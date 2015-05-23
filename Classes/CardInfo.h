@@ -8,7 +8,7 @@
 
 #include "cocos2d.h"
 
-enum Group {Tests, CLang, Web, Alg, Courses, Java, FrontEnd, DataBase, OS, Training}
+enum Group {Tests, CLang, Web, Alg, Courses, Java, FrontEnd, DataBase, OS, Training};
 
 class CardInfo : public cocos2d::Layer
 {
@@ -17,6 +17,7 @@ public:
     
     //параметры
     static std::string CardName;
+    static int CardIndex;
     static Group cardGroup;
     
     virtual bool init();
