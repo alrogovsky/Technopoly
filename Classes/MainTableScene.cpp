@@ -37,7 +37,7 @@ bool MainTable::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
     //для объединения карточек
-    auto table = Node::create();
+    table = Node::create();
     table->setContentSize(Size(visibleSize.height, visibleSize.height));
     table->setPosition(Vec2(origin.x + table->getContentSize().width/2, origin.y + table->getContentSize().height/2));
     table->setAnchorPoint(Vec2(0.5,0.5));
@@ -57,17 +57,7 @@ bool MainTable::init()
     rng.seed((++seed) + time(NULL));
     boost::random::uniform_int_distribution<> six(1,6);
     int random_num1 = six(rng);
-    
-    
-    std::string string_random_num1= std::to_string(random_num1);
-    auto cube1_img = Label::createWithTTF(string_random_num1, "fonts/Marker Felt.ttf", 24);
-    
-    cube1_img->setPosition(Vec2(origin.x + visibleSize.width/2,
-                                origin.y + visibleSize.height - cube1_img->getContentSize().height));
-    
-    // add the label as a child to this layer
-    this->addChild(cube1_img, 1);
-    
+
     cube1 = Sprite::create("1.png");
     switch (random_num1) {
         case (2): cube1 = Sprite::create("2.png"); break;
@@ -79,22 +69,8 @@ bool MainTable::init()
     }
     
     // position the sprite on the center of the screen
-    cube1->setPosition(Vec2(origin.x + visibleSize.width - 10 - cube1->getContentSize().width/2,
-                            origin.y + visibleSize.height/2));
-    
-    // add the sprite as a child to this layer
-    this->addChild(cube1, 1);
     
     int random_num2 = six(rng);
-    std::string string_random_num2= std::to_string(random_num2);
-    auto cube2_img = Label::createWithTTF(string_random_num2, "fonts/Marker Felt.ttf", 24);
-    
-    // position the label on the center of the screen
-    cube2_img->setPosition(Vec2(origin.x + visibleSize.width - cube2_img->getContentSize().width - cube1_img->getContentSize().width - 10,
-                                origin.y + visibleSize.height - cube2_img->getContentSize().height));
-    
-    // add the label as a child to this layer
-    this->addChild(cube2_img, 1);
     
     cube2 = Sprite::create("1.png");
     switch (random_num2) {
@@ -106,22 +82,36 @@ bool MainTable::init()
         default: break;
     }
     
+    float MenuWidth = visibleSize.width - (table->getPosition().x + table->getContentSize().width/2);
     
-    // position the sprite on the center of the screen
-    cube2->setPosition(Vec2(origin.x + visibleSize.width - cube2->getContentSize().width - 1.5 * cube1->getContentSize().width,
-                            origin.y + visibleSize.height/2));
-    
-    // add the sprite as a child to this layer
-    this->addChild(cube2, 1);
     
     auto StepButtonLabel = Label::createWithTTF("Сделать ход", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     StepButtonLabel -> setColor(Color3B::BLACK);
     auto StepButton = MenuItemLabel::create(StepButtonLabel, CC_CALLBACK_1(MainTable::onStepQlick, this));
-    StepButton->setPosition(Vec2(origin.x + visibleSize.width - StepButton->getContentSize().width/2 - 50,
-                              origin.y + StepButton->getContentSize().height));
+    StepButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
+                              origin.y + visibleSize.height/2));
+    
+    
+    //направо, налево
+    auto RotateRight = Label::createWithTTF("Направо", "isotextpro/PFIsotextPro-Regular.ttf", 34);
+    RotateRight -> setColor(Color3B::BLACK);
+    auto RotateRightButton = MenuItemLabel::create(RotateRight, CC_CALLBACK_1(MainTable::onRotateRight, this));
+    RotateRightButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
+                                 origin.y + visibleSize.height/2 - StepButton->getContentSize().height - 5));
+    
+    auto RotateLeft = Label::createWithTTF("Налево", "isotextpro/PFIsotextPro-Regular.ttf", 34);
+    RotateLeft -> setColor(Color3B::BLACK);
+    auto RotateLeftButton = MenuItemLabel::create(RotateLeft, CC_CALLBACK_1(MainTable::onRotateLeft, this));
+    RotateLeftButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
+                                        origin.y + visibleSize.height/2 - StepButton->getContentSize().height - RotateRightButton->getContentSize().height - 10));
+
+    
+    
     Vector<MenuItem*> MenuItems;
     MenuItems.pushBack(StepButton);
     MenuItems.pushBack(closeItem);
+    MenuItems.pushBack(RotateRightButton);
+    MenuItems.pushBack(RotateLeftButton);
   //  menu->setPosition(Vec2::ZERO);
     
     auto sprite = Sprite::create("paper.jpg");
@@ -130,9 +120,21 @@ bool MainTable::init()
     auto menu = Menu::createWithArray(MenuItems);
     menu->setPosition(Vec2::ZERO);
 
+    
+    cube1->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 + cube1->getContentSize().width,
+                            origin.y + visibleSize.height - cube1->getContentSize().height));
+    
+    
+    cube2->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 - cube2->getContentSize().width,
+                            origin.y + visibleSize.height - cube2->getContentSize().height));
+    
+    
+    this->addChild(cube2, 1);
+    this->addChild(cube1, 1);
+    
     this->addChild(sprite, 0);
     this->addChild(table,1);
-    this->addChild(menu, 1);
+    this->addChild(menu, 2);
    // this->addChild(lol,2);
     return true;
 }
@@ -178,6 +180,28 @@ void MainTable::menuCloseCallback(Ref* pSender)
     exit(0);
 #endif
 }
+
+void MainTable::onRotateRight(Ref* pSender)
+{
+    float current_rotation = table->getRotation();
+    table->setRotation(current_rotation + 90);
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    exit(0);
+#endif
+}
+
+void MainTable::onRotateLeft(Ref* pSender)
+{
+    float current_rotation = table->getRotation();
+    table->setRotation(current_rotation - 90);
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    exit(0);
+#endif
+}
+
+
 
 void MainTable::createTable(Node* Table)
 {
