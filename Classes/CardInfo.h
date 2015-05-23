@@ -27,5 +27,3 @@ public:
     
     CREATE_FUNC(CardInfo);
 };
-
-#endif

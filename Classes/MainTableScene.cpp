@@ -39,8 +39,8 @@ bool MainTable::init()
     //для объединения карточек
     auto table = Node::create();
     table->setContentSize(Size(visibleSize.height, visibleSize.height));
-    table->setPosition(Vec2(origin.x,origin.y));
-    table->setAnchorPoint(Vec2(origin.x,origin.y));
+    table->setPosition(Vec2(origin.x + table->getContentSize().width/2, origin.y + table->getContentSize().height/2));
+    table->setAnchorPoint(Vec2(0.5,0.5));
     createTable(table);
     //закрывающее меню
     auto closeItem = MenuItemImage::create(
@@ -217,7 +217,7 @@ void MainTable::createTable(Node* Table)
     for(int i = 32; i < 40; i++)
         addBottom(cards[i], cards[i-1]->getContentSize().width/(2*height_k*Height_K), cards[i-1]->getPosition(), visibleSize);
     
-    auto BaseSprite = Sprite::create("cards/base.jpg");
+    auto BaseSprite = Sprite::create("cards/Base.jpg");
     BaseSprite->setAnchorPoint(Vec2(0.5,0.5));
     size_card = BaseSprite->getContentSize();
     height_k = size_card.width/visibleSize.width;
