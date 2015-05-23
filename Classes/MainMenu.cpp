@@ -7,9 +7,6 @@
 //
 
 #include "MainMenu.h"
-#include "MainTableScene.h"
-#include "LobbyCreation.h"
-#include <boost/random.hpp>
 
 
 USING_NS_CC;
@@ -39,17 +36,8 @@ bool MainMenu::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
-    // Рандома
-    boost::random::mt11213b rng;
-    unsigned int seed = 0;
-    rng.seed((++seed) + time(NULL));
-    
-    boost::random::uniform_int_distribution<> six(1,6);
-    int x = six(rng);
-    
-    std::string newstring= std::to_string(x);
     //Название игры
-    auto label = Label::createWithTTF(newstring, "isotextpro/PFIsotextPro-Bold.ttf", 48);
+    auto label = Label::createWithTTF("Технополия", "isotextpro/PFIsotextPro-Bold.ttf", 48);
     label->setColor(Color3B::BLACK);
     
     //Кнопка новой игры

@@ -20,8 +20,14 @@ public:
   //  int resources() {return _resources;);
 };
 
-class Card{
+class Card : public cocos2d::Sprite{
+public:
     virtual void Action() = 0;
+    Card();
+    ~Card();
+    static Card* create();
+    void addEvents();
+    void ClickEvent(cocos2d::Touch* touch, cocos2d::Vec2 _p);
 };
 
 class SubjectCard : Card{
@@ -44,6 +50,22 @@ public:
 
 
 class ActionCard : Card{
+    
+};
+
+class MySprite : public cocos2d::Sprite
+{
+public:
+    MySprite();
+    ~MySprite();
+    static MySprite* create();
+    
+    void initOptions();
+    
+    void addEvents();
+    void touchEvent(cocos2d::Touch* touch);
+    
+private:
     
 };
 

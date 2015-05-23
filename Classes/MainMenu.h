@@ -10,6 +10,9 @@
 #define __Technopoly__MainMenu__
 
 #include "cocos2d.h"
+#include "MainTableScene.h"
+#include "LobbyCreation.h"
+#include <boost/random.hpp>
 
 class MainMenu : public cocos2d::Layer
 {

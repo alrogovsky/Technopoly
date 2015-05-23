@@ -7,8 +7,6 @@
 //
 
 #include "LobbyCreation.h"
-#include "MainMenu.h"
-#include "MainTableScene.h"
 #include "ui/CocosGUI.h"
 USING_NS_CC;
 
@@ -26,6 +24,7 @@ Scene* LobbyCreation::createScene()
     // возврат сцены
     return scene;
 }
+
 bool LobbyCreation::init()
 {
    

@@ -1,5 +1,4 @@
 #include "AppDelegate.h"
-
 #include "MainMenu.h"
 USING_NS_CC;
 
@@ -35,7 +34,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto glview = director->getOpenGLView();
     if(!glview) {
         glview = GLViewImpl::create("My Game");
-        glview->setFrameSize(1024, 720);
+        glview->setFrameSize(1024, 780);
         director->setOpenGLView(glview);
     }
 

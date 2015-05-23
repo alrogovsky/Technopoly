@@ -11,15 +11,24 @@
 
 #include "cocos2d.h"
 #include "boost/random.hpp"
+#include "Gameplay.h"
 
-#define Height_K 6
+#define Height_K 7.3
 
 class MainTable : public cocos2d::Layer
 {
 public:
+    
+    cocos2d::Sprite* cards [40];
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
     static cocos2d::Scene* createScene();
     
+    //
+    void createTable(cocos2d::Node* Table);
+    void addRight(cocos2d::Node*, float, cocos2d::Vec2, cocos2d::Size k);
+    void addLeft(cocos2d::Node*, float, cocos2d::Vec2, cocos2d::Size k);
+    void addTop(cocos2d::Node*, float, cocos2d::Vec2, cocos2d::Size k);
+    void addBottom(cocos2d::Node*, float, cocos2d::Vec2, cocos2d::Size k);
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     virtual bool init();
     
