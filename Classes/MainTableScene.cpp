@@ -136,7 +136,19 @@ bool MainTable::init()
     
     this->addChild(sprite, 0);
     this->addChild(table,1);
-    this->addChild(menu, 2);
+    this->addChild(menu, 1);
+    
+    //Фишка 1игрока
+    chip1 = Sprite::create("CloseNormal.png");
+    chip1->setAnchorPoint(Vec2(0.9, 0.2));
+    auto size_chip1 = chip1->getContentSize();
+    float height_sprite = size_chip1.width / visibleSize.width;
+    chip1->setScale(1 / (height_sprite * Height_K * 4));
+    table->addChild(chip1,2);
+    chip1->setPosition(cards[0]->getPosition());
+    current_position1 = 0;
+
+
    // this->addChild(lol,2);
     return true;
 }
@@ -246,7 +258,7 @@ void MainTable::createTable(Node* Table)
     for(int i = 32; i < 40; i++)
         addBottom(cards[i], cards[i-1]->getContentSize().width/(2*height_k*Height_K), cards[i-1]->getPosition(), visibleSize);
     
-    auto BaseSprite = Sprite::create("cards/Base.jpg");
+    auto BaseSprite = Sprite::create("cards/base.jpg");
     BaseSprite->setAnchorPoint(Vec2(0.5,0.5));
     size_card = BaseSprite->getContentSize();
     height_k = size_card.width/visibleSize.width;

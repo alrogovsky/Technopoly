@@ -40,7 +40,6 @@ public:
     cocos2d::Sprite* chip1;
     
     cocos2d::Sequence* step_sequence;
-    
     cocos2d::Node* table;
     
     boost::random::mt11213b rng;
