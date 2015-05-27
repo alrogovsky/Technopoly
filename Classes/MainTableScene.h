@@ -13,7 +13,7 @@
 #include "boost/random.hpp"
 #include "Gameplay.h"
 
-#define Height_K 7.3
+#define Height_K 7.35
 
 class MainTable : public cocos2d::Layer
 {
@@ -40,6 +40,7 @@ public:
     cocos2d::Sprite* chip1;
     
     cocos2d::Sequence* step_sequence;
+    cocos2d::Node* table;
     
     boost::random::mt11213b rng;
     unsigned int seed = 0;
@@ -51,6 +52,9 @@ public:
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
     void onStepQlick(cocos2d::Ref* pSender);
+    
+    void onRotateRight(cocos2d::Ref* pSender);
+    void onRotateLeft(cocos2d::Ref* pSender);
     // implement the "static create()" method manually
     
 

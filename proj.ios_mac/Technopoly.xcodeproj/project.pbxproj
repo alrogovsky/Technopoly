@@ -57,6 +57,8 @@
 		521A8EA919F11F5000D177D7 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 521A8EA819F11F5000D177D7 /* fonts */; };
 		521A8EAA19F11F5000D177D7 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 521A8EA819F11F5000D177D7 /* fonts */; };
 		52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B47A461A53D09B004E4C60 /* Security.framework */; };
+		8228F96C1B10C51C00242B8C /* CardInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8228F96A1B10C51C00242B8C /* CardInfo.cpp */; };
+		8228F96D1B10C51F00242B8C /* CardInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8228F96A1B10C51C00242B8C /* CardInfo.cpp */; };
 		8262943E1AAF051F00CB7CF7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8262943D1AAF051F00CB7CF7 /* Security.framework */; };
 		82986DA91B061CBB000E0747 /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 82986DA31B061CBB000E0747 /* 1.png */; };
 		82986DAA1B061CBB000E0747 /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 82986DA31B061CBB000E0747 /* 1.png */; };
@@ -177,6 +179,8 @@
 		521A8E6319F0C34300D177D7 /* Default-736h@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-736h@3x.png"; sourceTree = "<group>"; };
 		521A8EA819F11F5000D177D7 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		52B47A461A53D09B004E4C60 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
+		8228F96A1B10C51C00242B8C /* CardInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CardInfo.cpp; sourceTree = "<group>"; };
+		8228F96B1B10C51C00242B8C /* CardInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardInfo.h; sourceTree = "<group>"; };
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		82986DA31B061CBB000E0747 /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
 		82986DA41B061CBB000E0747 /* 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2.png; sourceTree = "<group>"; };
@@ -343,6 +347,8 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				8228F96A1B10C51C00242B8C /* CardInfo.cpp */,
+				8228F96B1B10C51C00242B8C /* CardInfo.h */,
 				46880B8419C43A87006E1F66 /* AppDelegate.cpp */,
 				46880B8519C43A87006E1F66 /* AppDelegate.h */,
 				82D68F4B1B00C307008F435C /* MainTableScene.cpp */,
@@ -595,6 +601,7 @@
 				82D68F4D1B00C307008F435C /* MainTableScene.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
+				8228F96C1B10C51C00242B8C /* CardInfo.cpp in Sources */,
 				82D68F541B00CF05008F435C /* MainMenu.cpp in Sources */,
 				82B9DCD21B0630690054FD77 /* Gameplay.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
@@ -607,6 +614,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
+				8228F96D1B10C51F00242B8C /* CardInfo.cpp in Sources */,
 				82B9DCD31B0630690054FD77 /* Gameplay.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
 				82D68F4E1B00C307008F435C /* MainTableScene.cpp in Sources */,
