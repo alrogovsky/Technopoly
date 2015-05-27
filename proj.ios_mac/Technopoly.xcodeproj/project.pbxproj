@@ -121,6 +121,8 @@
 		FA3F39691B1605350017A163 /* utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F39521B1605350017A163 /* utilities.cpp */; };
 		FA3F396B1B16078F0017A163 /* fishka1.png in Resources */ = {isa = PBXBuildFile; fileRef = FA3F396A1B16078F0017A163 /* fishka1.png */; };
 		FA3F396C1B16078F0017A163 /* fishka1.png in Resources */ = {isa = PBXBuildFile; fileRef = FA3F396A1B16078F0017A163 /* fishka1.png */; };
+		FA3F396F1B164AB90017A163 /* fishka2.png in Resources */ = {isa = PBXBuildFile; fileRef = FA3F396E1B164AB90017A163 /* fishka2.png */; };
+		FA3F39701B164AB90017A163 /* fishka2.png in Resources */ = {isa = PBXBuildFile; fileRef = FA3F396E1B164AB90017A163 /* fishka2.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -256,6 +258,7 @@
 		FA3F39521B1605350017A163 /* utilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utilities.cpp; sourceTree = "<group>"; };
 		FA3F39531B1605350017A163 /* utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utilities.h; sourceTree = "<group>"; };
 		FA3F396A1B16078F0017A163 /* fishka1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fishka1.png; sourceTree = "<group>"; };
+		FA3F396E1B164AB90017A163 /* fishka2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fishka2.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -378,6 +381,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				FA3F396E1B164AB90017A163 /* fishka2.png */,
 				FA3F396A1B16078F0017A163 /* fishka1.png */,
 				FA1DA2491B10A2DC00F0D83F /* isotextpro */,
 				FA1DA2331B10A23D00F0D83F /* paper.jpg */,
@@ -616,6 +620,7 @@
 				82986DA91B061CBB000E0747 /* 1.png in Resources */,
 				82986DAB1B061CBB000E0747 /* 2.png in Resources */,
 				82986DB11B061CBB000E0747 /* 5.jpg in Resources */,
+				FA3F396F1B164AB90017A163 /* fishka2.png in Resources */,
 				5087E78117EB970100C73F5D /* Icon-120.png in Resources */,
 				5087E78617EB970100C73F5D /* Icon-76.png in Resources */,
 				82986DAD1B061CBB000E0747 /* 3.jpg in Resources */,
@@ -668,6 +673,7 @@
 				FA1DA2351B10A23D00F0D83F /* paper.jpg in Resources */,
 				521A8EAA19F11F5000D177D7 /* fonts in Resources */,
 				46880B7C19C43A67006E1F66 /* CloseNormal.png in Resources */,
+				FA3F39701B164AB90017A163 /* fishka2.png in Resources */,
 				46880B7E19C43A67006E1F66 /* CloseSelected.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
