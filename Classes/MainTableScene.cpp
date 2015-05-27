@@ -34,6 +34,9 @@ bool MainTable::init()
         return false;
     }
     
+    
+    connectToAppWarp(this);
+    
     //размеры окна
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -106,6 +109,15 @@ bool MainTable::init()
     auto RotateLeftButton = MenuItemLabel::create(RotateLeft, CC_CALLBACK_1(MainTable::onRotateLeft, this));
     RotateLeftButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
                                         origin.y + visibleSize.height/2 - StepButton->getContentSize().height - RotateRightButton->getContentSize().height - 10));
+    
+    
+    // Test knopka
+    auto Test = Label::createWithTTF("Test", "isotextpro/PFIsotextPro-Regular.ttf", 34);
+    Test -> setColor(Color3B::BLACK);
+    auto TestButton = MenuItemLabel::create(Test, CC_CALLBACK_1(MainTable::onTest, this));
+    TestButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
+                                        origin.y + visibleSize.height/2 - StepButton->getContentSize().height - 80));
+
 
     
     
@@ -114,6 +126,7 @@ bool MainTable::init()
     MenuItems.pushBack(closeItem);
     MenuItems.pushBack(RotateRightButton);
     MenuItems.pushBack(RotateLeftButton);
+    MenuItems.pushBack(TestButton);
   //  menu->setPosition(Vec2::ZERO);
     
     auto sprite = Sprite::create("paper.jpg");
@@ -139,7 +152,7 @@ bool MainTable::init()
     this->addChild(menu, 1);
     
     //Фишка 1игрока
-    chip1 = Sprite::create("CloseNormal.png");
+    chip1 = Sprite::create("fishka1.png");
     chip1->setAnchorPoint(Vec2(0.9, 0.2));
     auto size_chip1 = chip1->getContentSize();
     float height_sprite = size_chip1.width / visibleSize.width;
@@ -216,6 +229,11 @@ void MainTable::onRotateLeft(Ref* pSender)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);
 #endif
+}
+
+void MainTable::onTest(cocos2d::Ref *pSender)
+{
+    sendData("M5");
 }
 
 
@@ -337,4 +355,100 @@ void MainTable::userStep(Node* spr,int strokes_number, int* curr_pos)
     step_sequence = Sequence::create( move_to_chip, rotateTo, move_to_chip2, NULL);
     spr->runAction(step_sequence);
     *curr_pos = new_pos;
+}
+
+
+/// APPWARP
+
+void MainTable::connectToAppWarp(Ref *pSender)
+{
+    AppWarp::Client *warpClientRef;
+    AppWarp::Client::initialize(APPWARP_APP_KEY, APPWARP_SECRET_KEY);
+    warpClientRef = AppWarp::Client::getInstance();
+    warpClientRef->setRecoveryAllowance(60);
+    warpClientRef->setConnectionRequestListener(this);
+    warpClientRef->setNotificationListener(this);
+    warpClientRef->setRoomRequestListener(this);
+    warpClientRef->setZoneRequestListener(this);
+    warpClientRef->connect("USER");
+}
+
+void MainTable::startGame()
+{
+    
+}
+
+void MainTable::pauseGame()
+{
+    
+}
+
+
+void MainTable::onConnectDone(int res, int reasonCode)
+{
+    if(res == AppWarp::ResultCode::success)
+    {
+        cocos2d::MessageBox("CONNECTION", "SUCCESS");
+        AppWarp::Client *warpClientRef;
+        warpClientRef = AppWarp::Client::getInstance();
+        warpClientRef->joinRoom(ROOM_ID);
+    } else {
+        printf("ERROR %d", res);
+    }
+}
+
+void MainTable::onJoinRoomDone(AppWarp::room revent)
+{
+    if (revent.result==0)
+    {
+        printf("\nonJoinRoomDone .. SUCCESS\n");
+        AppWarp::Client *warpClientRef;
+        warpClientRef = AppWarp::Client::getInstance();
+        warpClientRef->subscribeRoom(ROOM_ID);
+    }
+    else
+        printf("\nonJoinRoomDone .. FAILED\n");
+}
+
+void MainTable::onSubscribeRoomDone(AppWarp::room revent)
+{
+    if (revent.result==0)
+    {
+        printf("\nonSubscribeRoomDone .. SUCCESS\n");
+    }
+    else
+        printf("\nonSubscribeRoomDone .. FAILED\n");
+}
+
+void MainTable::sendData(std::string message = "")
+{
+    AppWarp::Client *warpClientRef;
+    warpClientRef = AppWarp::Client::getInstance();
+    warpClientRef->sendChat(message);
+}
+
+void MainTable::onChatReceived(AppWarp::chat chatevent)
+{
+    std::cout<<"SENDER: "<<chatevent.sender <<" onChatReceived: ";
+    std::string str2 = chatevent.chat.substr();
+    std::cout<<str2;
+    
+    std::size_t loc = chatevent.chat.find('M');
+    std::string str1 = chatevent.chat.substr(loc+1);
+    
+    int step = std::atof(str1.c_str());
+    
+    userStep(chip1, step, &current_position1);
+    
+}
+
+void MainTable::onUserPaused(std::string user, std::string locId, bool isLobby)
+{
+    
+}
+
+
+void MainTable::onUserResumed(std::string user, std::string locId, bool isLobby)
+{
+    
 }

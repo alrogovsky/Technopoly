@@ -97,6 +97,30 @@
 		FA1DA2351B10A23D00F0D83F /* paper.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FA1DA2331B10A23D00F0D83F /* paper.jpg */; };
 		FA1DA24A1B10A2DC00F0D83F /* isotextpro in Resources */ = {isa = PBXBuildFile; fileRef = FA1DA2491B10A2DC00F0D83F /* isotextpro */; };
 		FA1DA24B1B10A2DC00F0D83F /* isotextpro in Resources */ = {isa = PBXBuildFile; fileRef = FA1DA2491B10A2DC00F0D83F /* isotextpro */; };
+		FA3F39541B1605350017A163 /* appwarp_extended.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F393D1B1605350017A163 /* appwarp_extended.cpp */; };
+		FA3F39551B1605350017A163 /* appwarp_extended.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F393D1B1605350017A163 /* appwarp_extended.cpp */; };
+		FA3F39561B1605350017A163 /* appwarp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F393E1B1605350017A163 /* appwarp.cpp */; };
+		FA3F39571B1605350017A163 /* appwarp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F393E1B1605350017A163 /* appwarp.cpp */; };
+		FA3F39581B1605350017A163 /* base64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F39401B1605350017A163 /* base64.cpp */; };
+		FA3F39591B1605350017A163 /* base64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F39401B1605350017A163 /* base64.cpp */; };
+		FA3F395A1B1605350017A163 /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = FA3F39421B1605350017A163 /* cJSON.c */; };
+		FA3F395B1B1605350017A163 /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = FA3F39421B1605350017A163 /* cJSON.c */; };
+		FA3F395C1B1605350017A163 /* HMAC_SHA1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F39451B1605350017A163 /* HMAC_SHA1.cpp */; };
+		FA3F395D1B1605350017A163 /* HMAC_SHA1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F39451B1605350017A163 /* HMAC_SHA1.cpp */; };
+		FA3F395E1B1605350017A163 /* requests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F39481B1605350017A163 /* requests.cpp */; };
+		FA3F395F1B1605350017A163 /* requests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F39481B1605350017A163 /* requests.cpp */; };
+		FA3F39601B1605350017A163 /* SHA1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F394A1B1605350017A163 /* SHA1.cpp */; };
+		FA3F39611B1605350017A163 /* SHA1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F394A1B1605350017A163 /* SHA1.cpp */; };
+		FA3F39621B1605350017A163 /* socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F394C1B1605350017A163 /* socket.cpp */; };
+		FA3F39631B1605350017A163 /* socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F394C1B1605350017A163 /* socket.cpp */; };
+		FA3F39641B1605350017A163 /* udpsocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F394E1B1605350017A163 /* udpsocket.cpp */; };
+		FA3F39651B1605350017A163 /* udpsocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F394E1B1605350017A163 /* udpsocket.cpp */; };
+		FA3F39661B1605350017A163 /* urlencode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F39501B1605350017A163 /* urlencode.cpp */; };
+		FA3F39671B1605350017A163 /* urlencode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F39501B1605350017A163 /* urlencode.cpp */; };
+		FA3F39681B1605350017A163 /* utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F39521B1605350017A163 /* utilities.cpp */; };
+		FA3F39691B1605350017A163 /* utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3F39521B1605350017A163 /* utilities.cpp */; };
+		FA3F396B1B16078F0017A163 /* fishka1.png in Resources */ = {isa = PBXBuildFile; fileRef = FA3F396A1B16078F0017A163 /* fishka1.png */; };
+		FA3F396C1B16078F0017A163 /* fishka1.png in Resources */ = {isa = PBXBuildFile; fileRef = FA3F396A1B16078F0017A163 /* fishka1.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -208,6 +232,30 @@
 		D6B0611A1803AB670077942B /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		FA1DA2331B10A23D00F0D83F /* paper.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = paper.jpg; sourceTree = "<group>"; };
 		FA1DA2491B10A2DC00F0D83F /* isotextpro */ = {isa = PBXFileReference; lastKnownFileType = folder; path = isotextpro; sourceTree = "<group>"; };
+		FA3F393D1B1605350017A163 /* appwarp_extended.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = appwarp_extended.cpp; sourceTree = "<group>"; };
+		FA3F393E1B1605350017A163 /* appwarp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = appwarp.cpp; sourceTree = "<group>"; };
+		FA3F393F1B1605350017A163 /* appwarp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = appwarp.h; sourceTree = "<group>"; };
+		FA3F39401B1605350017A163 /* base64.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = base64.cpp; sourceTree = "<group>"; };
+		FA3F39411B1605350017A163 /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
+		FA3F39421B1605350017A163 /* cJSON.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cJSON.c; sourceTree = "<group>"; };
+		FA3F39431B1605350017A163 /* cJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cJSON.h; sourceTree = "<group>"; };
+		FA3F39441B1605350017A163 /* defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = defines.h; sourceTree = "<group>"; };
+		FA3F39451B1605350017A163 /* HMAC_SHA1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HMAC_SHA1.cpp; sourceTree = "<group>"; };
+		FA3F39461B1605350017A163 /* HMAC_SHA1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMAC_SHA1.h; sourceTree = "<group>"; };
+		FA3F39471B1605350017A163 /* listener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = listener.h; sourceTree = "<group>"; };
+		FA3F39481B1605350017A163 /* requests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = requests.cpp; sourceTree = "<group>"; };
+		FA3F39491B1605350017A163 /* requests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = requests.h; sourceTree = "<group>"; };
+		FA3F394A1B1605350017A163 /* SHA1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SHA1.cpp; sourceTree = "<group>"; };
+		FA3F394B1B1605350017A163 /* SHA1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHA1.h; sourceTree = "<group>"; };
+		FA3F394C1B1605350017A163 /* socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = socket.cpp; sourceTree = "<group>"; };
+		FA3F394D1B1605350017A163 /* socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = socket.h; sourceTree = "<group>"; };
+		FA3F394E1B1605350017A163 /* udpsocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = udpsocket.cpp; sourceTree = "<group>"; };
+		FA3F394F1B1605350017A163 /* udpsocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = udpsocket.h; sourceTree = "<group>"; };
+		FA3F39501B1605350017A163 /* urlencode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = urlencode.cpp; sourceTree = "<group>"; };
+		FA3F39511B1605350017A163 /* urlencode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = urlencode.h; sourceTree = "<group>"; };
+		FA3F39521B1605350017A163 /* utilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utilities.cpp; sourceTree = "<group>"; };
+		FA3F39531B1605350017A163 /* utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utilities.h; sourceTree = "<group>"; };
+		FA3F396A1B16078F0017A163 /* fishka1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fishka1.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -289,6 +337,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				FA3F393C1B16051E0017A163 /* AppWarp */,
 				82986DA11B061BBA000E0747 /* UserClasses */,
 				46880B8319C43A87006E1F66 /* Classes */,
 				46880B7519C43A67006E1F66 /* Resources */,
@@ -329,6 +378,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				FA3F396A1B16078F0017A163 /* fishka1.png */,
 				FA1DA2491B10A2DC00F0D83F /* isotextpro */,
 				FA1DA2331B10A23D00F0D83F /* paper.jpg */,
 				82B9DCD71B0776A30054FD77 /* cards */,
@@ -429,6 +479,36 @@
 				82986DA81B061CBB000E0747 /* 6.jpg */,
 			);
 			name = cube;
+			sourceTree = "<group>";
+		};
+		FA3F393C1B16051E0017A163 /* AppWarp */ = {
+			isa = PBXGroup;
+			children = (
+				FA3F393D1B1605350017A163 /* appwarp_extended.cpp */,
+				FA3F393E1B1605350017A163 /* appwarp.cpp */,
+				FA3F393F1B1605350017A163 /* appwarp.h */,
+				FA3F39401B1605350017A163 /* base64.cpp */,
+				FA3F39411B1605350017A163 /* base64.h */,
+				FA3F39421B1605350017A163 /* cJSON.c */,
+				FA3F39431B1605350017A163 /* cJSON.h */,
+				FA3F39441B1605350017A163 /* defines.h */,
+				FA3F39451B1605350017A163 /* HMAC_SHA1.cpp */,
+				FA3F39461B1605350017A163 /* HMAC_SHA1.h */,
+				FA3F39471B1605350017A163 /* listener.h */,
+				FA3F39481B1605350017A163 /* requests.cpp */,
+				FA3F39491B1605350017A163 /* requests.h */,
+				FA3F394A1B1605350017A163 /* SHA1.cpp */,
+				FA3F394B1B1605350017A163 /* SHA1.h */,
+				FA3F394C1B1605350017A163 /* socket.cpp */,
+				FA3F394D1B1605350017A163 /* socket.h */,
+				FA3F394E1B1605350017A163 /* udpsocket.cpp */,
+				FA3F394F1B1605350017A163 /* udpsocket.h */,
+				FA3F39501B1605350017A163 /* urlencode.cpp */,
+				FA3F39511B1605350017A163 /* urlencode.h */,
+				FA3F39521B1605350017A163 /* utilities.cpp */,
+				FA3F39531B1605350017A163 /* utilities.h */,
+			);
+			name = AppWarp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -558,6 +638,7 @@
 				5087E78217EB970100C73F5D /* Icon-144.png in Resources */,
 				82986DAF1B061CBB000E0747 /* 4.jpg in Resources */,
 				3EACC98F19EE6D4300EB3C5E /* res in Resources */,
+				FA3F396B1B16078F0017A163 /* fishka1.png in Resources */,
 				50EF629817ECD46A001EB2F8 /* Icon-80.png in Resources */,
 				5087E78417EB970100C73F5D /* Icon-57.png in Resources */,
 				5087E77E17EB970100C73F5D /* Default.png in Resources */,
@@ -581,6 +662,7 @@
 				503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */,
 				82986DAE1B061CBB000E0747 /* 3.jpg in Resources */,
 				82986DAA1B061CBB000E0747 /* 1.png in Resources */,
+				FA3F396C1B16078F0017A163 /* fishka1.png in Resources */,
 				3EACC99019EE6D4300EB3C5E /* res in Resources */,
 				FA1DA24B1B10A2DC00F0D83F /* isotextpro in Resources */,
 				FA1DA2351B10A23D00F0D83F /* paper.jpg in Resources */,
@@ -601,11 +683,22 @@
 				82D68F4D1B00C307008F435C /* MainTableScene.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
+				FA3F395A1B1605350017A163 /* cJSON.c in Sources */,
+				FA3F39621B1605350017A163 /* socket.cpp in Sources */,
+				FA3F39661B1605350017A163 /* urlencode.cpp in Sources */,
+				FA3F39641B1605350017A163 /* udpsocket.cpp in Sources */,
+				FA3F395E1B1605350017A163 /* requests.cpp in Sources */,
+				FA3F39601B1605350017A163 /* SHA1.cpp in Sources */,
+				FA3F39681B1605350017A163 /* utilities.cpp in Sources */,
 				8228F96C1B10C51C00242B8C /* CardInfo.cpp in Sources */,
+				FA3F39561B1605350017A163 /* appwarp.cpp in Sources */,
 				82D68F541B00CF05008F435C /* MainMenu.cpp in Sources */,
 				82B9DCD21B0630690054FD77 /* Gameplay.cpp in Sources */,
+				FA3F39581B1605350017A163 /* base64.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
+				FA3F39541B1605350017A163 /* appwarp_extended.cpp in Sources */,
 				82D68F811B01D913008F435C /* LobbyCreation.cpp in Sources */,
+				FA3F395C1B1605350017A163 /* HMAC_SHA1.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -613,12 +706,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA3F39651B1605350017A163 /* udpsocket.cpp in Sources */,
+				FA3F39551B1605350017A163 /* appwarp_extended.cpp in Sources */,
+				FA3F39631B1605350017A163 /* socket.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
+				FA3F395F1B1605350017A163 /* requests.cpp in Sources */,
 				8228F96D1B10C51F00242B8C /* CardInfo.cpp in Sources */,
+				FA3F39671B1605350017A163 /* urlencode.cpp in Sources */,
+				FA3F395D1B1605350017A163 /* HMAC_SHA1.cpp in Sources */,
 				82B9DCD31B0630690054FD77 /* Gameplay.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
+				FA3F39571B1605350017A163 /* appwarp.cpp in Sources */,
 				82D68F4E1B00C307008F435C /* MainTableScene.cpp in Sources */,
+				FA3F39691B1605350017A163 /* utilities.cpp in Sources */,
+				FA3F395B1B1605350017A163 /* cJSON.c in Sources */,
+				FA3F39611B1605350017A163 /* SHA1.cpp in Sources */,
 				82D68F821B01D913008F435C /* LobbyCreation.cpp in Sources */,
+				FA3F39591B1605350017A163 /* base64.cpp in Sources */,
 				82D68F551B00CF05008F435C /* MainMenu.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
