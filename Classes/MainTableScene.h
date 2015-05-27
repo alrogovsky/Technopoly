@@ -28,6 +28,7 @@ public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
     static cocos2d::Scene* createScene();
     int current_position1 = 0;
+    int current_position2 = 0;
     
     //
     void createTable(cocos2d::Node* Table);
@@ -43,6 +44,9 @@ public:
     cocos2d::Sprite* cube1;
     cocos2d::Sprite* cube2;
     cocos2d::Sprite* chip1;
+    cocos2d::Sprite* chip2;
+    
+    cocos2d::MenuItemLabel* StepButton;
     
     cocos2d::Sequence* step_sequence;
     cocos2d::Node* table;
@@ -52,6 +56,8 @@ public:
     
     int random_num1;
     int random_num2;
+    
+    std::string userName = "SASHQUA";
 
     
     // a selector callback

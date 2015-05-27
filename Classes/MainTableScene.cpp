@@ -92,7 +92,7 @@ bool MainTable::init()
     
     auto StepButtonLabel = Label::createWithTTF("Сделать ход", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     StepButtonLabel -> setColor(Color3B::BLACK);
-    auto StepButton = MenuItemLabel::create(StepButtonLabel, CC_CALLBACK_1(MainTable::onStepQlick, this));
+    StepButton = MenuItemLabel::create(StepButtonLabel, CC_CALLBACK_1(MainTable::onStepQlick, this));
     StepButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
                               origin.y + visibleSize.height/2));
     
@@ -155,11 +155,21 @@ bool MainTable::init()
     chip1 = Sprite::create("fishka1.png");
     chip1->setAnchorPoint(Vec2(0.9, 0.2));
     auto size_chip1 = chip1->getContentSize();
-    float height_sprite = size_chip1.width / visibleSize.width;
-    chip1->setScale(1 / (height_sprite * Height_K * 4));
+    float height_sprite1 = size_chip1.width / visibleSize.width;
+    chip1->setScale(1 / (height_sprite1 * Height_K * 4));
     table->addChild(chip1,2);
     chip1->setPosition(cards[0]->getPosition());
     current_position1 = 0;
+    
+    //Фишка 2игрока
+    chip2 = Sprite::create("fishka2.png");
+    chip2->setAnchorPoint(Vec2(0.9, 1.4));
+    auto size_chip2 = chip2->getContentSize();
+    float height_sprite2 = size_chip2.width / visibleSize.width;
+    chip2->setScale(1 / (height_sprite2 * Height_K * 4));
+    table->addChild(chip2,2);
+    chip2->setPosition(cards[0]->getPosition());
+    current_position2 = 0;
 
 
    // this->addChild(lol,2);
@@ -176,6 +186,7 @@ void MainTable::onStepQlick(Ref *pSender)
     
     std::string string_random_num1= std::to_string(random_num1);
     std::string string_random_num2= std::to_string(random_num2);
+    std::string string_sum = std::to_string(random_num1+random_num2);
 
     
     cube1 -> setTexture(Director::getInstance()->getTextureCache()->getTextureForKey("1.png"));
@@ -198,7 +209,11 @@ void MainTable::onStepQlick(Ref *pSender)
         default: break;
     }
     //Сделать шаг
+    StepButton->setEnabled(false);
+    StepButton->setOpacity(0);
     userStep(chip1, random_num1 + random_num2, &current_position1 );
+    sendData("M"+string_sum);
+    
 
    }
 
@@ -370,7 +385,7 @@ void MainTable::connectToAppWarp(Ref *pSender)
     warpClientRef->setNotificationListener(this);
     warpClientRef->setRoomRequestListener(this);
     warpClientRef->setZoneRequestListener(this);
-    warpClientRef->connect("USER1");
+    warpClientRef->connect(this->userName);
 }
 
 void MainTable::startGame()
@@ -394,6 +409,7 @@ void MainTable::onConnectDone(int res, int reasonCode)
         warpClientRef->joinRoom(ROOM_ID);
     } else {
         printf("ERROR %d", res);
+        connectToAppWarp(this);
     }
 }
 
@@ -432,13 +448,18 @@ void MainTable::onChatReceived(AppWarp::chat chatevent)
     std::cout<<"SENDER: "<<chatevent.sender <<" onChatReceived: ";
     std::string str2 = chatevent.chat.substr();
     std::cout<<str2;
-    
-    std::size_t loc = chatevent.chat.find('M');
-    std::string str1 = chatevent.chat.substr(loc+1);
-    
-    int step = std::atof(str1.c_str());
-    
-    userStep(chip1, step, &current_position1);
+    if(chatevent.sender != this->userName)
+    {
+        std::size_t loc = chatevent.chat.find('M');
+        std::string str1 = chatevent.chat.substr(loc+1);
+        
+        int step = std::atof(str1.c_str());
+        
+        userStep(chip2, step, &current_position2);
+        StepButton->setOpacity(255);
+        StepButton->setEnabled(true);
+
+    }
     
 }
 
