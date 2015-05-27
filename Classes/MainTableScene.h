@@ -18,10 +18,11 @@
 class MainTable : public cocos2d::Layer
 {
 public:
-    
-    cocos2d::Sprite* cards [40];
+    static const int numbers_of_cards = 40;
+    cocos2d::Sprite* cards [numbers_of_cards];
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
     static cocos2d::Scene* createScene();
+    int current_position1 = 0;
     
     //
     void createTable(cocos2d::Node* Table);
@@ -29,11 +30,16 @@ public:
     void addLeft(cocos2d::Node*, float, cocos2d::Vec2, cocos2d::Size k);
     void addTop(cocos2d::Node*, float, cocos2d::Vec2, cocos2d::Size k);
     void addBottom(cocos2d::Node*, float, cocos2d::Vec2, cocos2d::Size k);
+    
+    void userStep(cocos2d::Node* spr,int strokes_number, int* curr_pos);
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     virtual bool init();
     
     cocos2d::Sprite* cube1;
     cocos2d::Sprite* cube2;
+    cocos2d::Sprite* chip1;
+    
+    cocos2d::Sequence* step_sequence;
     
     cocos2d::Node* table;
     
@@ -51,6 +57,9 @@ public:
     void onRotateRight(cocos2d::Ref* pSender);
     void onRotateLeft(cocos2d::Ref* pSender);
     // implement the "static create()" method manually
+    
+
+    
     CREATE_FUNC(MainTable);
 };
 

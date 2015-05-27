@@ -20,6 +20,8 @@ Scene* MainTable::createScene()
     Director::getInstance()->getTextureCache()->addImage("4.jpg");
     Director::getInstance()->getTextureCache()->addImage("5.jpg");
     Director::getInstance()->getTextureCache()->addImage("6.jpg");
+    
+    
     return scene;
 }
 
@@ -170,7 +172,10 @@ void MainTable::onStepQlick(Ref *pSender)
         case (6): cube2 -> setTexture(Director::getInstance()->getTextureCache()->getTextureForKey("6.jpg")); break;
         default: break;
     }
-}
+    //Сделать шаг
+    userStep(chip1, random_num1 + random_num2, &current_position1 );
+
+   }
 
 void MainTable::menuCloseCallback(Ref* pSender)
 {
@@ -298,4 +303,26 @@ void MainTable::addBottom(Node* spr, float position_delta, Vec2 old_position, Si
     spr->setPosition(old_position.x, old_position.y - position_delta - new_width/2);
     spr->setRotation(270);
     spr->setAnchorPoint(Vec2(0.5,0.5));
-    spr->setScale(1/(k*Height_K));}
+    spr->setScale(1/(k*Height_K));
+}
+
+
+void MainTable::userStep(Node* spr,int strokes_number, int* curr_pos)
+{
+    
+    int new_pos = (*curr_pos + strokes_number) % numbers_of_cards;
+    int new_pos_delta = new_pos / 10;
+    int old_pos_delta = *curr_pos / 10;
+    
+    RotateTo* rotateTo = RotateTo::create(1.0f, old_pos_delta * 90.0f);
+    MoveTo* move_to_chip = MoveTo::create(2, spr->getPosition());
+    if (new_pos_delta > old_pos_delta || new_pos_delta < old_pos_delta) {
+        move_to_chip = MoveTo::create(1, cards[new_pos_delta * 10]->getPosition());
+        rotateTo = RotateTo::create(1.0f, new_pos_delta * 90.0f);
+    }
+    auto move_to_chip2 = MoveTo::create(1, cards[new_pos]->getPosition());
+    
+    step_sequence = Sequence::create( move_to_chip, rotateTo, move_to_chip2, NULL);
+    spr->runAction(step_sequence);
+    *curr_pos = new_pos;
+}
