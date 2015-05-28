@@ -33,10 +33,10 @@ public:
     
     //
     void createTable(cocos2d::Node* Table);
-    void addRight(cocos2d::Node*, float, cocos2d::Vec2, cocos2d::Size k);
-    void addLeft(cocos2d::Node*, float, cocos2d::Vec2, cocos2d::Size k);
-    void addTop(cocos2d::Node*, float, cocos2d::Vec2, cocos2d::Size k);
-    void addBottom(cocos2d::Node*, float, cocos2d::Vec2, cocos2d::Size k);
+    void addRight(cocos2d::Node*, cocos2d::Node*, cocos2d::Size, bool);
+    void addLeft(cocos2d::Node*, cocos2d::Node*, cocos2d::Size, bool);
+    void addTop(cocos2d::Node*, cocos2d::Node*, cocos2d::Size, bool);
+    void addBottom(cocos2d::Node*, cocos2d::Node*, cocos2d::Size, bool);
     
     void userStep(cocos2d::Node* spr,int strokes_number, int* curr_pos);
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone

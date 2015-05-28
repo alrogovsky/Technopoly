@@ -288,24 +288,24 @@ void MainTable::createTable(Node* Table)
                            cards[0]->getContentSize().height/(2*(height_k*Height_K))));
     
     //нижний ряд
-    addLeft(cards[1], cards[0]->getContentSize().width/(2*height_k*Height_K), cards[0]->getPosition(), visibleSize);
+    addLeft(cards[1], cards[0], visibleSize, true);
     for(int i = 2; i <= 10; i++)
-        addLeft(cards[i], cards[i-1]->getContentSize().width/(2*height_k*Height_K), cards[i-1]->getPosition(), visibleSize);
+        addLeft(cards[i], cards[i-1], visibleSize, false);
     
     //левый ряд
-    addTop(cards[11], cards[10]->getContentSize().height/(2*height_k*Height_K), cards[10]->getPosition(), visibleSize);
+    addTop(cards[11], cards[10], visibleSize, true);
     for(int i = 12; i <= 20; i++)
-        addTop(cards[i], cards[i-1]->getContentSize().width/(2*height_k*Height_K), cards[i-1]->getPosition(), visibleSize);
+        addTop(cards[i], cards[i-1], visibleSize, false);
     
     //верхний ряд
-    addRight(cards[21], cards[20]->getContentSize().width/(2*height_k*Height_K), cards[20]->getPosition(), visibleSize);
+    addRight(cards[21], cards[20], visibleSize, true);
     for(int i = 22; i <= 30; i++)
-        addRight(cards[i], cards[i-1]->getContentSize().width/(2*height_k*Height_K), cards[i-1]->getPosition(), visibleSize);
+        addRight(cards[i], cards[i-1], visibleSize, false);
     
     //правый ряд
-    addBottom(cards[31], cards[30]->getContentSize().height/(2*height_k*Height_K), cards[30]->getPosition(), visibleSize);
+    addBottom(cards[31], cards[30], visibleSize, true);
     for(int i = 32; i < 40; i++)
-        addBottom(cards[i], cards[i-1]->getContentSize().width/(2*height_k*Height_K), cards[i-1]->getPosition(), visibleSize);
+        addBottom(cards[i], cards[i-1], visibleSize, false);
     
     auto BaseSprite = Sprite::create("cards/base.jpg");
     BaseSprite->setAnchorPoint(Vec2(0.5,0.5));
@@ -327,44 +327,84 @@ void MainTable::createTable(Node* Table)
     table->addChild(BaseSprite);
 }
 
-void MainTable::addTop(Node* spr, float position_delta, Vec2 old_position, Size table)
+void MainTable::addTop(Node* spr, Node* oldspr, Size table, bool isFirst)
 {
+    auto old_position = oldspr->getPosition();
+    
+    float old_width = 0;
+    float old_k = oldspr->getContentSize().height/table.height;
+    
+    if(isFirst)
+        old_width = oldspr->getContentSize().height/(old_k * Height_K);
+    else
+        old_width = oldspr->getContentSize().width/(old_k * Height_K);
+    
     float k = spr->getContentSize().height/table.height;
     auto new_width = spr->getContentSize().width/(k * Height_K);
     
-    spr->setPosition(old_position.x, old_position.y + position_delta + new_width/2);
+    spr->setPosition(old_position.x, old_position.y + old_width/2 + new_width/2);
     spr->setRotation(90);
     spr->setAnchorPoint(Vec2(0.5,0.5));
     spr->setScale(1/(k*Height_K));
 }
 
-void MainTable::addRight(Node* spr, float position_delta, Vec2 old_position, Size table)
+void MainTable::addRight(Node* spr, cocos2d::Node* oldspr, Size table, bool isFirst)
 {
+    auto old_position = oldspr->getPosition();
+    
+    float old_width = 0;
+    float old_k = oldspr->getContentSize().height/table.height;
+    
+    if(isFirst)
+        old_width = oldspr->getContentSize().height/(old_k * Height_K);
+    else
+        old_width = oldspr->getContentSize().width/(old_k * Height_K);
+    
     float k = spr->getContentSize().height/table.height;
     auto new_width = spr->getContentSize().width/(k * Height_K);
     
-    spr->setPosition(old_position.x + position_delta + new_width/2, old_position.y);
+    spr->setPosition(old_position.x + old_width/2 + new_width/2, old_position.y);
     spr->setRotation(180);
     spr->setAnchorPoint(Vec2(0.5,0.5));
     spr->setScale(1/(k*Height_K));
 }
 
-void MainTable::addLeft(Node* spr, float position_delta, Vec2 old_position, Size table)
+void MainTable::addLeft(Node* spr, cocos2d::Node* oldspr, Size table, bool isFirst)
 {
+    auto old_position = oldspr->getPosition();
+    
+    float old_width = 0;
+    float old_k = oldspr->getContentSize().height/table.height;
+    
+    if(isFirst)
+        old_width = oldspr->getContentSize().height/(old_k * Height_K);
+    else
+        old_width = oldspr->getContentSize().width/(old_k * Height_K);
+    
     float k = spr->getContentSize().height/table.height;
     auto new_width = spr->getContentSize().width/(k * Height_K);
     
-    spr->setPosition(old_position.x - position_delta - new_width/2, old_position.y);
+    spr->setPosition(old_position.x - old_width/2 - new_width/2, old_position.y);
     spr->setRotation(0);
     spr->setAnchorPoint(Vec2(0.5,0.5));
     spr->setScale(1/(k*Height_K));}
 
-void MainTable::addBottom(Node* spr, float position_delta, Vec2 old_position, Size table)
+void MainTable::addBottom(Node* spr, cocos2d::Node* oldspr, Size table, bool isFirst)
 {
+    auto old_position = oldspr->getPosition();
+    
+    float old_width = 0;
+    float old_k = oldspr->getContentSize().height/table.height;
+    
+    if(isFirst)
+        old_width = oldspr->getContentSize().height/(old_k * Height_K);
+    else
+        old_width = oldspr->getContentSize().width/(old_k * Height_K);
+    
     float k = spr->getContentSize().height/table.height;
     auto new_width = spr->getContentSize().width/(k * Height_K);
     
-    spr->setPosition(old_position.x, old_position.y - position_delta - new_width/2);
+    spr->setPosition(old_position.x, old_position.y - old_width/2 - new_width/2);
     spr->setRotation(270);
     spr->setAnchorPoint(Vec2(0.5,0.5));
     spr->setScale(1/(k*Height_K));
