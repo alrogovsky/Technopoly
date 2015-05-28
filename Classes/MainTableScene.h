@@ -11,14 +11,17 @@
 
 #include "cocos2d.h"
 #include "boost/random.hpp"
+#include "boost/algorithm/string/split.hpp"
+#include "boost/algorithm/string/classification.hpp"
 #include "Gameplay.h"
 #include "appwarp.h"
+#include <vector>
 
 #define Height_K 7.35
 
 #define APPWARP_APP_KEY     "e9e179212bf8ab524908f4f2449a5399469a41b7a10c73d653bbc30af77141b2"
 #define APPWARP_SECRET_KEY  "6c8de95986e7916ac1faf63972e953e87f50dacd4075a2eec2b24c91f0c92339"
-#define ROOM_ID "1356183962"
+#define ROOM_ID "1799451657"
 
 class MainTable : public cocos2d::Layer, public AppWarp::ConnectionRequestListener,public AppWarp::RoomRequestListener,public AppWarp::NotificationListener, public AppWarp::ZoneRequestListener
 {
@@ -57,7 +60,8 @@ public:
     int random_num1;
     int random_num2;
     
-    std::string userName = "SASHQUA";
+    std::string userName = "BROTISHKA";
+    std::string chipSkin = "fishka2.png";
 
     
     // a selector callback
@@ -70,11 +74,13 @@ public:
     void onTest(cocos2d::Ref* pSender);
     // implement the "static create()" method manually
     
+    static bool isRejoined;
     
     ////////////
     //APPWARP///
     ////////////
     void connectToAppWarp(cocos2d::Ref* pSender);
+    
     void startGame();
     void pauseGame();
     
@@ -86,9 +92,14 @@ public:
     void onChatReceived(AppWarp::chat chatevent);
     void onUserPaused(std::string user,std::string locId,bool isLobby);
     void onUserResumed(std::string user,std::string locId,bool isLobby);
-
+    void onGetOnlineUsersDone(AppWarp::liveresult event);
+    void onGetLiveUserInfoDone(AppWarp::liveuser event);
+    void onGetLiveRoomInfoDone(AppWarp :: liveroom event);
+    void onSetCustomRoomDataDone(AppWarp :: liveroom event);
+    void onGetAllRoomsDone(AppWarp::liveresult event);
     
     CREATE_FUNC(MainTable);
+    
 };
 
 

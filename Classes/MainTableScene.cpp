@@ -152,7 +152,7 @@ bool MainTable::init()
     this->addChild(menu, 1);
     
     //Фишка 1игрока
-    chip1 = Sprite::create("fishka1.png");
+    chip1 = Sprite::create(this->chipSkin);
     chip1->setAnchorPoint(Vec2(0.9, 0.2));
     auto size_chip1 = chip1->getContentSize();
     float height_sprite1 = size_chip1.width / visibleSize.width;
@@ -162,7 +162,7 @@ bool MainTable::init()
     current_position1 = 0;
     
     //Фишка 2игрока
-    chip2 = Sprite::create("fishka2.png");
+    chip2 = Sprite::create("fishka1.png");
     chip2->setAnchorPoint(Vec2(0.9, 1.4));
     auto size_chip2 = chip2->getContentSize();
     float height_sprite2 = size_chip2.width / visibleSize.width;
@@ -219,6 +219,9 @@ void MainTable::onStepQlick(Ref *pSender)
 
 void MainTable::menuCloseCallback(Ref* pSender)
 {
+    AppWarp::Client *warpClientRef;
+    warpClientRef->getInstance();
+    warpClientRef->disconnect();
     Director::getInstance()->end();
     
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -248,7 +251,12 @@ void MainTable::onRotateLeft(Ref* pSender)
 
 void MainTable::onTest(cocos2d::Ref *pSender)
 {
-    sendData("M5");
+    AppWarp::Client *warpClientRef;
+    warpClientRef = AppWarp::Client::getInstance();
+    warpClientRef->getOnlineUsers();
+    std::cout<<"\n";
+    warpClientRef->getLiveUserInfo(this->userName);
+    warpClientRef->getAllRooms();
 }
 
 
@@ -386,6 +394,7 @@ void MainTable::connectToAppWarp(Ref *pSender)
     warpClientRef->setRoomRequestListener(this);
     warpClientRef->setZoneRequestListener(this);
     warpClientRef->connect(this->userName);
+    //warpClientRef->getLiveRoomInfo(ROOM_ID);
 }
 
 void MainTable::startGame()
@@ -462,6 +471,40 @@ void MainTable::onChatReceived(AppWarp::chat chatevent)
     }
     
 }
+
+void MainTable::onGetOnlineUsersDone(AppWarp::liveresult event)
+{
+    std::cout<< "ONLINE: ";
+    for(int i = 0; i<event.list.size(); i++)
+    {
+        std::cout<<event.list[i]<<" ";
+    }
+}
+
+void MainTable::onGetLiveUserInfoDone( AppWarp::liveuser event )
+{
+    std::cout<<"DATA OF "<<event.name<<": "<<event.customData<<" ";
+}
+
+void MainTable::onGetLiveRoomInfoDone(AppWarp :: liveroom event)
+{
+   
+}
+
+void MainTable::onSetCustomRoomDataDone(AppWarp::liveroom event)
+{
+    
+}
+
+
+void MainTable::onGetAllRoomsDone(AppWarp::liveresult event)
+{
+    for(int i = 0; i<event.list.size(); i++)
+    {
+        std::cout<<event.list[i]<<" ";
+    }
+}
+
 
 void MainTable::onUserPaused(std::string user, std::string locId, bool isLobby)
 {
