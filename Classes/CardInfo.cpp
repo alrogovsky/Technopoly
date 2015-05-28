@@ -57,6 +57,13 @@ bool CardInfo::init(std::string intname)
                               menu2->setEnabled(true);
                               this->removeAllChildren();
                               this->getParent()->removeChild(this);
+                              Director::getInstance()->getTextureCache()->removeUnusedTextures();
+                              Director::getInstance()->getTextureCache()->addImage("1.png");
+                              Director::getInstance()->getTextureCache()->addImage("2.png");
+                              Director::getInstance()->getTextureCache()->addImage("3.jpg");
+                              Director::getInstance()->getTextureCache()->addImage("4.jpg");
+                              Director::getInstance()->getTextureCache()->addImage("5.jpg");
+                              Director::getInstance()->getTextureCache()->addImage("6.jpg");
                              // this->autorelease();
                           });
     exit->setPosition(Vec2(origin.x + exit->getContentSize().width,
