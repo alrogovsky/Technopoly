@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "string.h"
+#include "ui/CocosGUI.h"
 
 class User{
 private:
@@ -20,14 +21,15 @@ public:
   //  int resources() {return _resources;);
 };
 
-class Card : public cocos2d::Sprite{
+class Card : public cocos2d::MenuItemImage{
+private:
 public:
-    virtual void Action() = 0;
     Card();
     ~Card();
     static Card* create();
-    void addEvents();
-    void ClickEvent(cocos2d::Touch* touch, cocos2d::Vec2 _p);
+//    virtual void Action() = 0;
+    //Card();
+   // static Card* create();
 };
 
 class SubjectCard : Card{
