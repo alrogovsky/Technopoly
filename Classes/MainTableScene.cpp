@@ -271,7 +271,7 @@ void MainTable::createTable(Node* Table)
               //int a = i;
               MenuItemImage* senderButton = (MenuItemImage*) sender;
               std::string nameImage = senderButton->getName();
-              auto NewGameScene = CardInfo::createScene(nameImage);
+              auto NewGameScene = CardInfo::create(nameImage);
               this->addChild(NewGameScene,5);
               tableMenu->setEnabled(false);
               ((Menu*) (this->getChildByName("menu")))->setEnabled(false);
