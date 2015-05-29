@@ -11,9 +11,11 @@ USING_NS_CC;
 Scene* MainTable::createScene()
 {
     auto scene = Scene::create();
-    auto layer = MainTable::create();
-    
-    scene->addChild(layer);
+    auto layerMainTable = MainTable::create();
+   // layerMainTable->InformationLayer = CardInfo::create("1");
+   // layerMainTable->InformationLayer->setVisible(false);
+    scene->addChild(layerMainTable);
+    // scene->addChild(layerMainTable->InformationLayer);
     Director::getInstance()->getTextureCache()->addImage("1.png");
     Director::getInstance()->getTextureCache()->addImage("2.png");
     Director::getInstance()->getTextureCache()->addImage("3.jpg");
@@ -134,7 +136,8 @@ bool MainTable::init()
     
     auto menu = Menu::createWithArray(MenuItems);
     menu->setPosition(Vec2::ZERO);
-
+    menu->setName("menu");
+    menu->setTag(1);
     
     cube1->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 + cube1->getContentSize().width,
                             origin.y + visibleSize.height - cube1->getContentSize().height));
@@ -148,9 +151,12 @@ bool MainTable::init()
     this->addChild(cube1, 1);
     
     this->addChild(sprite, 0);
+    table->addChild(tableMenu);
+    table->setName("table");
     this->addChild(table,1);
     this->addChild(menu, 1);
     
+   // this->addChild(table,1);
     //Фишка 1игрока
     chip1 = Sprite::create(this->chipSkin);
     chip1->setAnchorPoint(Vec2(0.9, 0.2));
@@ -265,10 +271,20 @@ void MainTable::createTable(Node* Table)
 {
     auto visibleSize = Table->getContentSize();
     std::string name = "";
-    for(int i = 0; i < 40; i++)
+    for(int i = 0; i < numbers_of_cards; i++)
     {
         name = std::to_string(i);
-        cards[i] = Sprite::create("cards/" + name + ".jpg");
+        cards[i] = MenuItemImage::create("cards/LowRes/" + name + ".jpg", "cards/LowRes/" + name + ".jpg",
+          [&](Ref* sender){
+              //int a = i;
+              MenuItemImage* senderButton = (MenuItemImage*) sender;
+              std::string nameImage = senderButton->getName();
+              auto NewGameScene = CardInfo::createScene(nameImage);
+              this->addChild(NewGameScene,5);
+              tableMenu->setEnabled(false);
+              ((Menu*) (this->getChildByName("menu")))->setEnabled(false);
+          });
+        cards[i]->setName(name);
     }
     
     //первая карта
@@ -307,13 +323,16 @@ void MainTable::createTable(Node* Table)
     BaseSprite->setPosition(Vec2(visibleSize.width/2,
                                visibleSize.height/2));
     
+    tableMenu = Menu::create();
+    tableMenu->setName("tableMenu");
     for(int i = 0; i < 40; i++)
     {
-    Table->addChild(cards[i],2);
+        tableMenu->addChild(cards[i]);
     }
-    Table->addChild(BaseSprite);
-    
-
+    tableMenu->setPosition(0, 0);
+   // tableMenu->createWithArray(cards);
+   // Table->createWithArray(tableButtons);
+    table->addChild(BaseSprite);
 }
 
 void MainTable::addTop(Node* spr, float position_delta, Vec2 old_position, Size table)

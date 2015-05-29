@@ -50,11 +50,12 @@ bool LobbyCreation::init()
     //ввод
    // std::string pNormalSprite = "menus/m17.png";
     //Widget::EditBox::create
-    auto textField = cocos2d::ui::TextField::create("Название Лобби","isotextpro/PFIsotextPro-Regular.ttf",30);
+    auto textField = cocos2d::ui::TextField::create("Введите ник","isotextpro/PFIsotextPro-Regular.ttf",30);
 
     
     // set the maximum number of characters the user can enter for this TextField
     textField->setMaxLength(10);
+    textField->setColor(Color3B::BLACK);
     textField->setPosition(Vec2(origin.x + visibleSize.width/2,
                                 origin.y + visibleSize.height - label->getContentSize().height*2
                                 - textField->getContentSize().height));

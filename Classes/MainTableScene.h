@@ -15,7 +15,7 @@
 #include "boost/algorithm/string/classification.hpp"
 #include "Gameplay.h"
 #include "appwarp.h"
-#include <vector>
+#include "CardInfo.h"
 
 #define Height_K 7.35
 
@@ -27,7 +27,7 @@ class MainTable : public cocos2d::Layer, public AppWarp::ConnectionRequestListen
 {
 public:
     static const int numbers_of_cards = 40;
-    cocos2d::Sprite* cards [numbers_of_cards];
+    cocos2d::MenuItemImage* cards [numbers_of_cards];
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
     static cocos2d::Scene* createScene();
     int current_position1 = 0;
@@ -52,7 +52,11 @@ public:
     cocos2d::MenuItemLabel* StepButton;
     
     cocos2d::Sequence* step_sequence;
-    cocos2d::Node* table;
+    cocos2d::Node* table;                           //для работы с поворотом
+    cocos2d::Vector<cocos2d::MenuItem*> tableButtons;
+    cocos2d::Menu* tableMenu;
+    //CardInfo* InformationLayer;
+    
     
     boost::random::mt11213b rng;
     unsigned int seed = 0;
