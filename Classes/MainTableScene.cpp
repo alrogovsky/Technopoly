@@ -384,7 +384,7 @@ void MainTable::userStep(Node* spr,int strokes_number, int* curr_pos)
     MoveTo* move_to_chip = MoveTo::create(0, spr->getPosition());
     if (new_pos_delta > old_pos_delta || new_pos_delta < old_pos_delta) {
         time_to_move = ((new_pos_delta * 10 - *curr_pos) * normal_time) / 10;
-        time_to_move2 -= time_to_move;
+        time_to_move2 -= time_to_move + 1;
         move_to_chip = MoveTo::create(time_to_move, cards[new_pos_delta * 10]->getPosition());
         rotateTo = RotateTo::create(1.0f, new_pos_delta * 90.0f);
     }
