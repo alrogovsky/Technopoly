@@ -16,9 +16,8 @@ Scene* MainTable::createScene()
     auto layerLobby = LobbyCreation::create();
     scene->addChild(layerLobby);
     
-    
     //инициализация данных
-    InitData();
+    //InitData();
     
     return scene;
 }
@@ -44,18 +43,6 @@ bool MainTable::init()
     //общий размер
     Size fullSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();                  // первоначальная координата
-    
-    
-    //---------ВЫБОР ЛОББИ--------
-    cocos2d::Node* LobbyChoose = Node::create();
-    LobbyChoose->setPosition(origin);
-    LobbyChoose->setContentSize(fullSize);
-    auto background = Sprite::create("paper.jpg");
-    background->setPosition(Vec2(fullSize.width/2 + origin.x, fullSize.height/2 + origin.y));
-    background->setOpacity(400);
-    LobbyChoose->addChild(background);
-    
-    //---------ВЫБОР ЛОББИ--------
     
     //кнопка закрытия
     auto exit = MenuItemImage::create("menus/m8.png", "menus/m14.png",
@@ -132,7 +119,6 @@ bool MainTable::init()
     StepButton = MenuItemLabel::create(StepButtonLabel, CC_CALLBACK_1(MainTable::onStepQlick, this));
     StepButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
                               origin.y + visibleSize.height/2));
-    
     
     //поворот доски
     auto RotateRight = Label::createWithTTF("Направо", "isotextpro/PFIsotextPro-Regular.ttf", 34);
@@ -211,6 +197,36 @@ bool MainTable::init()
     chip2->setPosition(cards[0]->getPosition());
     current_position2 = 0;
 
+    
+    //---------ВЫБОР ЛОББИ--------
+    cocos2d::Layer* LobbyChoose = Layer::create();
+    LobbyChoose->setName("Lobby");
+    this->addChild(LobbyChoose,5);
+    LobbyChoose->setPosition(origin);
+    LobbyChoose->setContentSize(fullSize);
+    auto background = Sprite::create("paper.jpg");
+    background->setPosition(Vec2(fullSize.width/2 + origin.x, fullSize.height/2 + origin.y));
+    background->setOpacity(400);
+    LobbyChoose->addChild(background);
+    tableMenu->setEnabled(false);
+    ((Menu*) (this->getChildByName("menu")))->setEnabled(false);
+    auto exitLobby = MenuItemImage::create("menus/m8.png", "menus/m14.png",
+                                      [&](Ref* sender){
+                                          tableMenu->setEnabled(true);
+                                          ((Menu*) (this->getChildByName("menu")))->setEnabled(true);
+                                          this->removeChildByName("Lobby");
+                                          //this->autorelease();
+                                          //this->retain();
+                                      });
+    
+    exitLobby->setPosition(Vec2(origin.x + exitLobby->getContentSize().width,
+                           origin.y + visibleSize.height - exitLobby->getContentSize().height));
+    
+    auto exitLobbyButton = Menu::create(exitLobby, NULL);
+    exitLobbyButton->setPosition(origin);
+    LobbyChoose->addChild(exitLobbyButton);
+    //---------ВЫБОР ЛОББИ--------
+    
     return true;
 }
 
