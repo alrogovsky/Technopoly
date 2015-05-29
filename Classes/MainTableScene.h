@@ -61,7 +61,7 @@ public:
     
     int random_num1;
     int random_num2;
-    
+    int normal_time = 5;
     std::string userName = "Anchella";
 
     
