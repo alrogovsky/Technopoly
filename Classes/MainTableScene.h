@@ -57,7 +57,7 @@ public:
     int random_num1;
     int random_num2;
     
-    std::string userName = "SASHQUA";
+    std::string userName = "Anchella";
 
     
     // a selector callback

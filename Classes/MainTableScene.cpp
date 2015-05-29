@@ -211,7 +211,7 @@ void MainTable::onStepQlick(Ref *pSender)
     //Сделать шаг
     StepButton->setEnabled(false);
     StepButton->setOpacity(0);
-    userStep(chip1, random_num1 + random_num2, &current_position1 );
+    userStep(chip1, random_num1 + random_num2, &current_position1 );//userStep(chip1, 0, &current_position1 ); при этом выше current_position1 = W; где W-позиция вылета
     sendData("M"+string_sum);
     
 
