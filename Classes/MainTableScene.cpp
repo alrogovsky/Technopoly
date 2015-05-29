@@ -10,24 +10,18 @@
 USING_NS_CC;
 Scene* MainTable::createScene()
 {
+    //запуск сцены
     auto scene = Scene::create();
-    auto layerMainTable = MainTable::create();
-   // layerMainTable->InformationLayer = CardInfo::create("1");
-   // layerMainTable->InformationLayer->setVisible(false);
-    scene->addChild(layerMainTable);
-    // scene->addChild(layerMainTable->InformationLayer);
-    Director::getInstance()->getTextureCache()->addImage("1.png");
-    Director::getInstance()->getTextureCache()->addImage("2.png");
-    Director::getInstance()->getTextureCache()->addImage("3.jpg");
-    Director::getInstance()->getTextureCache()->addImage("4.jpg");
-    Director::getInstance()->getTextureCache()->addImage("5.jpg");
-    Director::getInstance()->getTextureCache()->addImage("6.jpg");
     
+    auto layerLobby = LobbyCreation::create();
+    scene->addChild(layerLobby);
+    
+    //инициализация данных
+    //InitData();
     
     return scene;
 }
 
-//
 bool MainTable::init()
 {
 
@@ -36,25 +30,54 @@ bool MainTable::init()
         return false;
     }
     
+    //добавление в кэш текстур изображения кубиков
+    Director::getInstance()->getTextureCache()->addImage("1.png");
+    Director::getInstance()->getTextureCache()->addImage("2.png");
+    Director::getInstance()->getTextureCache()->addImage("3.jpg");
+    Director::getInstance()->getTextureCache()->addImage("4.jpg");
+    Director::getInstance()->getTextureCache()->addImage("5.jpg");
+    Director::getInstance()->getTextureCache()->addImage("6.jpg");
     
-    connectToAppWarp(this);
+   // connectToAppWarp(this);
+    
+    //общий размер
+    Size fullSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();                  // первоначальная координата
+    
+    //кнопка закрытия
+    auto exit = MenuItemImage::create("menus/m8.png", "menus/m14.png",
+                                      [&](Ref* sender){
+                                          auto NewGameScene = MainMenu::createScene();
+                                          Director::getInstance()->replaceScene(NewGameScene);
+                                      });
     
     //размеры окна
-    Size visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    Size visibleSize = Director::getInstance()->getVisibleSize();               // общий размер ...
+    visibleSize.height = visibleSize.height - exit->getContentSize().height/2;  //... без верхнего меню
     
-    //для объединения карточек
+    
+    //продолжаю пилить кнопку закрытия
+    exit->setPosition(Vec2(origin.x,
+                           origin.y + fullSize.height));
+    exit->setAnchorPoint(Vec2(0,1));
+    exit->setScale(0.5);
+    auto exitButton = Menu::create(exit, NULL);
+    exitButton->setPosition(origin);
+    this->addChild(exitButton,3);
+    
+    
+    //для объединения карточек в один 'node'
     table = Node::create();
     table->setContentSize(Size(visibleSize.height, visibleSize.height));
     table->setPosition(Vec2(origin.x + table->getContentSize().width/2, origin.y + table->getContentSize().height/2));
     table->setAnchorPoint(Vec2(0.5,0.5));
     createTable(table);
+    
     //закрывающее меню
     auto closeItem = MenuItemImage::create(
                                            "CloseNormal.png",
                                            "CloseSelected.png",
                                            CC_CALLBACK_1(MainTable::menuCloseCallback, this));
-    
     closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
                                 origin.y + closeItem->getContentSize().height/2));
     
@@ -65,6 +88,7 @@ bool MainTable::init()
     boost::random::uniform_int_distribution<> six(1,6);
     int random_num1 = six(rng);
 
+    //изображения кубиков
     cube1 = Sprite::create("1.png");
     switch (random_num1) {
         case (2): cube1 = Sprite::create("2.png"); break;
@@ -74,11 +98,7 @@ bool MainTable::init()
         case (6): cube1 = Sprite::create("6.jpg"); break;
         default: break;
     }
-    
-    // position the sprite on the center of the screen
-    
     int random_num2 = six(rng);
-    
     cube2 = Sprite::create("1.png");
     switch (random_num2) {
         case (2): cube2 = Sprite::create("2.png"); break;
@@ -89,17 +109,18 @@ bool MainTable::init()
         default: break;
     }
     
+    
+    //боковое меню (справа)
     float MenuWidth = visibleSize.width - (table->getPosition().x + table->getContentSize().width/2);
     
-    
+    //сделать ход пользователем
     auto StepButtonLabel = Label::createWithTTF("Сделать ход", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     StepButtonLabel -> setColor(Color3B::BLACK);
     StepButton = MenuItemLabel::create(StepButtonLabel, CC_CALLBACK_1(MainTable::onStepQlick, this));
     StepButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
                               origin.y + visibleSize.height/2));
     
-    
-    //направо, налево
+    //поворот доски
     auto RotateRight = Label::createWithTTF("Направо", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     RotateRight -> setColor(Color3B::BLACK);
     auto RotateRightButton = MenuItemLabel::create(RotateRight, CC_CALLBACK_1(MainTable::onRotateRight, this));
@@ -113,32 +134,32 @@ bool MainTable::init()
                                         origin.y + visibleSize.height/2 - StepButton->getContentSize().height - RotateRightButton->getContentSize().height - 10));
     
     
-    // Test knopka
+    //Тест... просто Тест...
     auto Test = Label::createWithTTF("Test", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     Test -> setColor(Color3B::BLACK);
     auto TestButton = MenuItemLabel::create(Test, CC_CALLBACK_1(MainTable::onTest, this));
     TestButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
                                         origin.y + visibleSize.height/2 - StepButton->getContentSize().height - 80));
 
-
-    
-    
+    //Все в менюшный вектор
     Vector<MenuItem*> MenuItems;
     MenuItems.pushBack(StepButton);
     MenuItems.pushBack(closeItem);
     MenuItems.pushBack(RotateRightButton);
     MenuItems.pushBack(RotateLeftButton);
     MenuItems.pushBack(TestButton);
-  //  menu->setPosition(Vec2::ZERO);
     
+    //Создаем работоспособное меню на основе массива менюшек
+    auto menu = Menu::createWithArray(MenuItems);
+    menu->setPosition(Vec2::ZERO);
+    menu->setName("menu");        // для дальнейшего поиска данного объекта в CardInfo
+    menu->setTag(1);              // аналогично, для поиска
+    
+    //фон
     auto sprite = Sprite::create("paper.jpg");
     sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     
-    auto menu = Menu::createWithArray(MenuItems);
-    menu->setPosition(Vec2::ZERO);
-    menu->setName("menu");
-    menu->setTag(1);
-    
+    //позиция кубиков
     cube1->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 + cube1->getContentSize().width,
                             origin.y + visibleSize.height - cube1->getContentSize().height));
     
@@ -147,18 +168,17 @@ bool MainTable::init()
                             origin.y + visibleSize.height - cube2->getContentSize().height));
     
     
-    this->addChild(cube2, 1);
+    //все объекты на сцену
+    this->addChild(cube2, 1);   //кубики
     this->addChild(cube1, 1);
-    
-    this->addChild(sprite, 0);
-    table->addChild(tableMenu);
+    this->addChild(sprite, 0);  //фон
+    table->addChild(tableMenu); //для дальнейшего поиска в CardInfo
     table->setName("table");
-    this->addChild(table,1);
+    this->addChild(table,1);    //стол с картами
     this->addChild(menu, 1);
     
-   // this->addChild(table,1);
     //Фишка 1игрока
-    chip1 = Sprite::create(this->chipSkin);
+    chip1 = Sprite::create("fishka1.png");
     chip1->setAnchorPoint(Vec2(0.9, 0.2));
     auto size_chip1 = chip1->getContentSize();
     float height_sprite1 = size_chip1.width / visibleSize.width;
@@ -177,13 +197,42 @@ bool MainTable::init()
     chip2->setPosition(cards[0]->getPosition());
     current_position2 = 0;
 
-
-   // this->addChild(lol,2);
+    
+    //---------ВЫБОР ЛОББИ--------
+    cocos2d::Layer* LobbyChoose = Layer::create();
+    LobbyChoose->setName("Lobby");
+    this->addChild(LobbyChoose,5);
+    LobbyChoose->setPosition(origin);
+    LobbyChoose->setContentSize(fullSize);
+    auto background = Sprite::create("paper.jpg");
+    background->setPosition(Vec2(fullSize.width/2 + origin.x, fullSize.height/2 + origin.y));
+    background->setOpacity(400);
+    LobbyChoose->addChild(background);
+    tableMenu->setEnabled(false);
+    ((Menu*) (this->getChildByName("menu")))->setEnabled(false);
+    auto exitLobby = MenuItemImage::create("menus/m8.png", "menus/m14.png",
+                                      [&](Ref* sender){
+                                          tableMenu->setEnabled(true);
+                                          ((Menu*) (this->getChildByName("menu")))->setEnabled(true);
+                                          this->removeChildByName("Lobby");
+                                          //this->autorelease();
+                                          //this->retain();
+                                      });
+    
+    exitLobby->setPosition(Vec2(origin.x + exitLobby->getContentSize().width,
+                           origin.y + visibleSize.height - exitLobby->getContentSize().height));
+    
+    auto exitLobbyButton = Menu::create(exitLobby, NULL);
+    exitLobbyButton->setPosition(origin);
+    LobbyChoose->addChild(exitLobbyButton);
+    //---------ВЫБОР ЛОББИ--------
+    
     return true;
 }
 
 void MainTable::onStepQlick(Ref *pSender)
 {
+    //рандомизатор
     rng.seed((++seed) + time(NULL));
     boost::random::uniform_int_distribution<> six(1,6);
     
@@ -193,8 +242,8 @@ void MainTable::onStepQlick(Ref *pSender)
     std::string string_random_num1= std::to_string(random_num1);
     std::string string_random_num2= std::to_string(random_num2);
     std::string string_sum = std::to_string(random_num1+random_num2);
-
     
+    //пилим текстуру, в зависимости от выпавшего номера
     cube1 -> setTexture(Director::getInstance()->getTextureCache()->getTextureForKey("1.png"));
     switch (random_num1) {
         case (2): cube1 -> setTexture(Director::getInstance()->getTextureCache()->getTextureForKey("2.png")); break;
@@ -204,7 +253,6 @@ void MainTable::onStepQlick(Ref *pSender)
         case (6): cube1 -> setTexture(Director::getInstance()->getTextureCache()->getTextureForKey("6.jpg")); break;
         default: break;
     }
-    
     cube2 -> setTexture(Director::getInstance()->getTextureCache()->getTextureForKey("1.png"));
     switch (random_num2) {
         case (2): cube2 -> setTexture(Director::getInstance()->getTextureCache()->getTextureForKey("2.png")); break;
@@ -214,6 +262,7 @@ void MainTable::onStepQlick(Ref *pSender)
         case (6): cube2 -> setTexture(Director::getInstance()->getTextureCache()->getTextureForKey("6.jpg")); break;
         default: break;
     }
+    
     //Сделать шаг
     StepButton->setEnabled(false);
     StepButton->setOpacity(0);
@@ -265,8 +314,6 @@ void MainTable::onTest(cocos2d::Ref *pSender)
     warpClientRef->getAllRooms();
 }
 
-
-
 void MainTable::createTable(Node* Table)
 {
     auto visibleSize = Table->getContentSize();
@@ -279,7 +326,7 @@ void MainTable::createTable(Node* Table)
               //int a = i;
               MenuItemImage* senderButton = (MenuItemImage*) sender;
               std::string nameImage = senderButton->getName();
-              auto NewGameScene = CardInfo::createScene(nameImage);
+              auto NewGameScene = CardInfo::create(nameImage);
               this->addChild(NewGameScene,5);
               tableMenu->setEnabled(false);
               ((Menu*) (this->getChildByName("menu")))->setEnabled(false);
@@ -296,24 +343,24 @@ void MainTable::createTable(Node* Table)
                            cards[0]->getContentSize().height/(2*(height_k*Height_K))));
     
     //нижний ряд
-    addLeft(cards[1], cards[0]->getContentSize().width/(2*height_k*Height_K), cards[0]->getPosition(), visibleSize);
+    addLeft(cards[1], cards[0], visibleSize, true);
     for(int i = 2; i <= 10; i++)
-        addLeft(cards[i], cards[i-1]->getContentSize().width/(2*height_k*Height_K), cards[i-1]->getPosition(), visibleSize);
+        addLeft(cards[i], cards[i-1], visibleSize, false);
     
     //левый ряд
-    addTop(cards[11], cards[10]->getContentSize().height/(2*height_k*Height_K), cards[10]->getPosition(), visibleSize);
+    addTop(cards[11], cards[10], visibleSize, true);
     for(int i = 12; i <= 20; i++)
-        addTop(cards[i], cards[i-1]->getContentSize().width/(2*height_k*Height_K), cards[i-1]->getPosition(), visibleSize);
+        addTop(cards[i], cards[i-1], visibleSize, false);
     
     //верхний ряд
-    addRight(cards[21], cards[20]->getContentSize().width/(2*height_k*Height_K), cards[20]->getPosition(), visibleSize);
+    addRight(cards[21], cards[20], visibleSize, true);
     for(int i = 22; i <= 30; i++)
-        addRight(cards[i], cards[i-1]->getContentSize().width/(2*height_k*Height_K), cards[i-1]->getPosition(), visibleSize);
+        addRight(cards[i], cards[i-1], visibleSize, false);
     
     //правый ряд
-    addBottom(cards[31], cards[30]->getContentSize().height/(2*height_k*Height_K), cards[30]->getPosition(), visibleSize);
+    addBottom(cards[31], cards[30], visibleSize, true);
     for(int i = 32; i < 40; i++)
-        addBottom(cards[i], cards[i-1]->getContentSize().width/(2*height_k*Height_K), cards[i-1]->getPosition(), visibleSize);
+        addBottom(cards[i], cards[i-1], visibleSize, false);
     
     auto BaseSprite = Sprite::create("cards/base.jpg");
     BaseSprite->setAnchorPoint(Vec2(0.5,0.5));
@@ -323,56 +370,95 @@ void MainTable::createTable(Node* Table)
     BaseSprite->setPosition(Vec2(visibleSize.width/2,
                                visibleSize.height/2));
     
+    //создается меню
     tableMenu = Menu::create();
-    tableMenu->setName("tableMenu");
+    tableMenu->setName("tableMenu"); //дальнейший поиск
     for(int i = 0; i < 40; i++)
     {
         tableMenu->addChild(cards[i]);
     }
     tableMenu->setPosition(0, 0);
-   // tableMenu->createWithArray(cards);
-   // Table->createWithArray(tableButtons);
     table->addChild(BaseSprite);
 }
 
-void MainTable::addTop(Node* spr, float position_delta, Vec2 old_position, Size table)
+void MainTable::addTop(Node* spr, Node* oldspr, Size table, bool isFirst)
 {
+    auto old_position = oldspr->getPosition();
+    
+    float old_width = 0;
+    float old_k = oldspr->getContentSize().height/table.height;
+    
+    if(isFirst)
+        old_width = oldspr->getContentSize().height/(old_k * Height_K);
+    else
+        old_width = oldspr->getContentSize().width/(old_k * Height_K);
+    
     float k = spr->getContentSize().height/table.height;
     auto new_width = spr->getContentSize().width/(k * Height_K);
     
-    spr->setPosition(old_position.x, old_position.y + position_delta + new_width/2);
+    spr->setPosition(old_position.x, old_position.y + old_width/2 + new_width/2);
     spr->setRotation(90);
     spr->setAnchorPoint(Vec2(0.5,0.5));
     spr->setScale(1/(k*Height_K));
 }
 
-void MainTable::addRight(Node* spr, float position_delta, Vec2 old_position, Size table)
+void MainTable::addRight(Node* spr, cocos2d::Node* oldspr, Size table, bool isFirst)
 {
+    auto old_position = oldspr->getPosition();
+    
+    float old_width = 0;
+    float old_k = oldspr->getContentSize().height/table.height;
+    
+    if(isFirst)
+        old_width = oldspr->getContentSize().height/(old_k * Height_K);
+    else
+        old_width = oldspr->getContentSize().width/(old_k * Height_K);
+    
     float k = spr->getContentSize().height/table.height;
     auto new_width = spr->getContentSize().width/(k * Height_K);
     
-    spr->setPosition(old_position.x + position_delta + new_width/2, old_position.y);
+    spr->setPosition(old_position.x + old_width/2 + new_width/2, old_position.y);
     spr->setRotation(180);
     spr->setAnchorPoint(Vec2(0.5,0.5));
     spr->setScale(1/(k*Height_K));
 }
 
-void MainTable::addLeft(Node* spr, float position_delta, Vec2 old_position, Size table)
+void MainTable::addLeft(Node* spr, cocos2d::Node* oldspr, Size table, bool isFirst)
 {
+    auto old_position = oldspr->getPosition();
+    
+    float old_width = 0;
+    float old_k = oldspr->getContentSize().height/table.height;
+    
+    if(isFirst)
+        old_width = oldspr->getContentSize().height/(old_k * Height_K);
+    else
+        old_width = oldspr->getContentSize().width/(old_k * Height_K);
+    
     float k = spr->getContentSize().height/table.height;
     auto new_width = spr->getContentSize().width/(k * Height_K);
     
-    spr->setPosition(old_position.x - position_delta - new_width/2, old_position.y);
+    spr->setPosition(old_position.x - old_width/2 - new_width/2, old_position.y);
     spr->setRotation(0);
     spr->setAnchorPoint(Vec2(0.5,0.5));
     spr->setScale(1/(k*Height_K));}
 
-void MainTable::addBottom(Node* spr, float position_delta, Vec2 old_position, Size table)
+void MainTable::addBottom(Node* spr, cocos2d::Node* oldspr, Size table, bool isFirst)
 {
+    auto old_position = oldspr->getPosition();
+    
+    float old_width = 0;
+    float old_k = oldspr->getContentSize().height/table.height;
+    
+    if(isFirst)
+        old_width = oldspr->getContentSize().height/(old_k * Height_K);
+    else
+        old_width = oldspr->getContentSize().width/(old_k * Height_K);
+    
     float k = spr->getContentSize().height/table.height;
     auto new_width = spr->getContentSize().width/(k * Height_K);
     
-    spr->setPosition(old_position.x, old_position.y - position_delta - new_width/2);
+    spr->setPosition(old_position.x, old_position.y - old_width/2 - new_width/2);
     spr->setRotation(270);
     spr->setAnchorPoint(Vec2(0.5,0.5));
     spr->setScale(1/(k*Height_K));
@@ -401,7 +487,6 @@ void MainTable::userStep(Node* spr,int strokes_number, int* curr_pos)
 
 
 /// APPWARP
-
 void MainTable::connectToAppWarp(Ref *pSender)
 {
     AppWarp::Client *warpClientRef;

@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "MainMenu.h"
+#include "ui/CocosGUI.h"
 
 class LobbyCreation : public cocos2d::Layer
 {

@@ -35,7 +35,6 @@ bool CardInfo::init(std::string intname)
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
    // std::string name = std::to_string(intname);
-   
     
     auto background = Sprite::create("paper.jpg");
     background->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
@@ -44,21 +43,29 @@ bool CardInfo::init(std::string intname)
     auto sprite = Sprite::create("cards/HighRes/" + intname + ".jpg");
     sprite->setPosition(Vec2(visibleSize.width + origin.x, visibleSize.height/2 + origin.y));
     sprite->setAnchorPoint(Vec2(1,0.5));
-
     
     auto exit = MenuItemImage::create("menus/m8.png", "menus/m14.png",
                           [&](Ref* sender){
+                              auto MainScene = this->getParent();
                               
-                              auto MainScene = this->getParent()->getParent();
                               auto menu1 = (Menu*) MainScene->getChildByName("menu");
                               menu1->setEnabled(true);
                               
                               auto menu2 = (Menu*) MainScene->getChildByName("table")->getChildByName("tableMenu");
                               menu2->setEnabled(true);
-                              this->removeAllChildren();
-                              this->getParent()->removeChild(this);
-                             // this->autorelease();
-                          });
+                              this->removeAllChildrenWithCleanup(true);
+                              this->removeFromParentAndCleanup(true);
+                              Director::getInstance()->getTextureCache()->removeAllTextures();
+                              Director::getInstance()->getTextureCache()->addImage("1.png");
+                              Director::getInstance()->getTextureCache()->addImage("2.png");
+                              Director::getInstance()->getTextureCache()->addImage("3.jpg");
+                              Director::getInstance()->getTextureCache()->addImage("4.jpg");
+                              Director::getInstance()->getTextureCache()->addImage("5.jpg");
+                              Director::getInstance()->getTextureCache()->addImage("6.jpg");
+                              //this->autorelease();
+                              //this->retain();
+                            });
+    
     exit->setPosition(Vec2(origin.x + exit->getContentSize().width,
                       origin.y + visibleSize.height - exit->getContentSize().height));
     
