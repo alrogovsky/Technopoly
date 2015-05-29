@@ -14,51 +14,59 @@
 #include "Gameplay.h"
 #include "appwarp.h"
 #include "CardInfo.h"
-
+#include "MainMenu.h"
 #define Height_K 7.35
 
 #define APPWARP_APP_KEY     "e9e179212bf8ab524908f4f2449a5399469a41b7a10c73d653bbc30af77141b2"
 #define APPWARP_SECRET_KEY  "6c8de95986e7916ac1faf63972e953e87f50dacd4075a2eec2b24c91f0c92339"
 #define ROOM_ID "1356183962"
 
-class MainTable : public cocos2d::Layer, public AppWarp::ConnectionRequestListener,public AppWarp::RoomRequestListener,public AppWarp::NotificationListener, public AppWarp::ZoneRequestListener
+class MainTable :   public cocos2d::Layer,
+                    public AppWarp::ConnectionRequestListener,
+                    public AppWarp::RoomRequestListener,
+                    public AppWarp::NotificationListener,
+                    public AppWarp::ZoneRequestListener
 {
 public:
+    // создание кнопок для карт
     static const int numbers_of_cards = 40;
     cocos2d::MenuItemImage* cards [numbers_of_cards];
-    // there's no 'id' in cpp, so we recommend returning the class instance pointer
+    cocos2d::Vector<cocos2d::MenuItem*> tableButtons;
+    cocos2d::Menu* tableMenu;
+   
+    // функция создания сцены
     static cocos2d::Scene* createScene();
+    virtual bool init();
+    
+    // исходное положение фишек
     int current_position1 = 0;
     int current_position2 = 0;
     
-    //
-    void createTable(cocos2d::Node* Table);
-    void addRight(cocos2d::Node*, float, cocos2d::Vec2, cocos2d::Size k);
-    void addLeft(cocos2d::Node*, float, cocos2d::Vec2, cocos2d::Size k);
-    void addTop(cocos2d::Node*, float, cocos2d::Vec2, cocos2d::Size k);
-    void addBottom(cocos2d::Node*, float, cocos2d::Vec2, cocos2d::Size k);
+    // создание стола с картами
+    cocos2d::Node* table;                                                   // для работы с поворотом
+    void createTable(cocos2d::Node* Table);                                 // создание стола
+    void addRight(cocos2d::Node*, cocos2d::Node*, cocos2d::Size, bool);     // добавление карты справа
+    void addLeft(cocos2d::Node*, cocos2d::Node*, cocos2d::Size, bool);      // добавление карты слева
+    void addTop(cocos2d::Node*, cocos2d::Node*, cocos2d::Size, bool);       // добавление карты сверху
+    void addBottom(cocos2d::Node*, cocos2d::Node*, cocos2d::Size, bool);    // добавление карты снизу
     
+    // шаг пользователя
+    cocos2d::MenuItemLabel* StepButton;
     void userStep(cocos2d::Node* spr,int strokes_number, int* curr_pos);
-    // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
-    virtual bool init();
     
+    // кубики + фишки
     cocos2d::Sprite* cube1;
     cocos2d::Sprite* cube2;
     cocos2d::Sprite* chip1;
     cocos2d::Sprite* chip2;
     
-    cocos2d::MenuItemLabel* StepButton;
+    cocos2d::Label* Attention;
     
     cocos2d::Sequence* step_sequence;
-    cocos2d::Node* table;                           //для работы с поворотом
-    cocos2d::Vector<cocos2d::MenuItem*> tableButtons;
-    cocos2d::Menu* tableMenu;
-    //CardInfo* InformationLayer;
     
-    
+    //рандомизатор              --библиотека Boost
     boost::random::mt11213b rng;
     unsigned int seed = 0;
-    
     int random_num1;
     int random_num2;
     int normal_time = 5;
@@ -69,12 +77,9 @@ public:
     void menuCloseCallback(cocos2d::Ref* pSender);
     void onStepQlick(cocos2d::Ref* pSender);
     
-    void onRotateRight(cocos2d::Ref* pSender);
-    void onRotateLeft(cocos2d::Ref* pSender);
     
-    void onTest(cocos2d::Ref* pSender);
-    // implement the "static create()" method manually
-    
+    //Никнейм пользователя
+    std::string userName = "SASHQUA";
     
     ////////////
     //APPWARP///

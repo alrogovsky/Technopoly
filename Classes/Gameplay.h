@@ -13,26 +13,38 @@
 #include "string.h"
 #include "ui/CocosGUI.h"
 
+void InitData();
+
 class User{
 private:
     int _resources;
-    std::string name;
+    std::string _name;
+    static const int firstTimeRecources = 100;
 public:
+    User();
+    void setName(std::string);
+    void changeResources(int);
+    int getResources();
+    std::string getName();
   //  int resources() {return _resources;);
 };
 
-class Card : public cocos2d::MenuItemImage{
+class Card{
 private:
+    std::string _name;
+    std::string _description;
 public:
     Card();
-    ~Card();
-    static Card* create();
-//    virtual void Action() = 0;
+    virtual void Action(User*) = 0;
+    void setName(std::string);
+    void setDescription(std::string);
+    std::string getName();
+    std::string getDescription();
     //Card();
-   // static Card* create();
+    //static Card* create();
 };
 
-class SubjectCard : Card{
+class SubjectCard : public Card{
 private:
     int card_price;
     int house_price;
@@ -40,35 +52,23 @@ private:
     int hotel_price;
     int tax;
 public:
-    void Action();
+    SubjectCard();
+    void Action(User*);
+    
 };
 
-class TrainingCard : Card{
+class TrainingCard : public Card{
 private:
     int card_price;
 public:
-    void Action();
+    void Action(User*);
 };
 
 
-class ActionCard : Card{
-    
-};
-
-class MySprite : public cocos2d::Sprite
-{
+class ActionCard : public Card{
 public:
-    MySprite();
-    ~MySprite();
-    static MySprite* create();
-    
-    void initOptions();
-    
-    void addEvents();
-    void touchEvent(cocos2d::Touch* touch);
-    
-private:
-    
+    void Action(User*);
 };
+
 
 #endif /* defined(__Technopoly__Gameplay__) */
