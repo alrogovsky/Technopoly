@@ -69,13 +69,13 @@ public:
     unsigned int seed = 0;
     int random_num1;
     int random_num2;
+    int normal_time = 5;
+    std::string userName = "Anchella";
+
     
-    //функции кнопок
-    void menuCloseCallback(cocos2d::Ref* pSender);      //закрытие
-    void onStepQlick(cocos2d::Ref* pSender);            //сделать ход
-    void onRotateRight(cocos2d::Ref* pSender);          //вращать поле направо
-    void onRotateLeft(cocos2d::Ref* pSender);           //вращать налево
-    void onTest(cocos2d::Ref* pSender);                 //кнопка тест
+    // a selector callback
+    void menuCloseCallback(cocos2d::Ref* pSender);
+    void onStepQlick(cocos2d::Ref* pSender);
     
     
     //Никнейм пользователя

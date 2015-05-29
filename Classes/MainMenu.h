@@ -22,6 +22,7 @@ public:
     
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     virtual bool init();
+    int scale_k = 3;
     
     // a selector callback
     
