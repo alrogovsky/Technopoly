@@ -42,7 +42,7 @@ bool LobbyCreation::init()
     sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     
     //заголовок окна
-    auto label = Label::createWithTTF("Создание лобби:", "isotextpro/PFIsotextPro-Bold.ttf", 48);
+    auto label = Label::createWithTTF("Выбор никнейма:", "isotextpro/PFIsotextPro-Bold.ttf", 48);
     label->setColor(Color3B::BLACK);
     label->setPosition(Vec2(origin.x + visibleSize.width/2,
                            origin.y + visibleSize.height - label->getContentSize().height));
@@ -50,14 +50,13 @@ bool LobbyCreation::init()
     //ввод
    // std::string pNormalSprite = "menus/m17.png";
     //Widget::EditBox::create
-    auto textField = cocos2d::ui::TextField::create("Название Лобби","isotextpro/PFIsotextPro-Regular.ttf",30);
-
-    
-    // set the maximum number of characters the user can enter for this TextField
+    auto textField = cocos2d::ui::TextField::create("Ваше имя","isotextpro/PFIsotextPro-Regular.ttf",30);
     textField->setMaxLength(10);
     textField->setPosition(Vec2(origin.x + visibleSize.width/2,
                                 origin.y + visibleSize.height - label->getContentSize().height*2
                                 - textField->getContentSize().height));
+    textField->setName("fieldUserName");
+    textField->setColor(Color3B::BLACK);
     
     //Кнопка новой игры
     auto backLabel = Label::createWithTTF("Назад", "isotextpro/PFIsotextPro-Regular.ttf", 34);
@@ -87,6 +86,7 @@ bool LobbyCreation::init()
     
     auto menu = Menu::createWithArray(MenuItems);
     menu->setPosition(Vec2::ZERO);
+    
     //добавление элементов на сцену
     this->addChild(textField, 1);
     this->addChild(sprite, 0);
@@ -99,11 +99,13 @@ bool LobbyCreation::init()
 
 void LobbyCreation::onNext(cocos2d::Ref* pSender)
 {
-    auto NewGameScene = MainTable::createScene();
-    Director::getInstance()->replaceScene(NewGameScene);
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
+    this->setVisible(false);
+    auto layerMainTable = MainTable::create();
+   // layerMainTable->setVisible(false);          //добавили, но не выводим на экран
+    layerMainTable->setName("GameLayer");       //для поиска
+    layerMainTable->userName = ((cocos2d::ui::TextField*) (this->getChildByName("fieldUserName")))->getString();
+    layerMainTable->connectToAppWarp(layerMainTable);
+    this->getParent()->addChild(layerMainTable);
 }
 
 void LobbyCreation::onBack(cocos2d::Ref* pSender)
