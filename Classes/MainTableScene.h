@@ -10,6 +10,7 @@
 #define __Technopoly__MainTableScene__
 
 #include "cocos2d.h"
+#include "CocosGUI.h"
 #include "boost/random.hpp"
 #include "boost/algorithm/string/split.hpp"
 #include "boost/algorithm/string/classification.hpp"

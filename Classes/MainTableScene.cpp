@@ -38,7 +38,6 @@ bool MainTable::init()
     Director::getInstance()->getTextureCache()->addImage("5.jpg");
     Director::getInstance()->getTextureCache()->addImage("6.jpg");
     
-   // connectToAppWarp(this);
     
     //общий размер
     Size fullSize = Director::getInstance()->getVisibleSize();
@@ -202,11 +201,14 @@ bool MainTable::init()
     cocos2d::Layer* LobbyChoose = Layer::create();
     LobbyChoose->setName("Lobby");
     this->addChild(LobbyChoose,5);
-    LobbyChoose->setPosition(origin);
-    LobbyChoose->setContentSize(fullSize);
-    auto background = Sprite::create("paper.jpg");
-    background->setPosition(Vec2(fullSize.width/2 + origin.x, fullSize.height/2 + origin.y));
+    LobbyChoose->setPosition(Vec2(origin.x + visibleSize.width/2,
+                                  origin.y + visibleSize.height/2));
+    LobbyChoose->setContentSize(Size(visibleSize.width/2, visibleSize.height/2));
+    LobbyChoose->setAnchorPoint(Vec2(0.5,0.5));
+    auto background = Sprite::create("background.png");
+   // background->setPosition(Vec2::ZERO);
     background->setOpacity(400);
+    background->setScale(0.5);
     LobbyChoose->addChild(background);
     tableMenu->setEnabled(false);
     ((Menu*) (this->getChildByName("menu")))->setEnabled(false);
@@ -219,12 +221,11 @@ bool MainTable::init()
                                           //this->retain();
                                       });
     
-    exitLobby->setPosition(Vec2(origin.x + exitLobby->getContentSize().width,
-                           origin.y + visibleSize.height - exitLobby->getContentSize().height));
+    exitLobby->setPosition(Vec2::ZERO);
     
     auto exitLobbyButton = Menu::create(exitLobby, NULL);
-    exitLobbyButton->setPosition(origin);
-    LobbyChoose->addChild(exitLobbyButton);
+    exitLobbyButton->setPosition(Vec2::ZERO);
+    LobbyChoose->addChild(exitLobbyButton,1);
     //---------ВЫБОР ЛОББИ--------
     
     return true;
