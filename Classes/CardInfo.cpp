@@ -7,7 +7,12 @@
 //
 #include "CardInfo.h"
 USING_NS_CC;
+using namespace ui;
 
+#define Margin 20
+#define HeaderFont_K 24
+#define Font_K 30
+#define AlsoCard_K 9
 Scene* CardInfo::createScene(std::string name)
 {
     // создание сцены
@@ -30,6 +35,8 @@ bool CardInfo::init(std::string intname)
         return false;
     }
     
+    int cardIndex = std::stoi(intname);
+    
     //видимый размер (разрешение экрана)
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -43,6 +50,9 @@ bool CardInfo::init(std::string intname)
     auto sprite = Sprite::create("cards/HighRes/" + intname + ".jpg");
     sprite->setPosition(Vec2(visibleSize.width + origin.x, visibleSize.height/2 + origin.y));
     sprite->setAnchorPoint(Vec2(1,0.5));
+    float height_k = sprite->getContentSize().height/visibleSize.height;
+    float scaling = 1/height_k;
+    sprite->setScale(scaling);
     
     auto exit = MenuItemImage::create("menus/m8.png", "menus/m14.png",
                           [&](Ref* sender){
@@ -66,16 +76,123 @@ bool CardInfo::init(std::string intname)
                               //this->retain();
                             });
     
-    exit->setPosition(Vec2(origin.x + exit->getContentSize().width,
-                      origin.y + visibleSize.height - exit->getContentSize().height));
+    exit->setPosition(Vec2(origin.x,
+                      origin.y + visibleSize.height));
+    exit->setAnchorPoint(Vec2(0,1));
     
     auto exitButton = Menu::create(exit, NULL);
     exitButton->setPosition(origin);
     
-   // int a = CardIndex;
-    this->addChild(sprite,1);
+    Size leftPanel;
+    leftPanel.width = visibleSize.width - sprite->getContentSize().width/height_k;
+    leftPanel.height = visibleSize.height - exit->getContentSize().height;
+    
+    auto textBackground = Sprite::create("background.png");
+    float textBG_k_height = textBackground->getContentSize().height / visibleSize.height;
+    float textBG_k_width = textBackground->getContentSize().width / leftPanel.width;
+    textBackground->cocos2d::Node::setScale(1/textBG_k_width, 1/textBG_k_height);
+    textBackground->setPosition(Vec2(origin.x, origin.y + visibleSize.height));
+    textBackground->setAnchorPoint(Vec2(0,1));
+    textBackground->setOpacity(700);
+    
+    Text* text;
+    Text* textDesc;
+    
+    if(MainTable::dataCards[cardIndex]->type == TypeCard::Subject)
+    {
+        Group* myGroup = MainTable::dataCards[cardIndex]->getGroup();
+        MenuItemImage* cards[myGroup->cards.size()];
+        cocos2d::Vector<MenuItem*> MenuItems;
+        for(int i = 0; i < myGroup->cards.size(); i++)
+        {
+            int index = myGroup->cards[i]->getIndex();
+            std::string name = std::to_string(index);
+            cards[i] = MenuItemImage::create("cards/HighRes/" + name + ".jpg", "cards/HighRes/" + name + ".jpg",
+                                         [&](Ref* sender){
+                                             //int a = i;
+                                             MenuItemImage* senderButton = (MenuItemImage*) sender;
+                                             std::string nameImage = senderButton->getName();
+                                             auto NewGameScene = CardInfo::create(nameImage);
+                                             auto ParentScene = this->getParent();
+                                             this->removeAllChildrenWithCleanup(true);
+                                             this->removeFromParentAndCleanup(true);
+                                             ParentScene->addChild(NewGameScene,5);
+                                         });
+            cards[i]->setName(name);
+            MenuItems.pushBack(cards[i]);
+            cards[i]->setAnchorPoint(Vec2(0,0));
+            auto size_card = cards[i]->getContentSize();
+            float cardHeightK = size_card.width/visibleSize.width;
+            float space_between_cards = (leftPanel.width - myGroup->cards.size() * size_card.width / (cardHeightK * AlsoCard_K)) / (myGroup->cards.size() + 1);
+            cards[i]->setScale(1/(cardHeightK*AlsoCard_K));
+            cards[i]->setPosition(Vec2(origin.x + (i+1) * space_between_cards + i * size_card.width / (cardHeightK * AlsoCard_K), origin.y + leftPanel.height/10));
+        }
+        auto AlsoCardsMenu = Menu::createWithArray(MenuItems);
+        AlsoCardsMenu->setPosition(origin);
+        this->addChild(AlsoCardsMenu,2);
+        
+        text = Text::create(myGroup->getName(),"isotextpro/PFIsotextPro-Bold.ttf",visibleSize.height/HeaderFont_K);
+        text->ignoreContentAdaptWithSize(false);
+        text->setContentSize(Size(leftPanel.width - 2*Margin, leftPanel.height/5 - Margin));
+        text->setTextHorizontalAlignment(TextHAlignment::CENTER);
+        text->setPosition(Vec2(origin.x + Margin, origin.y + leftPanel.height - Margin));
+        text->setAnchorPoint(Vec2(0,1));
+        text->setColor(Color3B::WHITE);
+        
+        
+        textDesc = Text::create(myGroup->getDescription(),"isotextpro/PFIsotextPro-Light.ttf",visibleSize.height/Font_K);
+        textDesc->ignoreContentAdaptWithSize(false);
+        textDesc->setContentSize(Size(leftPanel.width - 2*Margin, leftPanel.height/5));
+        textDesc->setTextHorizontalAlignment(TextHAlignment::LEFT);
+        textDesc->setPosition(Vec2(origin.x + Margin, origin.y + leftPanel.height*4/5));
+        textDesc->setAnchorPoint(Vec2(0,1));
+        textDesc->setColor(Color3B::WHITE);
+        
+        auto cardHeader = Text::create(MainTable::dataCards[cardIndex]->getName(),"isotextpro/PFIsotextPro-Bold.ttf",visibleSize.height/HeaderFont_K);
+        cardHeader->ignoreContentAdaptWithSize(false);
+        cardHeader->setContentSize(Size(leftPanel.width - 2*Margin, leftPanel.height/5));
+        cardHeader->setTextHorizontalAlignment(TextHAlignment::CENTER);
+        cardHeader->setPosition(Vec2(origin.x + Margin, origin.y + leftPanel.height*3/5));
+        cardHeader->setAnchorPoint(Vec2(0,1));
+        cardHeader->setColor(Color3B::WHITE);
+        
+        auto cardDesc = Text::create(MainTable::dataCards[cardIndex]->getDescription(),"isotextpro/PFIsotextPro-Light.ttf",visibleSize.height/Font_K);
+        textDesc->ignoreContentAdaptWithSize(false);
+        textDesc->setContentSize(Size(leftPanel.width - 2*Margin, leftPanel.height/5));
+        textDesc->setTextHorizontalAlignment(TextHAlignment::LEFT);
+        textDesc->setPosition(Vec2(origin.x + Margin, origin.y + leftPanel.height*2/5));
+        textDesc->setAnchorPoint(Vec2(0,1));
+        textDesc->setColor(Color3B::WHITE);
+        
+        this->addChild(cardHeader,3);
+        this->addChild(cardDesc,3);
+    }
+    else
+    {
+        text = Text::create(MainTable::dataCards[cardIndex]->getName(),"isotextpro/PFIsotextPro-Bold.ttf",visibleSize.height/HeaderFont_K);
+        text->ignoreContentAdaptWithSize(false);
+        text->setContentSize(Size(leftPanel.width - 2*Margin, leftPanel.height/10 - Margin));
+        text->setTextHorizontalAlignment(TextHAlignment::CENTER);
+        text->setPosition(Vec2(origin.x + Margin, origin.y + leftPanel.height - Margin));
+        text->setAnchorPoint(Vec2(0,1));
+        text->setColor(Color3B::WHITE);
+        
+        
+        textDesc = Text::create(MainTable::dataCards[cardIndex]->getDescription(),"isotextpro/PFIsotextPro-Light.ttf",visibleSize.height/Font_K);
+        textDesc->ignoreContentAdaptWithSize(false);
+        textDesc->setContentSize(Size(leftPanel.width - 2*Margin, leftPanel.height*4/5 - text->getContentSize().height));
+        textDesc->setTextHorizontalAlignment(TextHAlignment::LEFT);
+        textDesc->setPosition(Vec2(origin.x + Margin, origin.y + text->getPosition().y - text->getContentSize().height));
+        textDesc->setAnchorPoint(Vec2(0,1));
+        textDesc->setColor(Color3B::WHITE);
+    }
+    
+    this->addChild(text,2);
+    this->addChild(textDesc,2);
+    this->addChild(sprite,2);
+    this->addChild(textBackground,1);
     this->addChild(background,0);
-    this->addChild(exitButton, 1);
+    this->addChild(exitButton, 2);
     return true;
 }
 

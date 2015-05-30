@@ -7,9 +7,12 @@
 //
 
 #include "cocos2d.h"
+#include "ui/CocosGUI.h"
+#pragma once
+#include "MainTableScene.h"
 
 #define FullHeight 1
-enum Group {Tests, CLang, Web, Alg, Courses, Java, FrontEnd, DataBase, OS, Training};
+//
 
 class CardInfo : public cocos2d::Layer
 {

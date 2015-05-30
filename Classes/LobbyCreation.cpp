@@ -104,7 +104,7 @@ void LobbyCreation::onNext(cocos2d::Ref* pSender)
    // layerMainTable->setVisible(false);          //добавили, но не выводим на экран
     layerMainTable->setName("GameLayer");       //для поиска
     layerMainTable->userName = ((cocos2d::ui::TextField*) (this->getChildByName("fieldUserName")))->getString();
-    layerMainTable->connectToAppWarp(layerMainTable);
+ //   layerMainTable->connectToAppWarp(layerMainTable);
     this->getParent()->addChild(layerMainTable);
 }
 
