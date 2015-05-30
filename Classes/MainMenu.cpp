@@ -39,7 +39,7 @@ bool MainMenu::init()
     //кнопака начать игру
     auto NewGameButton = cocos2d::ui::Button::create("button_new_game.png");
     auto size_button = NewGameButton->getContentSize();
-    float height_button = size_button.width / visibleSize.width;
+    float height_button = size_button.height/ visibleSize.height;
     NewGameButton->setScale(1 / (height_button * scale_k));
     
     NewGameButton->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
@@ -90,29 +90,52 @@ bool MainMenu::init()
     
     //Расположение элементов на экране
     label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                              origin.y + visibleSize.height - label->getContentSize().height * 0.5));
+                            origin.y + visibleSize.height - label->getContentSize().height * 0.5));
     
     NewGameButton->setPosition(Vec2(origin.x + visibleSize.width/2,
-                                label->getPositionY() - OptionsButton->getContentSize().height * 0.5  - delta));
-
+                                    label->getPositionY() - label->getContentSize().height * 0.5 - NewGameButton->getContentSize().height * 0.5 -  delta));
+    
     OptionsButton->setPosition(Vec2(origin.x + visibleSize.width/2,
-                                    NewGameButton->getPositionY()  - label->getContentSize().height * 0.5 - OptionsButton->getContentSize().height * 0.5  -  delta));
-                           
+                                    NewGameButton->getPositionY()  - NewGameButton->getContentSize().height * 0.5 - OptionsButton->getContentSize().height * 0.5  -  delta));
+    
     CloseGameButton->setPosition(Vec2(origin.x + visibleSize.width/2,
-                                     OptionsButton->getPositionY() - label->getContentSize().height * 0.5 - CloseGameButton->getContentSize().height * 0.5 - delta ));
+                                      OptionsButton->getPositionY() - NewGameButton->getContentSize().height * 0.5 - CloseGameButton->getContentSize().height * 0.5 - delta ));
     
 
     //создание фона
     auto background = Sprite::create("background.png");
     background->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     
+    
+    ///////
+    auto mySprite = Sprite::create("fin_jake1.png");
+    mySprite->setPosition(Vec2(mySprite->getContentSize().width * 1.5 + origin.x, mySprite->getContentSize().height + origin.y));
+    // now lets animate the sprite we moved
+    
+    Vector<SpriteFrame*> animFrames;
+    animFrames.reserve(6);
+    animFrames.pushBack(SpriteFrame::create("fin_jake1.png", Rect(0,0,196,126)));
+    animFrames.pushBack(SpriteFrame::create("fin_jake2.png", Rect(0,0,196,126)));
+    animFrames.pushBack(SpriteFrame::create("fin_jake3.png", Rect(0,0,196,126)));
+    animFrames.pushBack(SpriteFrame::create("fin_jake4.png", Rect(0,0,196,126)));
+    animFrames.pushBack(SpriteFrame::create("fin_jake5.png", Rect(0,0,196,126)));
+    animFrames.pushBack(SpriteFrame::create("fin_jake6.png", Rect(0,0,196,126)));
+    
+    // create the animation out of the frames
+    Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
+    Animate* animate = Animate::create(animation);
+    
+    // run it and repeat it forever
+    mySprite->runAction(RepeatForever::create(animate));
+    ///////
+
     //добавление элементов на сцену
     this->addChild(background, 0);
     this->addChild(label, 1);
     this->addChild(NewGameButton, 1);
     this->addChild(OptionsButton, 1);
-    this->addChild(CloseGameButton, 1);   
-  
+    this->addChild(CloseGameButton, 1);
+    this->addChild(mySprite, 1);
     return true;
 }
 
