@@ -11,7 +11,9 @@
 
 #include "cocos2d.h"
 #include "boost/random.hpp"
-
+#include "boost/algorithm/string/split.hpp"
+#include "boost/algorithm/string/classification.hpp"
+#include "Gameplay.h"
 #include "appwarp.h"
 #include "MainMenu.h"
 #include "CardInfo.h"
