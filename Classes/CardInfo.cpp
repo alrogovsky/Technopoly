@@ -83,9 +83,13 @@ bool CardInfo::init(std::string intname)
     auto exitButton = Menu::create(exit, NULL);
     exitButton->setPosition(origin);
     
+    auto leftPart = Node::create();
+    
     Size leftPanel;
     leftPanel.width = visibleSize.width - sprite->getContentSize().width/height_k;
     leftPanel.height = visibleSize.height - exit->getContentSize().height;
+    
+    leftPart->setContentSize(leftPanel);
     
     auto textBackground = Sprite::create("background.png");
     float textBG_k_height = textBackground->getContentSize().height / visibleSize.height;
@@ -133,7 +137,7 @@ bool CardInfo::init(std::string intname)
         
         text = Text::create(myGroup->getName(),"isotextpro/PFIsotextPro-Bold.ttf",visibleSize.height/HeaderFont_K);
         text->ignoreContentAdaptWithSize(false);
-        text->setContentSize(Size(leftPanel.width - 2*Margin, leftPanel.height/5 - Margin));
+        text->setContentSize(Size(leftPanel.width - 2*Margin, leftPanel.height/10 - Margin));
         text->setTextHorizontalAlignment(TextHAlignment::CENTER);
         text->setPosition(Vec2(origin.x + Margin, origin.y + leftPanel.height - Margin));
         text->setAnchorPoint(Vec2(0,1));
@@ -142,30 +146,30 @@ bool CardInfo::init(std::string intname)
         
         textDesc = Text::create(myGroup->getDescription(),"isotextpro/PFIsotextPro-Light.ttf",visibleSize.height/Font_K);
         textDesc->ignoreContentAdaptWithSize(false);
-        textDesc->setContentSize(Size(leftPanel.width - 2*Margin, leftPanel.height/5));
+        textDesc->setContentSize(Size(leftPanel.width - 2*Margin, leftPanel.height/4 - Margin));
         textDesc->setTextHorizontalAlignment(TextHAlignment::LEFT);
-        textDesc->setPosition(Vec2(origin.x + Margin, origin.y + leftPanel.height*4/5));
+        textDesc->setPosition(Vec2(origin.x + Margin, text->getPositionY() - text->getContentSize().height - Margin));
         textDesc->setAnchorPoint(Vec2(0,1));
         textDesc->setColor(Color3B::WHITE);
         
         auto cardHeader = Text::create(MainTable::dataCards[cardIndex]->getName(),"isotextpro/PFIsotextPro-Bold.ttf",visibleSize.height/HeaderFont_K);
         cardHeader->ignoreContentAdaptWithSize(false);
-        cardHeader->setContentSize(Size(leftPanel.width - 2*Margin, leftPanel.height/5));
+        cardHeader->setContentSize(Size(leftPanel.width - 2*Margin, leftPanel.height/10 - Margin));
         cardHeader->setTextHorizontalAlignment(TextHAlignment::CENTER);
-        cardHeader->setPosition(Vec2(origin.x + Margin, origin.y + leftPanel.height*3/5));
+        cardHeader->setPosition(Vec2(origin.x + Margin, textDesc->getPositionY() - text->getContentSize().height - Margin));
         cardHeader->setAnchorPoint(Vec2(0,1));
         cardHeader->setColor(Color3B::WHITE);
         
         auto cardDesc = Text::create(MainTable::dataCards[cardIndex]->getDescription(),"isotextpro/PFIsotextPro-Light.ttf",visibleSize.height/Font_K);
-        textDesc->ignoreContentAdaptWithSize(false);
-        textDesc->setContentSize(Size(leftPanel.width - 2*Margin, leftPanel.height/5));
-        textDesc->setTextHorizontalAlignment(TextHAlignment::LEFT);
-        textDesc->setPosition(Vec2(origin.x + Margin, origin.y + leftPanel.height*2/5));
-        textDesc->setAnchorPoint(Vec2(0,1));
-        textDesc->setColor(Color3B::WHITE);
+        cardDesc->ignoreContentAdaptWithSize(false);
+        cardDesc->setContentSize(Size(leftPanel.width - 2*Margin, leftPanel.height/4 - Margin));
+        cardDesc->setTextHorizontalAlignment(TextHAlignment::LEFT);
+        cardDesc->setPosition(Vec2(origin.x + Margin, cardHeader->getPositionY() - cardHeader->getContentSize().height - Margin));
+        cardDesc->setAnchorPoint(Vec2(0,1));
+        cardDesc->setColor(Color3B::WHITE);
         
-        this->addChild(cardHeader,3);
-        this->addChild(cardDesc,3);
+        leftPart->addChild(cardHeader,3);
+        leftPart->addChild(cardDesc,3);
     }
     else
     {
@@ -181,14 +185,16 @@ bool CardInfo::init(std::string intname)
         textDesc = Text::create(MainTable::dataCards[cardIndex]->getDescription(),"isotextpro/PFIsotextPro-Light.ttf",visibleSize.height/Font_K);
         textDesc->ignoreContentAdaptWithSize(false);
         textDesc->setContentSize(Size(leftPanel.width - 2*Margin, leftPanel.height*4/5 - text->getContentSize().height));
-        textDesc->setTextHorizontalAlignment(TextHAlignment::LEFT);
-        textDesc->setPosition(Vec2(origin.x + Margin, origin.y + text->getPosition().y - text->getContentSize().height));
+        textDesc->setTextHorizontalAlignment(TextHAlignment::CENTER);
+        textDesc->setPosition(Vec2(origin.x + Margin, origin.y + Margin));
         textDesc->setAnchorPoint(Vec2(0,1));
         textDesc->setColor(Color3B::WHITE);
     }
     
-    this->addChild(text,2);
-    this->addChild(textDesc,2);
+    leftPart->addChild(text,2);
+    leftPart->addChild(textDesc,2);
+    leftPart->setPosition(Vec2::ZERO);
+    this->addChild(leftPart,2);
     this->addChild(sprite,2);
     this->addChild(textBackground,1);
     this->addChild(background,0);
