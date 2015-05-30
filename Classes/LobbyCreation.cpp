@@ -50,8 +50,10 @@ bool LobbyCreation::init()
     //ввод
    // std::string pNormalSprite = "menus/m17.png";
     //Widget::EditBox::create
+
     auto textField = cocos2d::ui::TextField::create("Ваше имя","isotextpro/PFIsotextPro-Regular.ttf",30);
     textField->setMaxLength(10);
+    textField->setColor(Color3B::BLACK);
     textField->setPosition(Vec2(origin.x + visibleSize.width/2,
                                 origin.y + visibleSize.height - label->getContentSize().height*2
                                 - textField->getContentSize().height));
