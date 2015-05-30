@@ -18,6 +18,7 @@
 #include "appwarp.h"
 #include "CardInfo.h"
 #include "MainMenu.h"
+#include <vector>
 #define Height_K 7.35
 
 #define APPWARP_APP_KEY     "e9e179212bf8ab524908f4f2449a5399469a41b7a10c73d653bbc30af77141b2"
@@ -83,12 +84,19 @@ public:
     void onRotateLeft(cocos2d::Ref* pSender);           //вращать налево
     void onTest(cocos2d::Ref* pSender);                 //кнопка тест
     
+    
     //Никнейм пользователя
     std::string userName = "SASHQUAA";
     
     ////////////
     //APPWARP///
     ////////////
+    
+    void DisplayLobbySelection();
+    void JoinRoom(cocos2d::Ref* pSender);
+    
+    std::vector<std::string> Rooms;
+    
     void connectToAppWarp(cocos2d::Ref* pSender);
     
     void startGame();

@@ -195,38 +195,6 @@ bool MainTable::init()
     table->addChild(chip2,2);
     chip2->setPosition(cards[0]->getPosition());
     current_position2 = 0;
-
-    
-    //---------ВЫБОР ЛОББИ--------
-    cocos2d::Layer* LobbyChoose = Layer::create();
-    LobbyChoose->setName("Lobby");
-    this->addChild(LobbyChoose,5);
-    LobbyChoose->setPosition(Vec2(origin.x + visibleSize.width/2,
-                                  origin.y + visibleSize.height/2));
-    LobbyChoose->setContentSize(Size(visibleSize.width/2, visibleSize.height/2));
-    LobbyChoose->setAnchorPoint(Vec2(0.5,0.5));
-    auto background = Sprite::create("background.png");
-   // background->setPosition(Vec2::ZERO);
-    background->setOpacity(400);
-    background->setScale(0.5);
-    LobbyChoose->addChild(background);
-    tableMenu->setEnabled(false);
-    ((Menu*) (this->getChildByName("menu")))->setEnabled(false);
-    auto exitLobby = MenuItemImage::create("menus/m8.png", "menus/m14.png",
-                                      [&](Ref* sender){
-                                          tableMenu->setEnabled(true);
-                                          ((Menu*) (this->getChildByName("menu")))->setEnabled(true);
-                                          this->removeChildByName("Lobby");
-                                          //this->autorelease();
-                                          //this->retain();
-                                      });
-    
-    exitLobby->setPosition(Vec2::ZERO);
-    
-    auto exitLobbyButton = Menu::create(exitLobby, NULL);
-    exitLobbyButton->setPosition(Vec2::ZERO);
-    LobbyChoose->addChild(exitLobbyButton,1);
-    //---------ВЫБОР ЛОББИ--------
     
     return true;
 }
@@ -307,12 +275,16 @@ void MainTable::onRotateLeft(Ref* pSender)
 
 void MainTable::onTest(cocos2d::Ref *pSender)
 {
+    sendData("M39");
+}
+
+void MainTable::JoinRoom(cocos2d::Ref *pSender)
+{
     AppWarp::Client *warpClientRef;
     warpClientRef = AppWarp::Client::getInstance();
-    warpClientRef->getOnlineUsers();
-    std::cout<<"\n";
-    warpClientRef->getLiveUserInfo(this->userName);
-    warpClientRef->getAllRooms();
+    MenuItemLabel* A = (MenuItemLabel*) pSender;
+    std::string room_id = A->getName();
+    warpClientRef->joinRoom(room_id);
 }
 
 void MainTable::createTable(Node* Table)
@@ -491,6 +463,61 @@ void MainTable::userStep(Node* spr,int strokes_number, int* curr_pos)
 }
 
 
+void MainTable::DisplayLobbySelection()
+{
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    Size visibleSize = Director::getInstance()->getVisibleSize();
+    //---------ВЫБОР ЛОББИ--------
+    cocos2d::Layer* LobbyChoose = Layer::create();
+    LobbyChoose->setName("Lobby");
+    this->addChild(LobbyChoose,5);
+    LobbyChoose->setPosition(Vec2(origin.x + visibleSize.width/2,
+                                  origin.y + visibleSize.height/2));
+    LobbyChoose->setContentSize(Size(visibleSize.width/2, visibleSize.height/2));
+    LobbyChoose->setAnchorPoint(Vec2(0.5,0.5));
+    auto background = Sprite::create("background.png");
+    float bg_HeightK = background->getContentSize().height / LobbyChoose->getContentSize().height;
+    float bg_WidthK = background->getContentSize().width / LobbyChoose->getContentSize().width;
+    background->setOpacity(400);
+    background->setScale(1/bg_WidthK,1/bg_HeightK);
+    LobbyChoose->addChild(background);
+    tableMenu->setEnabled(false);
+    ((Menu*) (this->getChildByName("menu")))->setEnabled(false);
+    auto exitLobby = MenuItemImage::create("menus/m8.png", "menus/m14.png",
+                                           [&](Ref* sender){
+                                               tableMenu->setEnabled(true);
+                                               ((Menu*) (this->getChildByName("menu")))->setEnabled(true);
+                                               this->removeChildByName("Lobby");
+                                               //this->autorelease();
+                                               //this->retain();
+                                           });
+    exitLobby->setAnchorPoint(Vec2(0.5,0.5));
+    exitLobby->setPosition(Vec2(-LobbyChoose->getContentSize().width/2, LobbyChoose->getContentSize().height/2));
+    
+    auto exitLobbyButton = Menu::create(exitLobby, NULL);
+    exitLobbyButton->setPosition(Vec2::ZERO);
+    LobbyChoose->addChild(exitLobbyButton,1);
+    
+    Vector<MenuItem*> LobbyItems;
+    
+    for(int i = 0; i<Rooms.size(); i++)
+    {
+        auto room = Label::createWithTTF(Rooms[i], "isotextpro/PFIsotextPro-Regular.ttf", 24);
+        room -> setColor(Color3B::BLACK);
+        auto RoomButton = MenuItemLabel::create(room, CC_CALLBACK_1(MainTable::JoinRoom, this));
+        RoomButton->setPosition(Vec2(-LobbyChoose->getContentSize().width/3, LobbyChoose->getContentSize().height/3));
+        RoomButton->setName(Rooms[i]);
+        LobbyItems.pushBack(RoomButton);
+    }
+    auto lobbies = Menu::createWithArray(LobbyItems);
+    lobbies->setPosition(Vec2(0.5,0.5));
+    LobbyChoose->addChild(lobbies, 1);
+    
+    
+    //---------ВЫБОР ЛОББИ--------
+}
+
+
 /// APPWARP
 void MainTable::connectToAppWarp(Ref *pSender)
 {
@@ -503,7 +530,6 @@ void MainTable::connectToAppWarp(Ref *pSender)
     warpClientRef->setRoomRequestListener(this);
     warpClientRef->setZoneRequestListener(this);
     warpClientRef->connect(this->userName);
-    //warpClientRef->getLiveRoomInfo(ROOM_ID);
 }
 
 void MainTable::startGame()
@@ -516,34 +542,48 @@ void MainTable::pauseGame()
     
 }
 
+//// Коллбеки ////
 
+//После коннекта
 void MainTable::onConnectDone(int res, int reasonCode)
 {
     if(res == AppWarp::ResultCode::success)
     {
-        cocos2d::MessageBox("CONNECTION", "SUCCESS");
+        //cocos2d::MessageBox("CONNECTION", "SUCCESS");
         AppWarp::Client *warpClientRef;
         warpClientRef = AppWarp::Client::getInstance();
-        warpClientRef->joinRoom(ROOM_ID);
+        warpClientRef->getAllRooms();
     } else {
         printf("ERROR %d", res);
+        
+        //Коннектимся, пока не можем
         connectToAppWarp(this);
     }
 }
 
+//После присоединения к комнате
 void MainTable::onJoinRoomDone(AppWarp::room revent)
 {
     if (revent.result==0)
     {
-        printf("\nonJoinRoomDone .. SUCCESS\n");
+        printf("\nonJoinRoomDone .. CONNECTED TO %s", revent.roomId.c_str());
+        
         AppWarp::Client *warpClientRef;
         warpClientRef = AppWarp::Client::getInstance();
-        warpClientRef->subscribeRoom(ROOM_ID);
+        
+        //Подписываемся на сообщения в комнате
+        warpClientRef->subscribeRoom(revent.roomId);
+        
+        //Выключаем менюшку выбора лобби
+        this->removeChildByName("Lobby");
+        tableMenu->setEnabled(true);
+        ((Menu*) (this->getChildByName("menu")))->setEnabled(true);
     }
     else
         printf("\nonJoinRoomDone .. FAILED\n");
 }
 
+//После подписки на комнату
 void MainTable::onSubscribeRoomDone(AppWarp::room revent)
 {
     if (revent.result==0)
@@ -554,6 +594,7 @@ void MainTable::onSubscribeRoomDone(AppWarp::room revent)
         printf("\nonSubscribeRoomDone .. FAILED\n");
 }
 
+//Отправить сообщение
 void MainTable::sendData(std::string message = "")
 {
     AppWarp::Client *warpClientRef;
@@ -561,6 +602,7 @@ void MainTable::sendData(std::string message = "")
     warpClientRef->sendChat(message);
 }
 
+//Парсинг сообщения
 void MainTable::onChatReceived(AppWarp::chat chatevent)
 {
     std::cout<<"SENDER: "<<chatevent.sender <<" onChatReceived: ";
@@ -581,6 +623,20 @@ void MainTable::onChatReceived(AppWarp::chat chatevent)
     
 }
 
+//Проверяем доступные комнаты
+void MainTable::onGetAllRoomsDone(AppWarp::liveresult event)
+{
+    for(int i = 0; i<event.list.size(); i++)
+    {
+        this->Rooms.push_back(event.list[i]);
+    }
+    
+    //Отображаем менюшку выбора
+    DisplayLobbySelection();
+}
+
+
+////////// TODO ////////////
 void MainTable::onGetOnlineUsersDone(AppWarp::liveresult event)
 {
     std::cout<< "ONLINE: ";
@@ -604,16 +660,6 @@ void MainTable::onSetCustomRoomDataDone(AppWarp::liveroom event)
 {
     
 }
-
-
-void MainTable::onGetAllRoomsDone(AppWarp::liveresult event)
-{
-    for(int i = 0; i<event.list.size(); i++)
-    {
-        std::cout<<event.list[i]<<" ";
-    }
-}
-
 
 void MainTable::onUserPaused(std::string user, std::string locId, bool isLobby)
 {
