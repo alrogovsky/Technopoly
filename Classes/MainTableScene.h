@@ -22,7 +22,7 @@
 
 #define APPWARP_APP_KEY     "e9e179212bf8ab524908f4f2449a5399469a41b7a10c73d653bbc30af77141b2"
 #define APPWARP_SECRET_KEY  "6c8de95986e7916ac1faf63972e953e87f50dacd4075a2eec2b24c91f0c92339"
-#define ROOM_ID "1356183962"
+#define ROOM_ID "1799451657"
 
 void InitData();
 
@@ -90,7 +90,6 @@ public:
     void onRotateLeft(cocos2d::Ref* pSender);           //вращать налево
     void onTest(cocos2d::Ref* pSender);                 //кнопка тест
     
-    
     //Никнейм пользователя
     std::string userName = "default";
     
@@ -98,6 +97,7 @@ public:
     //APPWARP///
     ////////////
     void connectToAppWarp(cocos2d::Ref* pSender);
+    
     void startGame();
     void pauseGame();
     
@@ -109,9 +109,14 @@ public:
     void onChatReceived(AppWarp::chat chatevent);
     void onUserPaused(std::string user,std::string locId,bool isLobby);
     void onUserResumed(std::string user,std::string locId,bool isLobby);
-
+    void onGetOnlineUsersDone(AppWarp::liveresult event);
+    void onGetLiveUserInfoDone(AppWarp::liveuser event);
+    void onGetLiveRoomInfoDone(AppWarp :: liveroom event);
+    void onSetCustomRoomDataDone(AppWarp :: liveroom event);
+    void onGetAllRoomsDone(AppWarp::liveresult event);
     
     CREATE_FUNC(MainTable);
+    
 };
 
 

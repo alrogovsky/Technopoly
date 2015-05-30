@@ -50,8 +50,10 @@ bool LobbyCreation::init()
     //ввод
    // std::string pNormalSprite = "menus/m17.png";
     //Widget::EditBox::create
+
     auto textField = cocos2d::ui::TextField::create("Ваше имя","isotextpro/PFIsotextPro-Regular.ttf",30);
     textField->setMaxLength(10);
+    textField->setColor(Color3B::BLACK);
     textField->setPosition(Vec2(origin.x + visibleSize.width/2,
                                 origin.y + visibleSize.height - label->getContentSize().height*2
                                 - textField->getContentSize().height));
@@ -86,12 +88,34 @@ bool LobbyCreation::init()
     
     auto menu = Menu::createWithArray(MenuItems);
     menu->setPosition(Vec2::ZERO);
+    ///////
+    auto mySprite = Sprite::create("fin_jake1.png");
+    mySprite->setPosition(Vec2(mySprite->getContentSize().width * 1.5 + origin.x, mySprite->getContentSize().height + origin.y));
+    // now lets animate the sprite we moved
+    
+    Vector<SpriteFrame*> animFrames;
+    animFrames.reserve(6);
+    animFrames.pushBack(SpriteFrame::create("fin_jake1.png", Rect(0,0,196,126)));
+    animFrames.pushBack(SpriteFrame::create("fin_jake2.png", Rect(0,0,196,126)));
+    animFrames.pushBack(SpriteFrame::create("fin_jake3.png", Rect(0,0,196,126)));
+    animFrames.pushBack(SpriteFrame::create("fin_jake4.png", Rect(0,0,196,126)));
+    animFrames.pushBack(SpriteFrame::create("fin_jake5.png", Rect(0,0,196,126)));
+    animFrames.pushBack(SpriteFrame::create("fin_jake6.png", Rect(0,0,196,126)));
+    
+    // create the animation out of the frames
+    Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
+    Animate* animate = Animate::create(animation);
+    
+    // run it and repeat it forever
+    mySprite->runAction(RepeatForever::create(animate));
+    ///////
     
     //добавление элементов на сцену
     this->addChild(textField, 1);
     this->addChild(sprite, 0);
     this->addChild(label, 1);
     this->addChild(menu, 1);
+    this->addChild(mySprite, 1);
     
     return true;
 
