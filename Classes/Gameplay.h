@@ -13,13 +13,16 @@
 #include "string.h"
 #include "ui/CocosGUI.h"
 
-void InitData();
+using namespace std;
+enum TypeCard {Subject,Training,Action};
+class Card;
+class Group;
 
 class User{
 private:
     int _resources;
     std::string _name;
-    static const int firstTimeRecources = 100;
+    static const int firstTimeRecources = 1500;
 public:
     User();
     void setName(std::string);
@@ -33,13 +36,22 @@ class Card{
 private:
     std::string _name;
     std::string _description;
+    int _index;
+   // static int count;
 public:
     Card();
+    ~Card();
+    Group* cardGroup;
+    TypeCard type;
     virtual void Action(User*) = 0;
     void setName(std::string);
     void setDescription(std::string);
+    void setIndex(int);
+    void setGroup(Group*);
     std::string getName();
     std::string getDescription();
+    int getIndex();
+    Group* getGroup();
     //Card();
     //static Card* create();
 };
@@ -50,11 +62,12 @@ private:
     int house_price;
     int house_count;
     int hotel_price;
+    User* Player;
     int tax;
 public:
     SubjectCard();
+    ~SubjectCard();
     void Action(User*);
-    
 };
 
 class TrainingCard : public Card{
@@ -67,8 +80,22 @@ public:
 
 class ActionCard : public Card{
 public:
+    ActionCard();
     void Action(User*);
 };
 
+class Group
+{
+    std::string _name;
+    std::string _description;
+public:
+    vector<Card*> cards;
+    void addCard(Card*);
+    void setName(std::string);
+    void setDescription(std::string);
+    std::string getName();
+    std::string getDescription();
+
+};
 
 #endif /* defined(__Technopoly__Gameplay__) */

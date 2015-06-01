@@ -16,9 +16,6 @@ Scene* MainTable::createScene()
     auto layerLobby = LobbyCreation::create();
     scene->addChild(layerLobby);
     
-    //инициализация данных
-    //InitData();
-    
     return scene;
 }
 
@@ -29,7 +26,7 @@ bool MainTable::init()
     {
         return false;
     }
-    
+    InitData();
     //добавление в кэш текстур изображения кубиков
     Director::getInstance()->getTextureCache()->addImage("1.png");
     Director::getInstance()->getTextureCache()->addImage("2.png");
@@ -37,8 +34,6 @@ bool MainTable::init()
     Director::getInstance()->getTextureCache()->addImage("4.jpg");
     Director::getInstance()->getTextureCache()->addImage("5.jpg");
     Director::getInstance()->getTextureCache()->addImage("6.jpg");
-    
-   // connectToAppWarp(this);
     
     //общий размер
     Size fullSize = Director::getInstance()->getVisibleSize();
