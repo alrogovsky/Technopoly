@@ -106,6 +106,7 @@ public:
     void onGetLiveRoomInfoDone(AppWarp :: liveroom event);
     void onSetCustomRoomDataDone(AppWarp :: liveroom event);
     void onGetAllRoomsDone(AppWarp::liveresult event);
+    void onCreateRoomDone(AppWarp::room event);
     
     CREATE_FUNC(MainTable);
     

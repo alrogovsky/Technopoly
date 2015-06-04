@@ -523,11 +523,19 @@ void MainTable::onConnectDone(int res, int reasonCode)
         cocos2d::MessageBox("CONNECTION", "SUCCESS");
         AppWarp::Client *warpClientRef;
         warpClientRef = AppWarp::Client::getInstance();
-        warpClientRef->joinRoom(ROOM_ID);
+        //warpClientRef->joinRoom(ROOM_ID);
+        warpClientRef->createRoom("LDA", userName, 3);
     } else {
         printf("ERROR %d", res);
         connectToAppWarp(this);
     }
+}
+
+void MainTable::onCreateRoomDone(AppWarp::room event)
+{
+    AppWarp::Client *warpClientRef;
+    warpClientRef = AppWarp::Client::getInstance();
+    warpClientRef->joinRoom(event.roomId);
 }
 
 void MainTable::onJoinRoomDone(AppWarp::room revent)
@@ -537,7 +545,7 @@ void MainTable::onJoinRoomDone(AppWarp::room revent)
         printf("\nonJoinRoomDone .. SUCCESS\n");
         AppWarp::Client *warpClientRef;
         warpClientRef = AppWarp::Client::getInstance();
-        warpClientRef->subscribeRoom(ROOM_ID);
+        warpClientRef->subscribeRoom(revent.roomId);
     }
     else
         printf("\nonJoinRoomDone .. FAILED\n");

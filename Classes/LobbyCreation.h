@@ -22,7 +22,8 @@ public:
     
     void onBack(cocos2d::Ref* pSender);
     void onNext(cocos2d::Ref* pSender);
-
+    int scale_k = 5;
+    
     CREATE_FUNC(LobbyCreation);
 };
 
