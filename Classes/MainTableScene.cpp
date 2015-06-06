@@ -522,6 +522,7 @@ void MainTable::onConnectDone(int res, int reasonCode)
         warpClientRef->createRoom("LDA", userName, 3);
     } else {
         printf("ERROR %d", res);
+        //cocos2d::MessageBox("Ошибка", "введите имя");
         connectToAppWarp(this);
     }
 }
