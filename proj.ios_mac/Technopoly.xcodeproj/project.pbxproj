@@ -57,7 +57,8 @@
 		521A8EA919F11F5000D177D7 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 521A8EA819F11F5000D177D7 /* fonts */; };
 		521A8EAA19F11F5000D177D7 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 521A8EA819F11F5000D177D7 /* fonts */; };
 		52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B47A461A53D09B004E4C60 /* Security.framework */; };
-		82124E451B18FC6700799A4B /* Data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82124E441B18FC6700799A4B /* Data.cpp */; };
+		82124E551B191B7500799A4B /* Data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82124E531B191B7500799A4B /* Data.cpp */; };
+		82124E561B191B7500799A4B /* Data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82124E531B191B7500799A4B /* Data.cpp */; };
 		8228F96C1B10C51C00242B8C /* CardInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8228F96A1B10C51C00242B8C /* CardInfo.cpp */; };
 		8228F96D1B10C51F00242B8C /* CardInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8228F96A1B10C51C00242B8C /* CardInfo.cpp */; };
 		8262943E1AAF051F00CB7CF7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8262943D1AAF051F00CB7CF7 /* Security.framework */; };
@@ -232,7 +233,7 @@
 		521A8E6319F0C34300D177D7 /* Default-736h@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-736h@3x.png"; sourceTree = "<group>"; };
 		521A8EA819F11F5000D177D7 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		52B47A461A53D09B004E4C60 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
-		82124E441B18FC6700799A4B /* Data.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Data.cpp; sourceTree = "<group>"; };
+		82124E531B191B7500799A4B /* Data.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Data.cpp; sourceTree = "<group>"; };
 		8228F96A1B10C51C00242B8C /* CardInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CardInfo.cpp; sourceTree = "<group>"; };
 		8228F96B1B10C51C00242B8C /* CardInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardInfo.h; sourceTree = "<group>"; };
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -455,7 +456,6 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				82124E441B18FC6700799A4B /* Data.cpp */,
 				8228F96A1B10C51C00242B8C /* CardInfo.cpp */,
 				8228F96B1B10C51C00242B8C /* CardInfo.h */,
 				46880B8419C43A87006E1F66 /* AppDelegate.cpp */,
@@ -468,6 +468,7 @@
 				82D68F801B01D913008F435C /* LobbyCreation.h */,
 				82B9DCD01B0630690054FD77 /* Gameplay.cpp */,
 				82B9DCD11B0630690054FD77 /* Gameplay.h */,
+				82124E531B191B7500799A4B /* Data.cpp */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -775,7 +776,7 @@
 				FA3F39661B1605350017A163 /* urlencode.cpp in Sources */,
 				FA3F39641B1605350017A163 /* udpsocket.cpp in Sources */,
 				FA3F395E1B1605350017A163 /* requests.cpp in Sources */,
-				82124E451B18FC6700799A4B /* Data.cpp in Sources */,
+				82124E551B191B7500799A4B /* Data.cpp in Sources */,
 				FA3F39601B1605350017A163 /* SHA1.cpp in Sources */,
 				FA3F39681B1605350017A163 /* utilities.cpp in Sources */,
 				8228F96C1B10C51C00242B8C /* CardInfo.cpp in Sources */,
@@ -805,6 +806,7 @@
 				82B9DCD31B0630690054FD77 /* Gameplay.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
 				FA3F39571B1605350017A163 /* appwarp.cpp in Sources */,
+				82124E561B191B7500799A4B /* Data.cpp in Sources */,
 				82D68F4E1B00C307008F435C /* MainTableScene.cpp in Sources */,
 				FA3F39691B1605350017A163 /* utilities.cpp in Sources */,
 				FA3F395B1B1605350017A163 /* cJSON.c in Sources */,

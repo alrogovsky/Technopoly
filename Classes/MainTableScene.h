@@ -16,14 +16,17 @@
 #include "boost/algorithm/string/classification.hpp"
 #include "Gameplay.h"
 #include "appwarp.h"
-#include "CardInfo.h"
 #include "MainMenu.h"
 #include <vector>
-#define Height_K 7.35
+#include "CardInfo.h"
+#include "Gameplay.h"
 
-#define APPWARP_APP_KEY     "e9e179212bf8ab524908f4f2449a5399469a41b7a10c73d653bbc30af77141b2"
-#define APPWARP_SECRET_KEY  "6c8de95986e7916ac1faf63972e953e87f50dacd4075a2eec2b24c91f0c92339"
+#define Height_K 7.35
+#define APPWARP_APP_KEY "e9e179212bf8ab524908f4f2449a5399469a41b7a10c73d653bbc30af77141b2"
+#define APPWARP_SECRET_KEY "6c8de95986e7916ac1faf63972e953e87f50dacd4075a2eec2b24c91f0c92339"
 #define ROOM_ID "1799451657"
+
+void InitData();
 
 class MainTable :   public cocos2d::Layer,
                     public AppWarp::ConnectionRequestListener,
@@ -34,25 +37,30 @@ class MainTable :   public cocos2d::Layer,
 public:
     // создание кнопок для карт
     static const int numbers_of_cards = 40;
+    static const int numbers_of_groups = 8;
     cocos2d::MenuItemImage* cards [numbers_of_cards];
     cocos2d::Vector<cocos2d::MenuItem*> tableButtons;
     cocos2d::Menu* tableMenu;
-   
+    
     // функция создания сцены
     static cocos2d::Scene* createScene();
     virtual bool init();
+    
+    //данные
+    static Card** dataCards;    //данные о картах
+    static Group* Groups;       //данные о группах
     
     // исходное положение фишек
     int current_position1 = 0;
     int current_position2 = 0;
     
     // создание стола с картами
-    cocos2d::Node* table;                                                   // для работы с поворотом
-    void createTable(cocos2d::Node* Table);                                 // создание стола
-    void addRight(cocos2d::Node*, cocos2d::Node*, cocos2d::Size, bool);     // добавление карты справа
-    void addLeft(cocos2d::Node*, cocos2d::Node*, cocos2d::Size, bool);      // добавление карты слева
-    void addTop(cocos2d::Node*, cocos2d::Node*, cocos2d::Size, bool);       // добавление карты сверху
-    void addBottom(cocos2d::Node*, cocos2d::Node*, cocos2d::Size, bool);    // добавление карты снизу
+    cocos2d::Node* table;                                                       // для работы с поворотом
+    void createTable(cocos2d::Node* Table);                                     // создание стола
+    void addRight   (cocos2d::Node*, cocos2d::Node*, cocos2d::Size, bool);      // добавление карты справа
+    void addLeft    (cocos2d::Node*, cocos2d::Node*, cocos2d::Size, bool);      // добавление карты слева
+    void addTop     (cocos2d::Node*, cocos2d::Node*, cocos2d::Size, bool);      // добавление карты сверху
+    void addBottom  (cocos2d::Node*, cocos2d::Node*, cocos2d::Size, bool);      // добавление карты снизу
     
     // шаг пользователя
     cocos2d::MenuItemLabel* StepButton;
@@ -86,7 +94,7 @@ public:
     
     
     //Никнейм пользователя
-    std::string userName = "SASHQUAA";
+    std::string userName = "default";
     
     ////////////
     //APPWARP///

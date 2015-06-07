@@ -16,9 +16,6 @@ Scene* MainTable::createScene()
     auto layerLobby = LobbyCreation::create();
     scene->addChild(layerLobby);
     
-    //инициализация данных
-    //InitData();
-    
     return scene;
 }
 
@@ -29,7 +26,7 @@ bool MainTable::init()
     {
         return false;
     }
-    
+    InitData();
     //добавление в кэш текстур изображения кубиков
     Director::getInstance()->getTextureCache()->addImage("1.png");
     Director::getInstance()->getTextureCache()->addImage("2.png");
@@ -37,7 +34,6 @@ bool MainTable::init()
     Director::getInstance()->getTextureCache()->addImage("4.jpg");
     Director::getInstance()->getTextureCache()->addImage("5.jpg");
     Director::getInstance()->getTextureCache()->addImage("6.jpg");
-    
     
     //общий размер
     Size fullSize = Director::getInstance()->getVisibleSize();
@@ -503,7 +499,7 @@ void MainTable::DisplayLobbySelection()
     for(int i = 0; i<Rooms.size(); i++)
     {
         auto room = Label::createWithTTF(Rooms[i], "isotextpro/PFIsotextPro-Regular.ttf", 24);
-        room -> setColor(Color3B::BLACK);
+        room -> setColor(Color3B::WHITE);
         auto RoomButton = MenuItemLabel::create(room, CC_CALLBACK_1(MainTable::JoinRoom, this));
         RoomButton->setPosition(Vec2(-LobbyChoose->getContentSize().width/3, LobbyChoose->getContentSize().height/3));
         RoomButton->setName(Rooms[i]);
