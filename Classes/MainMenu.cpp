@@ -36,6 +36,10 @@ bool MainMenu::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
+    //фон
+    auto background = Sprite::create("background.png");
+    background->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+    
     //кнопака начать игру
     auto NewGameButton = cocos2d::ui::Button::create("button_new_game.png");
     auto size_button = NewGameButton->getContentSize();
@@ -53,8 +57,8 @@ bool MainMenu::init()
         }
     });
     //название игры
-    auto label = Sprite::create("button_technipoly.png");
-    label->setScale(1 / (height_button * scale_k));
+    auto BeginLabel = Sprite::create("button_technipoly.png");
+    BeginLabel->setScale(1 / (height_button * scale_k));
     
     //кнопка настройки
     auto OptionsButton = cocos2d::ui::Button::create("button_options.png");
@@ -85,57 +89,70 @@ bool MainMenu::init()
                 break;
         }
     });
-    
-    int delta = (visibleSize.height - label->getContentSize().height - NewGameButton->getContentSize().height - OptionsButton->getContentSize().height - CloseGameButton->getContentSize().height) / 3;
-    
-    //Расположение элементов на экране
-    label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                            origin.y + visibleSize.height - label->getContentSize().height * 0.5));
-    
-    NewGameButton->setPosition(Vec2(origin.x + visibleSize.width/2,
-                                    label->getPositionY() - label->getContentSize().height * 0.5 - NewGameButton->getContentSize().height * 0.5 -  delta));
-    
-    OptionsButton->setPosition(Vec2(origin.x + visibleSize.width/2,
-                                    NewGameButton->getPositionY()  - NewGameButton->getContentSize().height * 0.5 - OptionsButton->getContentSize().height * 0.5  -  delta));
-    
-    CloseGameButton->setPosition(Vec2(origin.x + visibleSize.width/2,
-                                      OptionsButton->getPositionY() - NewGameButton->getContentSize().height * 0.5 - CloseGameButton->getContentSize().height * 0.5 - delta ));
-    
 
-    //создание фона
-    auto background = Sprite::create("background.png");
-    background->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     
+    //расстояние между блоками
+    int deltaCount = 3;
+    int delta = (visibleSize.height - BeginLabel->getBoundingBox().size.height - NewGameButton->getBoundingBox().size.height - OptionsButton->getBoundingBox().size.height - CloseGameButton->getBoundingBox().size.height) / deltaCount;
     
-    ///////
-    auto mySprite = Sprite::create("fin_jake1.png");
-    mySprite->setPosition(Vec2(mySprite->getContentSize().width * 1.5 + origin.x, mySprite->getContentSize().height + origin.y));
+    //стрелки
+    auto arrow_width = 8 / 37.79 * height_button * scale_k;
+    auto arrow1= Sprite::create("arrow_small_white.png");
+    arrow1->setAnchorPoint(Vec2(0.5,0.5));
+    arrow1->setScale(arrow_width ,delta /arrow1->getContentSize().height );
+    
+    auto arrow2= Sprite::create("arrow_small_white.png");
+    arrow2->setAnchorPoint(Vec2(0.5,0.5));
+    arrow2->setScale(arrow_width ,delta /arrow2->getContentSize().height );
+    
+    auto arrow3= Sprite::create("arrow_small_white.png");
+    arrow3->setAnchorPoint(Vec2(0.5,0.5));
+    arrow3->setScale(arrow_width ,delta /arrow3->getContentSize().height );
+
+    //Расположение элементов на экране
+    BeginLabel->setPosition(Vec2(origin.x + visibleSize.width/2,
+                            origin.y + visibleSize.height - BeginLabel->getBoundingBox().size.height * 0.5));
+    arrow1->setPosition(Vec2(BeginLabel->getPositionX(),  BeginLabel->getPositionY() - BeginLabel->getBoundingBox().size.height * 0.5 - delta * 0.5 ));
+    
+    NewGameButton->setPosition(Vec2(BeginLabel->getPositionX(),
+                                    BeginLabel->getPositionY() - BeginLabel->getBoundingBox().size.height * 0.5 - NewGameButton->getBoundingBox().size.height * 0.5 -  delta));
+    arrow2->setPosition(Vec2(BeginLabel->getPositionX(),  NewGameButton->getPositionY() - NewGameButton->getBoundingBox().size.height * 0.5 - delta * 0.5 ));
+    
+    OptionsButton->setPosition(Vec2(BeginLabel->getPositionX(),
+                                    NewGameButton->getPositionY()  - NewGameButton->getBoundingBox().size.height * 0.5 - OptionsButton->getBoundingBox().size.height * 0.5  -  delta));
+    arrow3->setPosition(Vec2(BeginLabel->getPositionX(),  OptionsButton->getPositionY() - OptionsButton->getBoundingBox().size.height * 0.5 - delta * 0.5 ));
+    CloseGameButton->setPosition(Vec2(BeginLabel->getPositionX(),
+                                      OptionsButton->getPositionY() - OptionsButton->getBoundingBox().size.height * 0.5 - CloseGameButton->getBoundingBox().size.height * 0.5 - delta ));
+    
+    //анимация
+    auto fin_and_jake = Sprite::create("fin_jake1.png");
+    fin_and_jake->setAnchorPoint(Vec2(0, 0));
+    fin_and_jake->setPosition(Vec2((BeginLabel->getPositionX() - BeginLabel->getBoundingBox().size.width * 0.5 - fin_and_jake->getBoundingBox().size.width) * 0.5 , CloseGameButton->getPositionY()));
     // now lets animate the sprite we moved
     
     Vector<SpriteFrame*> animFrames;
-    animFrames.reserve(6);
-    animFrames.pushBack(SpriteFrame::create("fin_jake1.png", Rect(0,0,196,126)));
+    animFrames.reserve(5);
     animFrames.pushBack(SpriteFrame::create("fin_jake2.png", Rect(0,0,196,126)));
     animFrames.pushBack(SpriteFrame::create("fin_jake3.png", Rect(0,0,196,126)));
     animFrames.pushBack(SpriteFrame::create("fin_jake4.png", Rect(0,0,196,126)));
     animFrames.pushBack(SpriteFrame::create("fin_jake5.png", Rect(0,0,196,126)));
     animFrames.pushBack(SpriteFrame::create("fin_jake6.png", Rect(0,0,196,126)));
     
-    // create the animation out of the frames
     Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
     Animate* animate = Animate::create(animation);
-    
-    // run it and repeat it forever
-    mySprite->runAction(RepeatForever::create(animate));
+    fin_and_jake->runAction(RepeatForever::create(animate));
     ///////
 
     //добавление элементов на сцену
     this->addChild(background, 0);
-    this->addChild(label, 1);
+    this->addChild(BeginLabel, 1);
+    this->addChild(arrow1, 1);
     this->addChild(NewGameButton, 1);
+    this->addChild(arrow2, 1);
     this->addChild(OptionsButton, 1);
+    this->addChild(arrow3, 1);
     this->addChild(CloseGameButton, 1);
-    this->addChild(mySprite, 1);
+    this->addChild(fin_and_jake, 2);
     return true;
 }
 
