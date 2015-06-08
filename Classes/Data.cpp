@@ -47,8 +47,8 @@ void InitData()
     for(int i=0; i<NumberOfSubjectCards; i++)
     {
         MainTable::dataCards[indexSubject[i]] = new SubjectCard();
-        MainTable::dataCards[indexSubject[i]]->setName("Название конкретной карты");
-        MainTable::dataCards[indexSubject[i]]->setDescription("Какое-то описание карты");
+       // MainTable::dataCards[indexSubject[i]]->setName("Название конкретной карты");
+       // MainTable::dataCards[indexSubject[i]]->setDescription("Какое-то описание карты");
         MainTable::dataCards[indexSubject[i]]->setIndex(indexSubject[i]);
     }
     for(int i=0; i<NumberOfOSCards; i++)
@@ -61,29 +61,29 @@ void InitData()
     for(int i=0; i<NumberOfComChest; i++)
     {
         MainTable::dataCards[indexChest[i]] = new ActionCard();
-        MainTable::dataCards[indexChest[i]]->setName("Название");
-        MainTable::dataCards[indexChest[i]]->setDescription("Описание");
+        MainTable::dataCards[indexChest[i]]->setName("Технопарк");
+        MainTable::dataCards[indexChest[i]]->setDescription("Остановка на таком поле означает, что Вам выпадает карточка, которая может потребовать, чтобы Вы: \n*передвинули Вашу фишку\n*отправились в Больницу\n*выписались из Больницы\n*потратили время\n*получили время");
         MainTable::dataCards[indexChest[i]]->setIndex(indexChest[i]);
     }
     for(int i=0; i<NumberOfTaxPay; i++)
     {
         MainTable::dataCards[indexTax[i]] = new ActionCard();
-        MainTable::dataCards[indexTax[i]]->setName("Название");
-        MainTable::dataCards[indexTax[i]]->setDescription("Описание");
+        MainTable::dataCards[indexTax[i]]->setName("Неприятности случаются");
+        MainTable::dataCards[indexTax[i]]->setDescription("Если Вы остановитесь на таком поле, Вам нужно просто потратить определенное количество времени.");
         MainTable::dataCards[indexTax[i]]->setIndex(indexTax[i]);
     }
     for(int i=0; i<NumberOfChance; i++)
     {
         MainTable::dataCards[indexChance[i]] = new ActionCard();
-        MainTable::dataCards[indexChance[i]]->setName("Название");
-        MainTable::dataCards[indexChance[i]]->setDescription("Описание");
+        MainTable::dataCards[indexChance[i]]->setName("Шанс");
+        MainTable::dataCards[indexChance[i]]->setDescription("Остановка на таком поле означает, что Вам выпадает карточка, которая может потребовать, чтобы Вы: \n*передвинули Вашу фишку\n*отправились в Больницу\n*выписались из Больницы\n*потратили время\n*получили время");
         MainTable::dataCards[indexChance[i]]->setIndex(indexChance[i]);
     }
     for(int i=0; i<NumberOfTraining; i++)
     {
         MainTable::dataCards[indexTraining[i]] = new ActionCard();
-        MainTable::dataCards[indexTraining[i]]->setName("Название");
-        MainTable::dataCards[indexTraining[i]]->setDescription("Описание");
+        MainTable::dataCards[indexTraining[i]]->setName("Цель курса");
+       // MainTable::dataCards[indexTraining[i]]->setDescription("Описание");
         MainTable::dataCards[indexTraining[i]]->setIndex(indexTraining[i]);
     }
     for(int i=0; i<NumberOfCorners; i++)
@@ -93,36 +93,45 @@ void InitData()
         MainTable::dataCards[indexCorner[i]]->setDescription("Описание");
         MainTable::dataCards[indexCorner[i]]->setIndex(indexCorner[i]);
     }
-   
+  
+    MainTable::dataCards[indexTraining[0]]->setDescription("Повышение коммуникативной компетентности участников и развитие навыков эффективного делового общения для результативного и успешного взаимодействия с партнёрами с помощью использования технологий коммуникации.");
+    MainTable::dataCards[indexTraining[1]]->setDescription("Изучение структуры и инструментов человекоориентированного подхода к разработке интерфейсов, основных принципов и паттернов разработки пользовательских интерфейсов, формирование навыков анализа, подбора и применения необходимого инструментария для решения поставленных интерфейсных задач.");
 
     //MainTable::dataCards[0] = new ActionCard();
     MainTable::dataCards[0]->setName("Круг Пройден!");
-    MainTable::dataCards[0]->setDescription("При прохождении данного поля, вы получаете 200 ресурсов");
+    MainTable::dataCards[0]->setDescription("При прохождении данного поля, вы получаете 200");
+    
+    MainTable::dataCards[20]->setName("Время попить кофе");
+    MainTable::dataCards[20]->setDescription("Если Вы остановитесь на таком поле, просто отдохните до следующего Вашего хода. Вы находитесь здесь бесплатно и не подвергаетесь никаким штрафам.");
+    
+    MainTable::dataCards[30]->setName("Пора подлечиться!");
+    MainTable::dataCards[30]->setDescription("Если Вы остановитесь на таком поле, вам придется отправиться в больницу.");
     
     MainTable::Groups[0].addCard(MainTable::dataCards[1]);
     MainTable::Groups[0].addCard(MainTable::dataCards[3]);
     MainTable::Groups[0].setName("Вступительные испытания");
-    MainTable::Groups[0].setDescription("Наисложнейшие тесты, отбирающие луч... нет, даже так... ЛУЧШИХ из ЛУЧШИХ");
+    MainTable::Groups[0].setDescription("Цель собеседования – с одной стороны, проверить уровень знаний и навыков кандидатов, а с другой — сориентировать студентов, рассказать, чем занимаются в Технопарке, и выяснить, насколько это пересекается с их интересами и ожиданиями.");
     
     MainTable::Groups[1].addCard(MainTable::dataCards[6]);
     MainTable::Groups[1].addCard(MainTable::dataCards[8]);
     MainTable::Groups[1].addCard(MainTable::dataCards[9]);
-    MainTable::Groups[1].setName("С/С++");
-    MainTable::Groups[1].setDescription("СиСИСИСИСИСИСИСИСИСИСИСИСИСИСИСИСИСИСИСИСИСИСИСИС\nСИСИСИСИСИСИСИСИСИСИ\nСИСИСИС");
+    MainTable::Groups[1].setName("Цель курса");
+    MainTable::Groups[1].setDescription("Формирование практических навыков и умений, необходимых специалистам по разработке программного обеспечения (ПО) UNIX-подобных операционных систем для участия в проектах промышленной разработки среднего уровня сложности на языках C и C++, в том числе для замещения стажерских должностей разработчиков серверной части высоконагруженных приложений");
     
     MainTable::Groups[2].addCard(MainTable::dataCards[11]);
     MainTable::Groups[2].addCard(MainTable::dataCards[13]);
     MainTable::Groups[2].addCard(MainTable::dataCards[14]);
-    MainTable::Groups[2].setName("WEB");
-    MainTable::Groups[2].setDescription("не был на лекциях, но говорят интересно");
+    MainTable::Groups[2].setName("Цель курса");
+    MainTable::Groups[2].setDescription("Всестороннее изучение устройства и принципа работы современных web приложений и сети WWW в целом, а также получение практических навыков web разработки. Акцент в курсе сделан на разработку серверного ПО, т.е. backend разработку.");
     
     MainTable::Groups[3].addCard(MainTable::dataCards[16]);
     MainTable::Groups[3].addCard(MainTable::dataCards[18]);
     MainTable::Groups[3].addCard(MainTable::dataCards[19]);
-    MainTable::Groups[3].setName("Название группы карт");
-    MainTable::Groups[3].setDescription("Описание группы карт");
+    MainTable::Groups[3].setName("Цель курса");
+    MainTable::Groups[3].setDescription("Обучить основам алгоритмического программирования, привить практические навыки решения задач с помощью базовых алгоритмов и структур данных, сформировать правильное представление о времени работы и эффективности различных алгоритмов и структур данных.");
     
     MainTable::Groups[4].addCard(MainTable::dataCards[21]);
+    //MainTable::dataCards[21]->setDescription("Курс направлен на приобретение студентами навыков работы в среде linux на уровнях базового администрирования и оценки работоспособности системы.");
     MainTable::Groups[4].addCard(MainTable::dataCards[23]);
     MainTable::Groups[4].addCard(MainTable::dataCards[24]);
     MainTable::Groups[4].setName("фывфывфывфывфы");
@@ -131,17 +140,17 @@ void InitData()
     MainTable::Groups[5].addCard(MainTable::dataCards[26]);
     MainTable::Groups[5].addCard(MainTable::dataCards[27]);
     MainTable::Groups[5].addCard(MainTable::dataCards[29]);
-    MainTable::Groups[5].setName("Название группы карт");
-    MainTable::Groups[5].setDescription("Описание группы карт");
+    MainTable::Groups[5].setName("Цель курса");
+    MainTable::Groups[5].setDescription("Получение студентами практических навыков создания клиент-серверного приложения на примере разработки сервера простой многопользовательской on-line игры в малых группах (4-6 человек).");
     
     MainTable::Groups[6].addCard(MainTable::dataCards[31]);
     MainTable::Groups[6].addCard(MainTable::dataCards[32]);
     MainTable::Groups[6].addCard(MainTable::dataCards[34]);
-    MainTable::Groups[6].setName("Название группы карт");
-    MainTable::Groups[6].setDescription("Описание группы карт");
+    MainTable::Groups[6].setName("Цель курса");
+    MainTable::Groups[6].setDescription("Дать студентам навыки клиентской разработки, навыки работы с базовыми технологиями CSS и JS, а также обучить базовым принципам разработки под мобильные устройства.");
     
     MainTable::Groups[7].addCard(MainTable::dataCards[37]);
     MainTable::Groups[7].addCard(MainTable::dataCards[39]);
-    MainTable::Groups[7].setName("Название группы карт");
-    MainTable::Groups[7].setDescription("Описание группы карт");
+    MainTable::Groups[7].setName("Цель курса");
+    MainTable::Groups[7].setDescription("Получение студентами знаний в области проектирования реляционных БД, эффективной работы с БД, оптимизации запросов и схем данных, изучение особенностей использования БД в проектах с высокой нагрузкой и/или использующих большие массивы данных, noSQL и его использование для решения прикладных задач в WWW.");
 }

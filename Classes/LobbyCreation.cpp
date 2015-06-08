@@ -58,11 +58,18 @@ bool LobbyCreation::init()
     //Widget::EditBox::create
 
     auto textField = cocos2d::ui::TextField::create("ВАШЕ ИМЯ","isotextpro/PFIsotextPro-Bold.ttf",72);
-    textField->setMaxLength(9);
+    //textField->setMaxLength(9);
     textField->setScale(1 / (height_lable * scale_k));
     textField->setColor(Color3B::BLACK);
     textField->setName("fieldUserName");
     textField->setColor(Color3B::BLACK);
+    auto nameAdded =  0;
+//nameAdded = textField->getMaxLength();
+    //textField->setPlaceHolder("input words here");
+//textField->addEventListener(CC_CALLBACK_2(UITextFieldTest_LineWrap::textFieldEvent, this));
+    textField->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
+        std::cout << "editing a TextField" << std::endl;
+    });
     
     //отступ между блоками
     auto delta = (visibleSize.height - BeginLabel->getBoundingBox().size.height - textFieldBackground->getBoundingBox().size.height) * 0.5;
@@ -85,7 +92,9 @@ bool LobbyCreation::init()
         switch (type)
         {
             case ui::Widget::TouchEventType::BEGAN:
-                onNext(sender);
+                
+                if (!nameAdded)
+                    onNext(sender);
                 break;
             default:
                 break;
@@ -185,15 +194,22 @@ bool LobbyCreation::init()
 
 }
 
+
+
 void LobbyCreation::onNext(cocos2d::Ref* pSender)
 {
-    this->setVisible(false);
+    
     auto layerMainTable = MainTable::create();
    // layerMainTable->setVisible(false);          //добавили, но не выводим на экран
     layerMainTable->setName("GameLayer");       //для поиска
     layerMainTable->userName = ((cocos2d::ui::TextField*) (this->getChildByName("fieldUserName")))->getString();
+    if (layerMainTable->userName != "\0") {
+    this->setVisible(false);
     layerMainTable->connectToAppWarp(layerMainTable);
     this->getParent()->addChild(layerMainTable);
+    } else {
+    return;
+    }
 }
 
 void LobbyCreation::onBack(cocos2d::Ref* pSender)
