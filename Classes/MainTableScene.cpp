@@ -551,13 +551,18 @@ void MainTable::onConnectDone(int res, int reasonCode)
         warpClientRef->getAllRooms();
     } else {
         printf("ERROR %d", res);
-        
-        //Коннектимся, пока не можем
+        //cocos2d::MessageBox("Ошибка", "введите имя");
         connectToAppWarp(this);
     }
 }
 
-//После присоединения к комнате
+void MainTable::onCreateRoomDone(AppWarp::room event)
+{
+    AppWarp::Client *warpClientRef;
+    warpClientRef = AppWarp::Client::getInstance();
+    warpClientRef->joinRoom(event.roomId);
+}
+
 void MainTable::onJoinRoomDone(AppWarp::room revent)
 {
     if (revent.result==0)

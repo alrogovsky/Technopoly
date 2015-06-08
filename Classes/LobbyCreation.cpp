@@ -38,64 +38,129 @@ bool LobbyCreation::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     
     //фон
-    auto sprite = Sprite::create("paper.jpg");
-    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+    auto background = Sprite::create("paper.jpg");
+    background->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
     
-    //заголовок окна
-    auto label = Label::createWithTTF("Выбор никнейма:", "isotextpro/PFIsotextPro-Bold.ttf", 48);
-    label->setColor(Color3B::BLACK);
-    label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                           origin.y + visibleSize.height - label->getContentSize().height));
+    //первый блок "Ввести имя"
+    auto BeginLabel = Sprite::create("vvesti_name.png");
+    BeginLabel->setAnchorPoint(Vec2(0.5,0.5));
+    float height_lable = BeginLabel->getContentSize().height / visibleSize.height;
+    BeginLabel->setScale(1 / (height_lable * scale_k));
+  
+    
+    //фон для textField
+    auto textFieldBackground = Sprite::create("name.png");
+    textFieldBackground->setAnchorPoint(Vec2(0.5,0.5));
+    textFieldBackground->setScale(1 / (height_lable * scale_k));
     
     //ввод
    // std::string pNormalSprite = "menus/m17.png";
     //Widget::EditBox::create
 
-    auto textField = cocos2d::ui::TextField::create("Ваше имя","isotextpro/PFIsotextPro-Regular.ttf",30);
-    textField->setMaxLength(10);
+    auto textField = cocos2d::ui::TextField::create("ВАШЕ ИМЯ","isotextpro/PFIsotextPro-Bold.ttf",72);
+    //textField->setMaxLength(9);
+    textField->setScale(1 / (height_lable * scale_k));
     textField->setColor(Color3B::BLACK);
-    textField->setPosition(Vec2(origin.x + visibleSize.width/2,
-                                origin.y + visibleSize.height - label->getContentSize().height*2
-                                - textField->getContentSize().height));
     textField->setName("fieldUserName");
     textField->setColor(Color3B::BLACK);
+    auto nameAdded =  0;
+//nameAdded = textField->getMaxLength();
+    //textField->setPlaceHolder("input words here");
+//textField->addEventListener(CC_CALLBACK_2(UITextFieldTest_LineWrap::textFieldEvent, this));
+    textField->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
+        std::cout << "editing a TextField" << std::endl;
+    });
     
-    //Кнопка новой игры
-    auto backLabel = Label::createWithTTF("Назад", "isotextpro/PFIsotextPro-Regular.ttf", 34);
-    backLabel->setColor(Color3B::BLACK);
-    auto backButton = MenuItemLabel::create(backLabel, CC_CALLBACK_1(LobbyCreation::onBack, this));
-    
-    
-    
-    backButton->setPosition(Vec2(origin.x + backButton->getContentSize().width/1.5,
-                              origin.y + visibleSize.height - label->getContentSize().height/1.5));
-    
-    auto goNextLabel = Label::createWithTTF("Далее", "isotextpro/PFIsotextPro-Regular.ttf", 34);
-    goNextLabel->setColor(Color3B::BLACK);
-    auto goNextButton = MenuItemLabel::create(goNextLabel, CC_CALLBACK_1(LobbyCreation::onNext, this));
+    //отступ между блоками
+    auto delta = (visibleSize.height - BeginLabel->getBoundingBox().size.height - textFieldBackground->getBoundingBox().size.height) * 0.5;
+    auto delta_size = delta - BeginLabel->getBoundingBox().size.height * 0.5 - textFieldBackground->getBoundingBox().size.height * 0.5;
     
     
+    //толщина стрелки
+    auto arrow_width = 8 / 37.79 * (height_lable * scale_k);
+    //первая стрелка по вертикали
+    auto arrow1 = Sprite::create("arrow_small.png");
+    arrow1->setAnchorPoint(Vec2(0.5,0.5));
+    arrow1->setScale(arrow_width ,delta_size  / arrow1->getContentSize().height ) ;
     
-    backButton->setPosition(    Vec2(origin.x + backButton->getContentSize().width/1.5,
-                                     origin.y + visibleSize.height - label->getContentSize().height/1.5));
-    goNextButton->setPosition(  Vec2(origin.x + visibleSize.width/2,
-                                     origin.y + backButton->getContentSize().height * 3 ));
+    
+    //кнопко "Далее"
+    auto button_next = cocos2d::ui::Button::create("next.png");
+    button_next->setAnchorPoint(Vec2(0.5,0.5));
+    button_next->setScale(1 / (height_lable * scale_k));
+    button_next->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
+        switch (type)
+        {
+            case ui::Widget::TouchEventType::BEGAN:
+                
+                if (!nameAdded)
+                    onNext(sender);
+                break;
+            default:
+                break;
+        }
+    });
+    
+    //вторая стрелка по вертикали
+    auto arrow2 = Sprite::create("arrow_small.png");
+    arrow2->setAnchorPoint(Vec2(0.5,0.5));
+    arrow2->setScale(arrow_width, delta_size  / arrow2->getContentSize().height ) ;
+    
+        //кнопка "Назад"
+    auto button_back = cocos2d::ui::Button::create("back.png");
+    button_back->setAnchorPoint(Vec2(0.5,0.5));
+    button_back->setScale(1 / (height_lable * scale_k));
+    button_back->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
+        switch (type)
+        {
+            case ui::Widget::TouchEventType::BEGAN:
+                onBack(sender);
+                break;
+            default:
+                break;
+        }
+    });
+    
+    //горизонтальная часть стрелки слева
+    auto arrow_left1= Sprite::create("arrow_left1.png");
+    arrow_left1->setAnchorPoint(Vec2(0,0.5));
+    arrow_left1->setScale(button_back->getBoundingBox().size.width * 0.5 / arrow_left1->getContentSize().width , arrow_width);
+    
+    //вертикальная часть стрелки слева
+    auto arrow_left2= Sprite::create("arrow_small.png");
+    arrow_left2->setAnchorPoint(Vec2(0.5,0));
+    arrow_left2->setScale(arrow_width,
+        (BeginLabel->getPositionY() + button_back->getPositionY() + button_back->getBoundingBox().size.height) / arrow_left2->getContentSize().height);
+    
+    //расположение элементов на сцене
+    BeginLabel->setPosition(Vec2(origin.x + visibleSize.width/2,
+                           origin.y + visibleSize.height - BeginLabel->getBoundingBox().size.height ));
+    
+    arrow1->setPosition(Vec2(BeginLabel->getPositionX(), BeginLabel->getPositionY() - delta * 0.5));
+    
+    textFieldBackground->setPosition(Vec2(BeginLabel->getPositionX(),BeginLabel->getPositionY() - delta ));
+    
+    textField->setPosition(Vec2(textFieldBackground->getPositionX(), textFieldBackground->getPositionY()));
+    
+    arrow2->setPosition(Vec2(BeginLabel->getPositionX(), textFieldBackground->getPositionY() - delta / 2 ));
+    
+    button_next->setPosition(Vec2(BeginLabel->getPositionX(), textFieldBackground->getPositionY() - delta));
+    
+    button_back->setPosition(Vec2(BeginLabel->getPositionX() - button_back->getBoundingBox().size.width, BeginLabel->getPositionY() - delta * 0.5));
+    arrow_left1->setPosition(Vec2(button_back->getPositionX() , BeginLabel->getPositionY()));
+    
+    arrow_left2->setPosition(Vec2(button_back->getPositionX() , BeginLabel->getPositionY() - button_back->getBoundingBox().size.height));
+    
+    
 
-    
-    Vector<MenuItem*> MenuItems;
-    MenuItems.pushBack(backButton);
-    MenuItems.pushBack(goNextButton);
-    
-    auto menu = Menu::createWithArray(MenuItems);
-    menu->setPosition(Vec2::ZERO);
-    ///////
-    auto mySprite = Sprite::create("fin_jake1.png");
-    mySprite->setPosition(Vec2(mySprite->getContentSize().width * 1.5 + origin.x, mySprite->getContentSize().height + origin.y));
+    //анимация
+    auto fin_and_jake = Sprite::create("fin_jake1.png");
+    fin_and_jake->setAnchorPoint(Vec2(0, 0));
+    fin_and_jake->setPosition(Vec2((BeginLabel->getPositionX() - BeginLabel->getBoundingBox().size.width * 0.5 - fin_and_jake->getBoundingBox().size.width) * 0.5 , button_next->getPositionY() - fin_and_jake->getBoundingBox().size.height *  0.5));
     // now lets animate the sprite we moved
     
     Vector<SpriteFrame*> animFrames;
-    animFrames.reserve(6);
-    animFrames.pushBack(SpriteFrame::create("fin_jake1.png", Rect(0,0,196,126)));
+    animFrames.reserve(5);
     animFrames.pushBack(SpriteFrame::create("fin_jake2.png", Rect(0,0,196,126)));
     animFrames.pushBack(SpriteFrame::create("fin_jake3.png", Rect(0,0,196,126)));
     animFrames.pushBack(SpriteFrame::create("fin_jake4.png", Rect(0,0,196,126)));
@@ -104,30 +169,40 @@ bool LobbyCreation::init()
     
     // create the animation out of the frames
     Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
+    
     Animate* animate = Animate::create(animation);
     
     // run it and repeat it forever
-    mySprite->runAction(RepeatForever::create(animate));
+    fin_and_jake->runAction(RepeatForever::create(animate));
     ///////
     
     //добавление элементов на сцену
+    this->addChild(background, 0);
+    this->addChild(BeginLabel, 1);
     this->addChild(textField, 1);
-    this->addChild(sprite, 0);
-    this->addChild(label, 1);
-    this->addChild(menu, 1);
-    this->addChild(mySprite, 1);
+    this->addChild(textFieldBackground, 1);
+    this->addChild(arrow1, 1);
+    this->addChild(button_back, 1);
+    this->addChild(arrow_left1, 1);
+    this->addChild(arrow_left2, 1);
+    this->addChild(button_next, 1);
+    this->addChild(arrow2, 1);
+    this->addChild(fin_and_jake, 1);
     
     return true;
 
 }
 
+
+
 void LobbyCreation::onNext(cocos2d::Ref* pSender)
 {
-    this->setVisible(false);
     auto layerMainTable = MainTable::create();
    // layerMainTable->setVisible(false);          //добавили, но не выводим на экран
     layerMainTable->setName("GameLayer");       //для поиска
     layerMainTable->userName = ((cocos2d::ui::TextField*) (this->getChildByName("fieldUserName")))->getString();
+    if (layerMainTable->userName == "\0") return;
+    this->setVisible(false);
     layerMainTable->connectToAppWarp(layerMainTable);
     this->getParent()->addChild(layerMainTable);
 }
