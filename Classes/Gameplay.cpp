@@ -31,6 +31,14 @@ std::string User::getName()
 {
     return _name;
 }
+void User::addCard(Card* card)
+{
+    cards.push_back(card);
+}
+void User::move(int steps)
+{
+    this->_index = (_index + steps)%40;
+}
 
 //Card Class
 //int Card::count = 0;
@@ -87,17 +95,23 @@ SubjectCard::SubjectCard():Card()
     this->tax = -100;
     this->house_count = 0;
     this->hotel_price = 0;
-    Player = nullptr;
+    Owner = nullptr;
     type = TypeCard::Subject;
 }
 SubjectCard::~SubjectCard()
 {
-    if(Player!=nullptr)
-        delete Player;
+    if(Owner!=nullptr)
+        delete Owner;
 }
 void SubjectCard::Action(User* Player)
 {
     Player->changeResources(this->tax);
+}
+void SubjectCard::sellToOwner(User* Player)
+{
+    Owner = Player;
+    Player->addCard(this);
+    Player->changeResources(-this->card_price);
 }
 
 //Action

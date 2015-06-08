@@ -143,20 +143,12 @@ void MainMenu::onNewGame(cocos2d::Ref* pSender)
 {
     auto NewGameScene = LobbyCreation::createScene();
     Director::getInstance()->replaceScene(NewGameScene);
-    
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
 }
 
 void MainMenu::onOptions(cocos2d::Ref* pSender)
 {
     auto NewGameScene = MainTable::createScene();
     Director::getInstance()->replaceScene(NewGameScene);
-    
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
 }
 
 void MainMenu::onQuit(cocos2d::Ref* pSender)

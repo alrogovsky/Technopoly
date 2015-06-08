@@ -125,8 +125,8 @@ void InitData()
     MainTable::Groups[4].addCard(MainTable::dataCards[21]);
     MainTable::Groups[4].addCard(MainTable::dataCards[23]);
     MainTable::Groups[4].addCard(MainTable::dataCards[24]);
-    MainTable::Groups[4].setName("Название группы карт");
-    MainTable::Groups[4].setDescription("Описание группы карт");
+    MainTable::Groups[4].setName("фывфывфывфывфы");
+    MainTable::Groups[4].setDescription("Офывфывфывфывыфвфывфывт");
     
     MainTable::Groups[5].addCard(MainTable::dataCards[26]);
     MainTable::Groups[5].addCard(MainTable::dataCards[27]);

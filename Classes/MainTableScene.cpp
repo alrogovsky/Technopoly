@@ -27,6 +27,8 @@ bool MainTable::init()
         return false;
     }
     InitData();
+    User Player;
+    
     //добавление в кэш текстур изображения кубиков
     Director::getInstance()->getTextureCache()->addImage("1.png");
     Director::getInstance()->getTextureCache()->addImage("2.png");
@@ -135,6 +137,18 @@ bool MainTable::init()
     auto TestButton = MenuItemLabel::create(Test, CC_CALLBACK_1(MainTable::onTest, this));
     TestButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
                                         origin.y + visibleSize.height/2 - StepButton->getContentSize().height - 80));
+    
+    //покупка
+    auto BuyCard = Label::createWithTTF("Купить", "isotextpro/PFIsotextPro-Regular.ttf", 34);
+    BuyCard -> setColor(Color3B::BLACK);
+    auto NoMoney = Label::createWithTTF("Недостаточно времени", "isotextpro/PFIsotextPro-Regular.ttf", 34);
+    BuyCard -> setColor(Color3B::BLACK);
+    
+    
+    auto BuyCardButton = MenuItemLabel::create(BuyCard, CC_CALLBACK_1(MainTable::onTest, this));
+    BuyCardButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
+                                 origin.y + visibleSize.height/2 - StepButton->getContentSize().height - 80));
+    
 
     //Все в менюшный вектор
     Vector<MenuItem*> MenuItems;
