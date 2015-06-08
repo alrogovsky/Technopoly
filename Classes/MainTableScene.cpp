@@ -244,9 +244,7 @@ void MainTable::menuCloseCallback(Ref* pSender)
     warpClientRef->disconnect();
     Director::getInstance()->end();
     
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
+
 }
 
 void MainTable::onRotateRight(Ref* pSender)
@@ -254,19 +252,14 @@ void MainTable::onRotateRight(Ref* pSender)
     float current_rotation = table->getRotation();
     table->setRotation(current_rotation + 90);
     
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
+
 }
 
 void MainTable::onRotateLeft(Ref* pSender)
 {
     float current_rotation = table->getRotation();
     table->setRotation(current_rotation - 90);
-    
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
+
 }
 
 void MainTable::onTest(cocos2d::Ref *pSender)
