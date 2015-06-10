@@ -91,7 +91,7 @@ bool MainTable::init()
         case (3): cube1 = Sprite::create("3.jpg"); break;
         case (4): cube1 = Sprite::create("4.jpg"); break;
         case (5): cube1 = Sprite::create("5.jpg"); break;
-        case (6): cube1 = Sprite::create("6.jpg"); break;
+        case (6): cube1 = Sprite::create("6.png"); break;
         default: break;
     }
     int random_num2 = six(rng);
@@ -101,7 +101,7 @@ bool MainTable::init()
         case (3): cube2 = Sprite::create("3.jpg"); break;
         case (4): cube2 = Sprite::create("4.jpg"); break;
         case (5): cube2 = Sprite::create("5.jpg"); break;
-        case (6): cube2 = Sprite::create("6.jpg"); break;
+        case (6): cube2 = Sprite::create("6.png"); break;
         default: break;
     }
     
@@ -110,13 +110,55 @@ bool MainTable::init()
     float MenuWidth = visibleSize.width - (table->getPosition().x + table->getContentSize().width/2);
     
     //сделать ход пользователем
+    /*
     auto StepButtonLabel = Label::createWithTTF("Сделать ход", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     StepButtonLabel -> setColor(Color3B::BLACK);
     StepButton = MenuItemLabel::create(StepButtonLabel, CC_CALLBACK_1(MainTable::onStepQlick, this));
     StepButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
                               origin.y + visibleSize.height/2));
+    */
+    
+    auto StepButton = cocos2d::ui::Button::create("do_step_black.png");
+    StepButton->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
+        switch (type)
+        {
+            case ui::Widget::TouchEventType::BEGAN:
+                onStepQlick(sender);
+                break;
+            default:
+                break;
+        }
+    });
+    
     
     //поворот доски
+    auto rotate_right = cocos2d::ui::Button::create("rotate_r.png");
+    rotate_right->setScale(cube2->getBoundingBox().size.width / rotate_right->getContentSize().width);
+    rotate_right->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
+        switch (type)
+        {
+            case ui::Widget::TouchEventType::BEGAN:
+                onRotateRight(sender);
+                break;
+            default:
+                break;
+        }
+    });
+
+
+    auto rotate_left = cocos2d::ui::Button::create("rotate_l.png");
+    rotate_left->setScale(rotate_right->getBoundingBox().size.width / rotate_left->getContentSize().width);
+    rotate_left->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
+        switch (type)
+        {
+            case ui::Widget::TouchEventType::BEGAN:
+                onRotateLeft(sender);
+                break;
+            default:
+                break;
+        }
+    });
+    /*
     auto RotateRight = Label::createWithTTF("Направо", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     RotateRight -> setColor(Color3B::BLACK);
     auto RotateRightButton = MenuItemLabel::create(RotateRight, CC_CALLBACK_1(MainTable::onRotateRight, this));
@@ -129,7 +171,7 @@ bool MainTable::init()
     RotateLeftButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
                                         origin.y + visibleSize.height/2 - StepButton->getContentSize().height - RotateRightButton->getContentSize().height - 10));
     
-    
+    */
     //Тест... просто Тест...
     auto Test = Label::createWithTTF("Test", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     Test -> setColor(Color3B::BLACK);
@@ -139,10 +181,10 @@ bool MainTable::init()
 
     //Все в менюшный вектор
     Vector<MenuItem*> MenuItems;
-    MenuItems.pushBack(StepButton);
+   // MenuItems.pushBack(StepButton);
     MenuItems.pushBack(closeItem);
-    MenuItems.pushBack(RotateRightButton);
-    MenuItems.pushBack(RotateLeftButton);
+   // MenuItems.pushBack(RotateRightButton);
+   // MenuItems.pushBack(RotateLeftButton);
     MenuItems.pushBack(TestButton);
     
     //Создаем работоспособное меню на основе массива менюшек
@@ -153,27 +195,37 @@ bool MainTable::init()
     
     //фон
     auto sprite = Sprite::create("grey_grodation.jpg");
-    sprite->setScale(visibleSize.width / sprite->getContentSize().width, visibleSize.height / sprite->getContentSize().height);
+    sprite->setScale(visibleSize.width / sprite->getContentSize().width, (visibleSize.height + exit->getContentSize().height)/ sprite->getContentSize().height);
     sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     
     //позиция кубиков
     cube1->setScale(MenuWidth / (4 * cube1->getContentSize().width));
-    cube1->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 + cube1->getContentSize().width,
-                           origin.y + visibleSize.height - cube1->getContentSize().height));
-    
     cube2->setScale(MenuWidth / (4 * cube2->getContentSize().width));
-    cube2->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 - cube2->getContentSize().width,
-                            origin.y + visibleSize.height - cube2->getContentSize().height));
+    
+    auto delta_cube = MenuWidth - 2 * cube1->getBoundingBox().size.width;
+    cube1->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 + delta_cube * 0.5, cards[30]->getPositionY()));
+    cube2->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 - delta_cube* 0.5,cards[30]->getPositionY() ));
+    
+    auto button_width = cube1->getPositionX() - cube2->getPositionX() + cube2->getBoundingBox().size.width;
+    StepButton->setScale((button_width) / StepButton->getContentSize().width);
+    StepButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
+                                 origin.y + visibleSize.height/2));
+    //позиция кнопок поворота
+    rotate_right->setPosition(Vec2(cube1->getPositionX(), cards[0]->getPositionY() ));
+    rotate_left->setPosition(Vec2(cube2->getPositionX(), cards[0]->getPositionY() ));
     
     
     //все объекты на сцену
     this->addChild(cube2, 1);   //кубики
-    this->addChild(cube1, 1);
+   this->addChild(cube1, 1);
     this->addChild(sprite, 0);  //фон
     table->addChild(tableMenu); //для дальнейшего поиска в CardInfo
     table->setName("table");
     this->addChild(table,1);    //стол с картами
     this->addChild(menu, 1);
+    this->addChild(rotate_right,1);
+    this->addChild(rotate_left,1);
+    this->addChild(StepButton,1);
     
     //Фишка 1игрока
     chip1 = Sprite::create("fishka1.png");
