@@ -498,19 +498,18 @@ void MainTable::DisplayLobbySelection()
     
     auto newGame = Label::createWithTTF("Создать комнату", "isotextpro/PFIsotextPro-Regular.ttf", 24);
     newGame->setColor(Color3B::WHITE);
-    newGame->setAnchorPoint(Vec2(0.5,0.5));
-    newGame->setPosition(Vec2(-LobbyChoose->getContentSize().width/3, LobbyChoose->getContentSize().height));
     auto newGameButton = MenuItemLabel::create(newGame, CC_CALLBACK_1(MainTable::createNewGame, this));
+    newGameButton->setPosition(Vec2(LobbyChoose->getContentSize().width/3, LobbyChoose->getContentSize().height/2-20));
     LobbyChoose->addChild(newGameButton, 1);
     
     Vector<MenuItem*> LobbyItems;
     
-    for(int i = 0; i<Rooms.size() && i<5; i++)
+    for(int i = 0; i<Rooms.size(); i++)
     {
         auto room = Label::createWithTTF("Room #"+Rooms[i]+"  ("+std::to_string(RoomPlayers[i])+"/2)", "isotextpro/PFIsotextPro-Regular.ttf", 24);
         room -> setColor(Color3B::WHITE);
         auto RoomButton = MenuItemLabel::create(room, CC_CALLBACK_1(MainTable::JoinRoom, this));
-        RoomButton->setPosition(Vec2(-LobbyChoose->getContentSize().width/4 + 20, LobbyChoose->getContentSize().height/3 - i*10));
+        RoomButton->setPosition(Vec2(-LobbyChoose->getContentSize().width/4 + 20, LobbyChoose->getContentSize().height/3 - i*20));
         RoomButton->setName(Rooms[i]);
         LobbyItems.pushBack(RoomButton);
     }
