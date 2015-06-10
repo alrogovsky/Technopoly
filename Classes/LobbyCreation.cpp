@@ -189,7 +189,6 @@ bool LobbyCreation::init()
     this->addChild(arrow2, 1);
     this->addChild(fin_and_jake, 1);
     
-    
     return true;
 
 }
@@ -198,17 +197,16 @@ bool LobbyCreation::init()
 
 void LobbyCreation::onNext(cocos2d::Ref* pSender)
 {
-    
     auto layerMainTable = MainTable::create();
    // layerMainTable->setVisible(false);          //добавили, но не выводим на экран
     layerMainTable->setName("GameLayer");       //для поиска
     layerMainTable->userName = ((cocos2d::ui::TextField*) (this->getChildByName("fieldUserName")))->getString();
     if (layerMainTable->userName != "\0") {
-    this->setVisible(false);
-    layerMainTable->connectToAppWarp(layerMainTable);
-    this->getParent()->addChild(layerMainTable);
+        this->setVisible(false);
+        layerMainTable->connectToAppWarp(layerMainTable);
+        this->getParent()->addChild(layerMainTable);
     } else {
-    return;
+        return;
     }
 }
 
