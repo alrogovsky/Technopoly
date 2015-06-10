@@ -10,20 +10,20 @@
 #define __Technopoly__MainTableScene__
 
 #include "cocos2d.h"
+#include "CocosGUI.h"
 #include "boost/random.hpp"
 #include "boost/algorithm/string/split.hpp"
 #include "boost/algorithm/string/classification.hpp"
 #include "Gameplay.h"
 #include "appwarp.h"
 #include "MainMenu.h"
+#include <vector>
 #include "CardInfo.h"
-
 #include "Gameplay.h"
 
 #define Height_K 7.35
-
-#define APPWARP_APP_KEY     "e9e179212bf8ab524908f4f2449a5399469a41b7a10c73d653bbc30af77141b2"
-#define APPWARP_SECRET_KEY  "6c8de95986e7916ac1faf63972e953e87f50dacd4075a2eec2b24c91f0c92339"
+#define APPWARP_APP_KEY "e9e179212bf8ab524908f4f2449a5399469a41b7a10c73d653bbc30af77141b2"
+#define APPWARP_SECRET_KEY "6c8de95986e7916ac1faf63972e953e87f50dacd4075a2eec2b24c91f0c92339"
 #define ROOM_ID "1799451657"
 
 void InitData();
@@ -92,12 +92,21 @@ public:
     void onRotateLeft(cocos2d::Ref* pSender);           //вращать налево
     void onTest(cocos2d::Ref* pSender);                 //кнопка тест
     
+    
     //Никнейм пользователя
     std::string userName = "default";
     
     ////////////
     //APPWARP///
     ////////////
+    
+    void DisplayLobbySelection();
+    void JoinRoom(cocos2d::Ref* pSender);
+    void createNewGame(cocos2d::Ref* pSender);
+    
+    std::vector<std::string> Rooms;
+    std::vector<int> RoomPlayers;
+    
     void connectToAppWarp(cocos2d::Ref* pSender);
     
     void startGame();
