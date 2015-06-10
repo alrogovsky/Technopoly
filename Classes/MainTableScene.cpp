@@ -247,6 +247,12 @@ bool MainTable::init()
     chip2->setPosition(cards[0]->getPosition());
     current_position2 = 0;
     
+    Opponent = Label::createWithTTF("Игра с: ", "isotextpro/PFIsotextPro-Regular.ttf", 34);
+    Opponent->setColor(Color3B::BLACK);
+    Opponent->setPosition(Vec2(visibleSize.width-160, visibleSize.height));
+    Opponent->setVisible(false);
+    this->addChild(Opponent);
+    
     return true;
 }
 
@@ -284,8 +290,6 @@ void MainTable::onStepQlick(Ref *pSender)
     }
     
     //Сделать шаг
-    StepButton->setEnabled(false);
-    StepButton->setOpacity(0);
     userStep(chip1, random_num1 + random_num2, &current_position1 );//userStep(chip1, 0, &current_position1 ); при этом выше current_position1 = W; где W-позиция вылета
     sendData("M"+string_sum);
     
@@ -296,18 +300,16 @@ void MainTable::menuCloseCallback(Ref* pSender)
 {
     AppWarp::Client *warpClientRef;
     warpClientRef->getInstance();
+    if(currentRoom != "")
+        warpClientRef->leaveRoom(currentRoom);
     warpClientRef->disconnect();
     Director::getInstance()->end();
-    
-
 }
 
 void MainTable::onRotateRight(Ref* pSender)
 {
     float current_rotation = table->getRotation();
     table->setRotation(current_rotation + 90);
-    
-
 }
 
 void MainTable::onRotateLeft(Ref* pSender)
@@ -319,7 +321,11 @@ void MainTable::onRotateLeft(Ref* pSender)
 
 void MainTable::onTest(cocos2d::Ref *pSender)
 {
-    sendData("M39");
+    AppWarp::Client *warpClientRef;
+    warpClientRef = AppWarp::Client::getInstance();
+    if(currentRoom != "")
+       // warpClientRef->unsubscribeRoom(currentRoom);
+        warpClientRef->leaveRoom(currentRoom);
 }
 
 void MainTable::JoinRoom(cocos2d::Ref *pSender)
@@ -329,13 +335,15 @@ void MainTable::JoinRoom(cocos2d::Ref *pSender)
     MenuItemLabel* A = (MenuItemLabel*) pSender;
     std::string room_id = A->getName();
     warpClientRef->joinRoom(room_id);
+    currentRoom = room_id;
 }
 
 void MainTable::createNewGame(Ref* pSender)
 {
     AppWarp::Client *warpClientRef;
     warpClientRef = AppWarp::Client::getInstance();
-    warpClientRef->createRoom("newRoom", userName, 2);
+    std::map<std::string, std::string> properties;
+    warpClientRef->createTurnRoom("newRoom", userName, 2, properties, 360);
 }
 
 void MainTable::createTable(Node* Table)
@@ -554,11 +562,11 @@ void MainTable::DisplayLobbySelection()
     auto newGame = Label::createWithTTF("Создать комнату", "isotextpro/PFIsotextPro-Regular.ttf", 24);
     newGame->setColor(Color3B::WHITE);
     auto newGameButton = MenuItemLabel::create(newGame, CC_CALLBACK_1(MainTable::createNewGame, this));
-    newGameButton->setPosition(Vec2(LobbyChoose->getContentSize().width/3, LobbyChoose->getContentSize().height/2-20));
-    LobbyChoose->addChild(newGameButton, 1);
+    newGameButton->setPosition(Vec2(LobbyChoose->getContentSize().width/3-10, LobbyChoose->getContentSize().height/2-30));
     
     Vector<MenuItem*> LobbyItems;
-    
+    LobbyItems.pushBack(newGameButton);
+
     for(int i = 0; i<Rooms.size(); i++)
     {
         auto room = Label::createWithTTF("Room #"+Rooms[i]+"  ("+std::to_string(RoomPlayers[i])+"/2)", "isotextpro/PFIsotextPro-Regular.ttf", 24);
@@ -588,6 +596,7 @@ void MainTable::connectToAppWarp(Ref *pSender)
     warpClientRef->setNotificationListener(this);
     warpClientRef->setRoomRequestListener(this);
     warpClientRef->setZoneRequestListener(this);
+    warpClientRef->setTurnBasedRoomRequestListener(this);
     warpClientRef->connect(this->userName);
 }
 
@@ -608,13 +617,11 @@ void MainTable::onConnectDone(int res, int reasonCode)
 {
     if(res == AppWarp::ResultCode::success)
     {
-        //cocos2d::MessageBox("CONNECTION", "SUCCESS");
         AppWarp::Client *warpClientRef;
         warpClientRef = AppWarp::Client::getInstance();
         warpClientRef->getAllRooms();
     } else {
         printf("ERROR %d", res);
-        //cocos2d::MessageBox("Ошибка", "введите имя");
         connectToAppWarp(this);
     }
 }
@@ -624,6 +631,7 @@ void MainTable::onCreateRoomDone(AppWarp::room event)
     AppWarp::Client *warpClientRef;
     warpClientRef = AppWarp::Client::getInstance();
     warpClientRef->joinRoom(event.roomId);
+    currentRoom = event.roomId;
 }
 
 void MainTable::onJoinRoomDone(AppWarp::room revent)
@@ -642,9 +650,8 @@ void MainTable::onJoinRoomDone(AppWarp::room revent)
         this->removeChildByName("Lobby");
         tableMenu->setEnabled(true);
         ((Menu*) (this->getChildByName("menu")))->setEnabled(true);
+        gameStarted = true;
     }
-    else
-        printf("\nonJoinRoomDone .. FAILED\n");
 }
 
 //После подписки на комнату
@@ -663,26 +670,29 @@ void MainTable::sendData(std::string message = "")
 {
     AppWarp::Client *warpClientRef;
     warpClientRef = AppWarp::Client::getInstance();
-    warpClientRef->sendChat(message);
+    warpClientRef->sendMove(message);
+    StepButton->setEnabled(false);
+    StepButton->setVisible(false);
 }
 
 //Парсинг сообщения
 void MainTable::onChatReceived(AppWarp::chat chatevent)
 {
-    std::cout<<"SENDER: "<<chatevent.sender <<" onChatReceived: ";
-    std::string str2 = chatevent.chat.substr();
-    std::cout<<str2;
     if(chatevent.sender != this->userName)
     {
-        std::size_t loc = chatevent.chat.find('M');
-        std::string str1 = chatevent.chat.substr(loc+1);
+        if(chatevent.chat[0] == 'S') {
+            std::cout<<"START FRAME\n";
+        } else {
+            std::size_t loc = chatevent.chat.find('M');
+            std::string str1 = chatevent.chat.substr(loc+1);
+            
+            int step = std::atof(str1.c_str());
+            
+            userStep(chip2, step, &current_position2);
+            StepButton->setVisible(true);
+            StepButton->setEnabled(true);
+        }
         
-        int step = std::atof(str1.c_str());
-        
-        userStep(chip2, step, &current_position2);
-        StepButton->setOpacity(255);
-        StepButton->setEnabled(true);
-
     }
     
 }
@@ -718,9 +728,26 @@ void MainTable::onGetLiveUserInfoDone( AppWarp::liveuser event )
 
 void MainTable::onGetLiveRoomInfoDone(AppWarp :: liveroom event)
 {
-    this->RoomPlayers.push_back(event.users.size());
-    if(Rooms.size() == RoomPlayers.size())
-        DisplayLobbySelection();
+    if(!gameStarted) {
+        this->RoomPlayers.push_back(event.users.size());
+        if(Rooms.size() == RoomPlayers.size())
+            DisplayLobbySelection();
+    }
+}
+
+void MainTable::onLeaveRoomDone(AppWarp::room event)
+{
+    if(event.result == 0)
+    {
+        AppWarp::Client *warpClientRef;
+        warpClientRef = AppWarp::Client::getInstance();
+        currentRoom = "";
+        gameStarted = false;
+        Rooms.clear();
+        RoomPlayers.clear();
+        warpClientRef->getAllRooms();
+    }
+   
 }
 
 void MainTable::onSetCustomRoomDataDone(AppWarp::liveroom event)
@@ -728,13 +755,52 @@ void MainTable::onSetCustomRoomDataDone(AppWarp::liveroom event)
     
 }
 
-void MainTable::onUserPaused(std::string user, std::string locId, bool isLobby)
+void MainTable::onGameStarted(std::string sender, std::string room, std::string nextTurn)
 {
+    if(sender!=userName)
+    {
+        Opponent->setString("Игра с: "+sender);
+        Opponent->setVisible(true);
+    }
+    
+    if(nextTurn == userName)
+    {
+        StepButton->setVisible(true);
+        StepButton->setEnabled(true);
+    }
+}
+
+void MainTable::onMoveCompleted(AppWarp::move event)
+{
+    if(event.sender != userName)
+    {
+        std::size_t loc = event.moveData.find('M');
+        std::string str1 = event.moveData.substr(loc+1);
+        
+        int step = std::atof(str1.c_str());
+        userStep(chip2, step, &current_position2);
+    }
+    
+    if(event.nextTurn == userName)
+    {
+        StepButton->setVisible(true);
+        StepButton->setEnabled(true);
+    }
     
 }
 
-
-void MainTable::onUserResumed(std::string user, std::string locId, bool isLobby)
+void MainTable::onUserLeftRoom(AppWarp::room event , std::string username)
 {
+    cout<<username+" LEFT THE ROOM "+event.roomId.c_str();
+}
+
+void MainTable::onUserJoinedRoom(AppWarp::room event , std::string username)
+{
+    cout<<username+" JOINED THE ROOM "+event.roomId.c_str();
+    Opponent->setString("Игра с: "+username);
+    Opponent->setVisible(true);
     
+    AppWarp::Client *warpClientRef;
+    warpClientRef = AppWarp::Client::getInstance();
+    warpClientRef->startGame();
 }
