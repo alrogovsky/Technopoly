@@ -102,8 +102,10 @@ public:
     
     void DisplayLobbySelection();
     void JoinRoom(cocos2d::Ref* pSender);
+    void createNewGame(cocos2d::Ref* pSender);
     
     std::vector<std::string> Rooms;
+    std::vector<int> RoomPlayers;
     
     void connectToAppWarp(cocos2d::Ref* pSender);
     

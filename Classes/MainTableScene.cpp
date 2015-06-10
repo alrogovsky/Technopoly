@@ -183,7 +183,7 @@ bool MainTable::init()
     current_position1 = 0;
     
     //Фишка 2игрока
-    chip2 = Sprite::create("fishka1.png");
+    chip2 = Sprite::create("fishka2.png");
     chip2->setAnchorPoint(Vec2(0.9, 1.4));
     auto size_chip2 = chip2->getContentSize();
     float height_sprite2 = size_chip2.width / visibleSize.width;
@@ -274,6 +274,13 @@ void MainTable::JoinRoom(cocos2d::Ref *pSender)
     MenuItemLabel* A = (MenuItemLabel*) pSender;
     std::string room_id = A->getName();
     warpClientRef->joinRoom(room_id);
+}
+
+void MainTable::createNewGame(Ref* pSender)
+{
+    AppWarp::Client *warpClientRef;
+    warpClientRef = AppWarp::Client::getInstance();
+    warpClientRef->createRoom("newRoom", userName, 2);
 }
 
 void MainTable::createTable(Node* Table)
@@ -451,12 +458,12 @@ void MainTable::userStep(Node* spr,int strokes_number, int* curr_pos)
     *curr_pos = new_pos;
 }
 
-
 void MainTable::DisplayLobbySelection()
 {
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Size visibleSize = Director::getInstance()->getVisibleSize();
-    //---------ВЫБОР ЛОББИ--------
+    
+    //---------ВЫБОР ЛОББИ--------//
     cocos2d::Layer* LobbyChoose = Layer::create();
     LobbyChoose->setName("Lobby");
     this->addChild(LobbyChoose,5);
@@ -472,6 +479,8 @@ void MainTable::DisplayLobbySelection()
     LobbyChoose->addChild(background);
     tableMenu->setEnabled(false);
     ((Menu*) (this->getChildByName("menu")))->setEnabled(false);
+    
+    // Кнопки //
     auto exitLobby = MenuItemImage::create("menus/m8.png", "menus/m14.png",
                                            [&](Ref* sender){
                                                tableMenu->setEnabled(true);
@@ -487,14 +496,21 @@ void MainTable::DisplayLobbySelection()
     exitLobbyButton->setPosition(Vec2::ZERO);
     LobbyChoose->addChild(exitLobbyButton,1);
     
+    auto newGame = Label::createWithTTF("Создать комнату", "isotextpro/PFIsotextPro-Regular.ttf", 24);
+    newGame->setColor(Color3B::WHITE);
+    newGame->setAnchorPoint(Vec2(0.5,0.5));
+    newGame->setPosition(Vec2(-LobbyChoose->getContentSize().width/3, LobbyChoose->getContentSize().height));
+    auto newGameButton = MenuItemLabel::create(newGame, CC_CALLBACK_1(MainTable::createNewGame, this));
+    LobbyChoose->addChild(newGameButton, 1);
+    
     Vector<MenuItem*> LobbyItems;
     
-    for(int i = 0; i<Rooms.size(); i++)
+    for(int i = 0; i<Rooms.size() && i<5; i++)
     {
-        auto room = Label::createWithTTF(Rooms[i], "isotextpro/PFIsotextPro-Regular.ttf", 24);
+        auto room = Label::createWithTTF("Room #"+Rooms[i]+"  ("+std::to_string(RoomPlayers[i])+"/2)", "isotextpro/PFIsotextPro-Regular.ttf", 24);
         room -> setColor(Color3B::WHITE);
         auto RoomButton = MenuItemLabel::create(room, CC_CALLBACK_1(MainTable::JoinRoom, this));
-        RoomButton->setPosition(Vec2(-LobbyChoose->getContentSize().width/3, LobbyChoose->getContentSize().height/3));
+        RoomButton->setPosition(Vec2(-LobbyChoose->getContentSize().width/4 + 20, LobbyChoose->getContentSize().height/3 - i*10));
         RoomButton->setName(Rooms[i]);
         LobbyItems.pushBack(RoomButton);
     }
@@ -503,7 +519,7 @@ void MainTable::DisplayLobbySelection()
     LobbyChoose->addChild(lobbies, 1);
     
     
-    //---------ВЫБОР ЛОББИ--------
+    //---------ВЫБОР ЛОББИ--------//
 }
 
 
@@ -620,13 +636,14 @@ void MainTable::onChatReceived(AppWarp::chat chatevent)
 //Проверяем доступные комнаты
 void MainTable::onGetAllRoomsDone(AppWarp::liveresult event)
 {
+    AppWarp::Client *warpClientRef;
+    warpClientRef = AppWarp::Client::getInstance();
+    
     for(int i = 0; i<event.list.size(); i++)
     {
         this->Rooms.push_back(event.list[i]);
+        warpClientRef->getLiveRoomInfo(event.list[i]);
     }
-    
-    //Отображаем менюшку выбора
-    DisplayLobbySelection();
 }
 
 
@@ -647,7 +664,9 @@ void MainTable::onGetLiveUserInfoDone( AppWarp::liveuser event )
 
 void MainTable::onGetLiveRoomInfoDone(AppWarp :: liveroom event)
 {
-   
+    this->RoomPlayers.push_back(event.users.size());
+    if(Rooms.size() == RoomPlayers.size())
+        DisplayLobbySelection();
 }
 
 void MainTable::onSetCustomRoomDataDone(AppWarp::liveroom event)

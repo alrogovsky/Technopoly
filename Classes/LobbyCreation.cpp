@@ -202,11 +202,11 @@ void LobbyCreation::onNext(cocos2d::Ref* pSender)
     layerMainTable->setName("GameLayer");       //для поиска
     layerMainTable->userName = ((cocos2d::ui::TextField*) (this->getChildByName("fieldUserName")))->getString();
     if (layerMainTable->userName != "\0") {
-    this->setVisible(false);
-    layerMainTable->connectToAppWarp(layerMainTable);
-    this->getParent()->addChild(layerMainTable);
+        this->setVisible(false);
+        layerMainTable->connectToAppWarp(layerMainTable);
+        this->getParent()->addChild(layerMainTable);
     } else {
-    return;
+        return;
     }
 }
 
