@@ -116,8 +116,8 @@ bool MainTable::init()
     StepButton = MenuItemLabel::create(StepButtonLabel, CC_CALLBACK_1(MainTable::onStepQlick, this));
     StepButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
                               origin.y + visibleSize.height/2));
-    */
     
+    */
     auto StepButton = cocos2d::ui::Button::create("do_step_black.png");
     StepButton->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
         switch (type)
@@ -129,7 +129,6 @@ bool MainTable::init()
                 break;
         }
     });
-    
     
     //поворот доски
     auto rotate_right = cocos2d::ui::Button::create("rotate_r.png");
@@ -217,7 +216,7 @@ bool MainTable::init()
     
     //все объекты на сцену
     this->addChild(cube2, 1);   //кубики
-   this->addChild(cube1, 1);
+    this->addChild(cube1, 1);
     this->addChild(sprite, 0);  //фон
     table->addChild(tableMenu); //для дальнейшего поиска в CardInfo
     table->setName("table");
