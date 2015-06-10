@@ -32,7 +32,8 @@ class MainTable :   public cocos2d::Layer,
                     public AppWarp::ConnectionRequestListener,
                     public AppWarp::RoomRequestListener,
                     public AppWarp::NotificationListener,
-                    public AppWarp::ZoneRequestListener
+                    public AppWarp::ZoneRequestListener,
+                    public AppWarp::TurnBasedRoomRequestListener
 {
 public:
     // создание кнопок для карт
@@ -73,6 +74,7 @@ public:
     cocos2d::Sprite* chip2;
     
     cocos2d::Label* Attention;
+    cocos2d::Label* Opponent;
     
     cocos2d::Sequence* step_sequence;
     
@@ -96,9 +98,14 @@ public:
     //Никнейм пользователя
     std::string userName = "default";
     
+    //Флаг состояния игры
+    bool gameStarted = false;
+    
     ////////////
     //APPWARP///
     ////////////
+    
+    std::string currentRoom = "";
     
     void DisplayLobbySelection();
     void JoinRoom(cocos2d::Ref* pSender);
@@ -118,14 +125,17 @@ public:
     void onJoinRoomDone(AppWarp::room revent);
     void onSubscribeRoomDone(AppWarp::room revent);
     void onChatReceived(AppWarp::chat chatevent);
-    void onUserPaused(std::string user,std::string locId,bool isLobby);
-    void onUserResumed(std::string user,std::string locId,bool isLobby);
     void onGetOnlineUsersDone(AppWarp::liveresult event);
     void onGetLiveUserInfoDone(AppWarp::liveuser event);
     void onGetLiveRoomInfoDone(AppWarp :: liveroom event);
     void onSetCustomRoomDataDone(AppWarp :: liveroom event);
     void onGetAllRoomsDone(AppWarp::liveresult event);
     void onCreateRoomDone(AppWarp::room event);
+    void onUserLeftRoom(AppWarp::room event , std::string username);
+    void onUserJoinedRoom(AppWarp::room event , std::string username);
+    void onLeaveRoomDone(AppWarp::room event);
+    void onMoveCompleted(AppWarp::move event);
+    void onGameStarted(std::string sender, std::string room, std::string nextTurn);
     
     CREATE_FUNC(MainTable);
     
