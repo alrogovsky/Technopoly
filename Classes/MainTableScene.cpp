@@ -27,7 +27,9 @@ bool MainTable::init()
         return false;
     }
     InitData();
-    User Player;
+    
+    Player = new User();
+    Player->setName("Player1");
     
     //добавление в кэш текстур изображения кубиков
     Director::getInstance()->getTextureCache()->addImage("1.png");
@@ -42,19 +44,19 @@ bool MainTable::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();                  // первоначальная координата
     
     //кнопка закрытия
-    auto exit = MenuItemImage::create("menus/m8.png", "menus/m14.png",
+ /*   auto exit = MenuItemImage::create("menus/m8.png", "menus/m14.png",
                                       [&](Ref* sender){
                                           auto NewGameScene = MainMenu::createScene();
                                           Director::getInstance()->replaceScene(NewGameScene);
-                                      });
+                                      });*/
     
     //размеры окна
     Size visibleSize = Director::getInstance()->getVisibleSize();               // общий размер ...
-    visibleSize.height = visibleSize.height - exit->getContentSize().height/2;  //... без верхнего меню
+    visibleSize.height = visibleSize.height;  //... без верхнего меню
     
     
     //продолжаю пилить кнопку закрытия
-    exit->setPosition(Vec2(origin.x,
+ /*   exit->setPosition(Vec2(origin.x,
                            origin.y + fullSize.height));
     exit->setAnchorPoint(Vec2(0,1));
     exit->setScale(0.5);
@@ -62,11 +64,11 @@ bool MainTable::init()
     exitButton->setPosition(origin);
     auto NickName = Label::createWithTTF(this->userName, "isotextpro/PFIsotextPro-Regular.ttf", 100);
     NickName->setAnchorPoint(Vec2(0,0));
-    NickName->setPosition(Vec2(origin.x + exit->getPositionX(), origin.y /* + exit->getPositionY()*/));
+    NickName->setPosition(Vec2(origin.x + exit->getPositionX(), origin.y + exit->getPositionY()));
     NickName->setColor(Color3B::BLACK);
     
     this->addChild(NickName,3);
-    this->addChild(exitButton,3);
+    this->addChild(exitButton,3);*/
     
     
     //для объединения карточек в один 'node'
@@ -137,23 +139,35 @@ bool MainTable::init()
                                         origin.y + visibleSize.height/2 - StepButton->getContentSize().height - RotateRightButton->getContentSize().height - 10));
     
     
-    //Тест... просто Тест...
+  /*  //Тест... просто Тест...
     auto Test = Label::createWithTTF("Test", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     Test -> setColor(Color3B::BLACK);
     auto TestButton = MenuItemLabel::create(Test, CC_CALLBACK_1(MainTable::onTest, this));
     TestButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
-                                        origin.y + visibleSize.height/2 - StepButton->getContentSize().height - 80));
+                                        origin.y + visibleSize.height/2 - StepButton->getContentSize().height - 80));*/
     
     //покупка
     auto BuyCard = Label::createWithTTF("Купить", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     BuyCard -> setColor(Color3B::BLACK);
+    
     auto NoMoney = Label::createWithTTF("Недостаточно времени", "isotextpro/PFIsotextPro-Regular.ttf", 34);
-    BuyCard -> setColor(Color3B::BLACK);
+    NoMoney -> setColor(Color3B::BLACK);
     
     
-    auto BuyCardButton = MenuItemLabel::create(BuyCard, CC_CALLBACK_1(MainTable::onTest, this));
+    BuyCardButton = MenuItemLabel::create(BuyCard,
+                                               [&](Ref* sender)
+    {
+        if(Player->getResources()>((SubjectCard*)dataCards[current_position1])->getCardPrice())
+        {
+            ((SubjectCard*)dataCards[current_position1])->sellToOwner(Player);
+            BuyCardButton->setVisible(false);
+        }
+    }
+    );
     BuyCardButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
                                  origin.y + visibleSize.height/2 - StepButton->getContentSize().height - 80));
+    BuyCardButton->setVisible(false);
+    BuyCardButton->setName("BuyCardButton");
     
 
     //Все в менюшный вектор
@@ -162,7 +176,8 @@ bool MainTable::init()
     MenuItems.pushBack(closeItem);
     MenuItems.pushBack(RotateRightButton);
     MenuItems.pushBack(RotateLeftButton);
-    MenuItems.pushBack(TestButton);
+  //  MenuItems.pushBack(TestButton);
+    MenuItems.pushBack(BuyCardButton);
     
     //Создаем работоспособное меню на основе массива менюшек
     auto menu = Menu::createWithArray(MenuItems);
@@ -217,6 +232,7 @@ bool MainTable::init()
 
 void MainTable::onStepQlick(Ref *pSender)
 {
+    BuyCardButton->setVisible(false);
     //рандомизатор
     rng.seed((++seed) + time(NULL));
     boost::random::uniform_int_distribution<> six(1,6);
@@ -254,7 +270,13 @@ void MainTable::onStepQlick(Ref *pSender)
     userStep(chip1, random_num1 + random_num2, &current_position1 );//userStep(chip1, 0, &current_position1 ); при этом выше current_position1 = W; где W-позиция вылета
     sendData("M"+string_sum);
     
-
+    if(dataCards[current_position1]->type==Subject)
+    {
+        if(((SubjectCard*)dataCards[current_position1])->getOwnerName()=="")
+        {
+            BuyCardButton->setVisible(true);
+        }
+    }
    }
 
 void MainTable::menuCloseCallback(Ref* pSender)
@@ -578,6 +600,7 @@ void MainTable::onConnectDone(int res, int reasonCode)
         warpClientRef = AppWarp::Client::getInstance();
         //warpClientRef->joinRoom(ROOM_ID);
       //  warpClientRef->createRoom("LDA", userName, 3);
+        warpClientRef->getAllRooms();
     } else {
         printf("ERROR %d", res);
         //cocos2d::MessageBox("Ошибка", "введите имя");

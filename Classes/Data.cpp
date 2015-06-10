@@ -50,6 +50,7 @@ void InitData()
        // MainTable::dataCards[indexSubject[i]]->setName("Название конкретной карты");
        // MainTable::dataCards[indexSubject[i]]->setDescription("Какое-то описание карты");
         MainTable::dataCards[indexSubject[i]]->setIndex(indexSubject[i]);
+        ((SubjectCard*)MainTable::dataCards[indexSubject[i]])->setPrice(100);
     }
     for(int i=0; i<NumberOfOSCards; i++)
     {

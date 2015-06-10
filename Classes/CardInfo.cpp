@@ -168,6 +168,15 @@ bool CardInfo::init(std::string intname)
         textDesc->setAnchorPoint(Vec2(0,1));
         textDesc->setColor(Color3B::WHITE);
         
+        std::string Owner = "Приобретено:" + ((SubjectCard*)MainTable::dataCards[cardIndex])->getOwnerName();
+        auto OwnerText = Text::create(Owner,"isotextpro/PFIsotextPro-Light.ttf",visibleSize.height/Font_K);
+        OwnerText->ignoreContentAdaptWithSize(false);
+        OwnerText->setContentSize(Size(leftPanel.width - 2*Margin, leftPanel.height/3 - Margin));
+        OwnerText->setTextHorizontalAlignment(TextHAlignment::LEFT);
+        OwnerText->setPosition(Vec2(origin.x + Margin, textDesc->getPositionY() - textDesc->getContentSize().height - Margin));
+        OwnerText->setAnchorPoint(Vec2(0,1));
+        OwnerText->setColor(Color3B::WHITE);
+        
         /*
         auto cardHeader = Text::create(MainTable::dataCards[cardIndex]->getName(),"isotextpro/PFIsotextPro-Bold.ttf",visibleSize.height/HeaderFont_K);
         cardHeader->ignoreContentAdaptWithSize(false);
@@ -177,7 +186,7 @@ bool CardInfo::init(std::string intname)
         cardHeader->setAnchorPoint(Vec2(0,1));
         cardHeader->setColor(Color3B::WHITE);
         */
-        auto cardHeader = Text::create(MainTable::dataCards[cardIndex]->getName(),"isotextpro/PFIsotextPro-Bold.ttf",visibleSize.height/HeaderFont_K);
+       /* auto cardHeader = Text::create(MainTable::dataCards[cardIndex]->getName(),"isotextpro/PFIsotextPro-Bold.ttf",visibleSize.height/HeaderFont_K);
         cardHeader->ignoreContentAdaptWithSize(false);
         cardHeader->setContentSize(Size(leftPanel.width - 2*Margin, leftPanel.height/12 - Margin));
         cardHeader->setTextHorizontalAlignment(TextHAlignment::CENTER);
@@ -194,8 +203,9 @@ bool CardInfo::init(std::string intname)
         cardDesc->setColor(Color3B::WHITE);
         
         leftPart->addChild(cardHeader,3);
-        leftPart->addChild(cardDesc,3);
+        leftPart->addChild(cardDesc,3);*/
         leftPart->addChild(AlsoCardsText,3);
+        leftPart->addChild(OwnerText);
     }
     else
     {

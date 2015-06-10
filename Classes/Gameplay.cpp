@@ -111,7 +111,21 @@ void SubjectCard::sellToOwner(User* Player)
 {
     Owner = Player;
     Player->addCard(this);
-    Player->changeResources(-this->card_price);
+    Player->changeResources(-(this->card_price));
+}
+void SubjectCard::setPrice(int price)
+{
+    this->card_price = price;
+}
+string SubjectCard::getOwnerName()
+{
+    if(this->Owner!=nullptr)
+        return this->Owner->getName();
+    else
+        return "";
+}
+int SubjectCard::getCardPrice(){
+    return card_price;
 }
 
 //Action

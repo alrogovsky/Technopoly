@@ -72,6 +72,9 @@ public:
     SubjectCard();
     ~SubjectCard();
     void sellToOwner(User* player);
+    void setPrice(int price);
+    string getOwnerName();
+    int getCardPrice();
     void Action(User*);
 };
 

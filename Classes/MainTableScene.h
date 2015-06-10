@@ -76,6 +76,7 @@ public:
     
     cocos2d::Sequence* step_sequence;
     
+    cocos2d::MenuItemLabel* BuyCardButton;
     //рандомизатор              --библиотека Boost
     boost::random::mt11213b rng;
     unsigned int seed = 0;
@@ -96,6 +97,10 @@ public:
     //Никнейм пользователя
     std::string userName = "default";
     
+    
+    
+    ///НАДО ГДЕ-ТО ОЧИСТИТЬ
+    User* Player;
     ////////////
     //APPWARP///
     ////////////
