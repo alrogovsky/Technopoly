@@ -39,6 +39,7 @@ bool LobbyCreation::init()
     
     //фон
     auto background = Sprite::create("paper.jpg");
+    background->setScale(visibleSize.width / background->getContentSize().width, visibleSize.height / background->getContentSize().height);
     background->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
     
     //первый блок "Ввести имя"
@@ -155,6 +156,7 @@ bool LobbyCreation::init()
 
     //анимация
     auto fin_and_jake = Sprite::create("fin_jake1.png");
+    fin_and_jake->setScale((button_next->getBoundingBox().size.height / fin_and_jake->getContentSize().height));
     fin_and_jake->setAnchorPoint(Vec2(0, 0));
     fin_and_jake->setPosition(Vec2((BeginLabel->getPositionX() - BeginLabel->getBoundingBox().size.width * 0.5 - fin_and_jake->getBoundingBox().size.width) * 0.5 , button_next->getPositionY() - fin_and_jake->getBoundingBox().size.height *  0.5));
     // now lets animate the sprite we moved

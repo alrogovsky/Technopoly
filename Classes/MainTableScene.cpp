@@ -58,7 +58,7 @@ bool MainTable::init()
     exit->setScale(0.5);
     auto exitButton = Menu::create(exit, NULL);
     exitButton->setPosition(origin);
-    this->addChild(exitButton,3);
+   // this->addChild(exitButton,3);
     
     
     //для объединения карточек в один 'node'
@@ -84,6 +84,7 @@ bool MainTable::init()
     int random_num1 = six(rng);
 
     //изображения кубиков
+    
     cube1 = Sprite::create("1.png");
     switch (random_num1) {
         case (2): cube1 = Sprite::create("2.png"); break;
@@ -151,14 +152,16 @@ bool MainTable::init()
     menu->setTag(1);              // аналогично, для поиска
     
     //фон
-    auto sprite = Sprite::create("paper.jpg");
+    auto sprite = Sprite::create("grey_grodation.jpg");
+    sprite->setScale(visibleSize.width / sprite->getContentSize().width, visibleSize.height / sprite->getContentSize().height);
     sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     
     //позиция кубиков
+    cube1->setScale(MenuWidth / (4 * cube1->getContentSize().width));
     cube1->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 + cube1->getContentSize().width,
-                            origin.y + visibleSize.height - cube1->getContentSize().height));
+                           origin.y + visibleSize.height - cube1->getContentSize().height));
     
-    
+    cube2->setScale(MenuWidth / (4 * cube2->getContentSize().width));
     cube2->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 - cube2->getContentSize().width,
                             origin.y + visibleSize.height - cube2->getContentSize().height));
     
