@@ -60,6 +60,12 @@ bool MainTable::init()
     exit->setScale(0.5);
     auto exitButton = Menu::create(exit, NULL);
     exitButton->setPosition(origin);
+    auto NickName = Label::createWithTTF(this->userName, "isotextpro/PFIsotextPro-Regular.ttf", 100);
+    NickName->setAnchorPoint(Vec2(0,0));
+    NickName->setPosition(Vec2(origin.x + exit->getPositionX(), origin.y /* + exit->getPositionY()*/));
+    NickName->setColor(Color3B::BLACK);
+    
+    this->addChild(NickName,3);
     this->addChild(exitButton,3);
     
     
@@ -526,7 +532,7 @@ void MainTable::onConnectDone(int res, int reasonCode)
         AppWarp::Client *warpClientRef;
         warpClientRef = AppWarp::Client::getInstance();
         //warpClientRef->joinRoom(ROOM_ID);
-        warpClientRef->createRoom("LDA", userName, 3);
+      //  warpClientRef->createRoom("LDA", userName, 3);
     } else {
         printf("ERROR %d", res);
         //cocos2d::MessageBox("Ошибка", "введите имя");

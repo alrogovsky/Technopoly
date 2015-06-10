@@ -134,8 +134,8 @@ void InitData()
     //MainTable::dataCards[21]->setDescription("Курс направлен на приобретение студентами навыков работы в среде linux на уровнях базового администрирования и оценки работоспособности системы.");
     MainTable::Groups[4].addCard(MainTable::dataCards[23]);
     MainTable::Groups[4].addCard(MainTable::dataCards[24]);
-    MainTable::Groups[4].setName("фывфывфывфывфы");
-    MainTable::Groups[4].setDescription("Офывфывфывфывыфвфывфывт");
+    MainTable::Groups[4].setName("Цель курса");
+    MainTable::Groups[4].setDescription("Открытые курсы");
     
     MainTable::Groups[5].addCard(MainTable::dataCards[26]);
     MainTable::Groups[5].addCard(MainTable::dataCards[27]);
