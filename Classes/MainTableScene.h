@@ -117,7 +117,7 @@ public:
     void connectToAppWarp(cocos2d::Ref* pSender);
     
     void startGame();
-    void pauseGame();
+    void stopGame();
     
     void sendData(std::string message);
     
@@ -125,10 +125,8 @@ public:
     void onJoinRoomDone(AppWarp::room revent);
     void onSubscribeRoomDone(AppWarp::room revent);
     void onChatReceived(AppWarp::chat chatevent);
-    void onGetOnlineUsersDone(AppWarp::liveresult event);
     void onGetLiveUserInfoDone(AppWarp::liveuser event);
     void onGetLiveRoomInfoDone(AppWarp :: liveroom event);
-    void onSetCustomRoomDataDone(AppWarp :: liveroom event);
     void onGetAllRoomsDone(AppWarp::liveresult event);
     void onCreateRoomDone(AppWarp::room event);
     void onUserLeftRoom(AppWarp::room event , std::string username);
@@ -136,6 +134,7 @@ public:
     void onLeaveRoomDone(AppWarp::room event);
     void onMoveCompleted(AppWarp::move event);
     void onGameStarted(std::string sender, std::string room, std::string nextTurn);
+    void onGameStopped(std::string sender, std::string room);  
     
     CREATE_FUNC(MainTable);
     

@@ -270,7 +270,8 @@ void MainTable::onTest(cocos2d::Ref *pSender)
     warpClientRef = AppWarp::Client::getInstance();
     if(currentRoom != "")
        // warpClientRef->unsubscribeRoom(currentRoom);
-        warpClientRef->leaveRoom(currentRoom);
+        //warpClientRef->leaveRoom(currentRoom);
+        warpClientRef->getMoveHistory();
 }
 
 void MainTable::JoinRoom(cocos2d::Ref *pSender)
@@ -550,7 +551,7 @@ void MainTable::startGame()
     
 }
 
-void MainTable::pauseGame()
+void MainTable::stopGame()
 {
     
 }
@@ -596,6 +597,8 @@ void MainTable::onJoinRoomDone(AppWarp::room revent)
         tableMenu->setEnabled(true);
         ((Menu*) (this->getChildByName("menu")))->setEnabled(true);
         gameStarted = true;
+        Opponent->setString("Ожидание игрока...");
+        Opponent->setVisible(true);
     }
 }
 
@@ -605,6 +608,7 @@ void MainTable::onSubscribeRoomDone(AppWarp::room revent)
     if (revent.result==0)
     {
         printf("\nonSubscribeRoomDone .. SUCCESS\n");
+        
     }
     else
         printf("\nonSubscribeRoomDone .. FAILED\n");
@@ -657,14 +661,6 @@ void MainTable::onGetAllRoomsDone(AppWarp::liveresult event)
 
 
 ////////// TODO ////////////
-void MainTable::onGetOnlineUsersDone(AppWarp::liveresult event)
-{
-    std::cout<< "ONLINE: ";
-    for(int i = 0; i<event.list.size(); i++)
-    {
-        std::cout<<event.list[i]<<" ";
-    }
-}
 
 void MainTable::onGetLiveUserInfoDone( AppWarp::liveuser event )
 {
@@ -690,33 +686,31 @@ void MainTable::onLeaveRoomDone(AppWarp::room event)
         gameStarted = false;
         Rooms.clear();
         RoomPlayers.clear();
+        Opponent->setVisible(false);
         warpClientRef->getAllRooms();
     }
    
 }
 
-void MainTable::onSetCustomRoomDataDone(AppWarp::liveroom event)
-{
-    
-}
-
 void MainTable::onGameStarted(std::string sender, std::string room, std::string nextTurn)
 {
+    cout<<nextTurn;
     if(sender!=userName)
     {
         Opponent->setString("Игра с: "+sender);
         Opponent->setVisible(true);
     }
     
-    if(nextTurn == userName)
+    if(nextTurn != userName)
     {
-        StepButton->setVisible(true);
-        StepButton->setEnabled(true);
+        StepButton->setVisible(false);
+        StepButton->setEnabled(false);
     }
 }
 
 void MainTable::onMoveCompleted(AppWarp::move event)
 {
+    cout<<event.nextTurn<<"\n";
     if(event.sender != userName)
     {
         std::size_t loc = event.moveData.find('M');
@@ -737,6 +731,9 @@ void MainTable::onMoveCompleted(AppWarp::move event)
 void MainTable::onUserLeftRoom(AppWarp::room event , std::string username)
 {
     cout<<username+" LEFT THE ROOM "+event.roomId.c_str();
+    AppWarp::Client *warpClientRef;
+    warpClientRef = AppWarp::Client::getInstance();
+    warpClientRef->stopGame();
 }
 
 void MainTable::onUserJoinedRoom(AppWarp::room event , std::string username)
@@ -748,4 +745,9 @@ void MainTable::onUserJoinedRoom(AppWarp::room event , std::string username)
     AppWarp::Client *warpClientRef;
     warpClientRef = AppWarp::Client::getInstance();
     warpClientRef->startGame();
+}
+
+void MainTable::onGameStopped(std::string sender, std::string room)
+{
+    //Отобразить панель YOU WIN, при закрытии удалять комнату
 }
