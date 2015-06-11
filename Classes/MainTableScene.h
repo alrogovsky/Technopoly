@@ -64,6 +64,7 @@ public:
     
     // шаг пользователя
     cocos2d::ui::Button* StepButton;
+    cocos2d::ui::Button* EndStepButton;
     void userStep(cocos2d::Node* spr,int strokes_number, int* curr_pos);
     
     // кубики + фишки
@@ -78,7 +79,7 @@ public:
     
     cocos2d::Sequence* step_sequence;
     
-    cocos2d::MenuItemLabel* BuyCardButton;
+    cocos2d::ui::Button* BuyCardButton;
     //рандомизатор              --библиотека Boost
     boost::random::mt11213b rng;
     unsigned int seed = 0;

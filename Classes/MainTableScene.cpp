@@ -125,8 +125,9 @@ bool MainTable::init()
                               origin.y + visibleSize.height/2));
     
     */
-    StepButton = cocos2d::ui::Button::create("do_step_black.png");
     
+    
+    StepButton = cocos2d::ui::Button::create("do_step_black.png");
     StepButton->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
         switch (type)
         {
@@ -138,7 +139,17 @@ bool MainTable::init()
         }
     });
     
-    StepButton->setVisible(false);
+    EndStepButton = cocos2d::ui::Button::create("end_step.png");
+    EndStepButton->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
+        switch (type)
+        {
+            case ui::Widget::TouchEventType::BEGAN:
+                
+                break;
+            default:
+                break;
+        }
+    });
     
     //поворот доски
     auto rotate_right = cocos2d::ui::Button::create("rotate_r.png");
@@ -167,28 +178,12 @@ bool MainTable::init()
                 break;
         }
     });
-    /*
-    auto RotateRight = Label::createWithTTF("Направо", "isotextpro/PFIsotextPro-Regular.ttf", 34);
-    RotateRight -> setColor(Color3B::BLACK);
-    auto RotateRightButton = MenuItemLabel::create(RotateRight, CC_CALLBACK_1(MainTable::onRotateRight, this));
-    RotateRightButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
-                                 origin.y + visibleSize.height/2 - StepButton->getContentSize().height - 5));
+
     
-    auto RotateLeft = Label::createWithTTF("Налево", "isotextpro/PFIsotextPro-Regular.ttf", 34);
-    RotateLeft -> setColor(Color3B::BLACK);
-    auto RotateLeftButton = MenuItemLabel::create(RotateLeft, CC_CALLBACK_1(MainTable::onRotateLeft, this));
-    RotateLeftButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
-                                        origin.y + visibleSize.height/2 - StepButton->getContentSize().height - RotateRightButton->getContentSize().height - 10));
-     */
-    
-    
-    //Тест... просто Тест...
-    auto Test = Label::createWithTTF("Покинуть комнату", "isotextpro/PFIsotextPro-Regular.ttf", 34);
-    Test -> setColor(Color3B::WHITE);
-    auto TestButton = MenuItemLabel::create(Test, CC_CALLBACK_1(MainTable::onTest, this));
-    TestButton->setPosition(Vec2(visibleSize.width-170, visibleSize.height/2-150));
+
     
     //покупка
+    /*
     auto BuyCard = Label::createWithTTF("Купить", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     BuyCard -> setColor(Color3B::WHITE);
     
@@ -201,7 +196,31 @@ bool MainTable::init()
             BuyCardButton->setVisible(false);
         }
     }
-);
+    );
+    */
+    BuyCardButton = cocos2d::ui::Button::create("lets_learn.png");
+    BuyCardButton->setName("BuyCardButton");
+    BuyCardButton->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
+        switch (type)
+        {
+            case ui::Widget::TouchEventType::BEGAN:
+                if(Player->getResources()>((SubjectCard*)dataCards[current_position1])->getCardPrice())
+                {
+                    ((SubjectCard*)dataCards[current_position1])->sellToOwner(Player);
+                    BuyCardButton->setVisible(false);
+                }
+                break;
+            default:
+                break;
+        }
+    });
+    
+    
+    //Тест... просто Тест...
+    auto Test = Label::createWithTTF("Покинуть комнату", "isotextpro/PFIsotextPro-Regular.ttf", 34);
+    Test -> setColor(Color3B::BLACK);
+    auto TestButton = MenuItemLabel::create(Test, CC_CALLBACK_1(MainTable::onTest, this));
+    
 
     //Все в менюшный вектор
     Vector<MenuItem*> MenuItems;
@@ -210,7 +229,7 @@ bool MainTable::init()
    // MenuItems.pushBack(RotateRightButton);
    // MenuItems.pushBack(RotateLeftButton);
     MenuItems.pushBack(TestButton);
-    MenuItems.pushBack(BuyCardButton);
+   // MenuItems.pushBack(BuyCardButton);
     
     //Создаем работоспособное меню на основе массива менюшек
     auto menu = Menu::createWithArray(MenuItems);
@@ -219,7 +238,7 @@ bool MainTable::init()
     menu->setTag(1);              // аналогично, для поиска
     
     //фон
-    auto sprite = Sprite::create("grey_grodation.jpg");
+    auto sprite = Sprite::create("paper.jpg");
     sprite->setScale(visibleSize.width / sprite->getContentSize().width, (visibleSize.height + exit->getContentSize().height)/ sprite->getContentSize().height);
     sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     
@@ -235,15 +254,23 @@ bool MainTable::init()
     StepButton->setScale((button_width) / StepButton->getContentSize().width);
     StepButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
                                  origin.y + visibleSize.height/2));
+    
+    EndStepButton->setScale((button_width) / EndStepButton->getContentSize().width);
+    EndStepButton->setPosition(Vec2(StepButton->getPositionX(),
+                                 StepButton->getPositionY()));
+    EndStepButton->setVisible(false);
+
+    
     //позиция кнопок поворота
     rotate_right->setPosition(Vec2(cube1->getPositionX(), cards[0]->getPositionY() ));
     rotate_left->setPosition(Vec2(cube2->getPositionX(), cards[0]->getPositionY() ));
     
+    BuyCardButton->setScale((button_width) / BuyCardButton->getContentSize().width);
     BuyCardButton->setPosition(Vec2(StepButton->getPositionX(),
-                                    StepButton->getPositionY() - StepButton->getBoundingBox().size.height));
+                                    StepButton->getPositionY() - StepButton->getBoundingBox().size.height * 1.5));
     BuyCardButton->setVisible(false);
-    BuyCardButton->setName("BuyCardButton");
     
+    TestButton->setPosition(Vec2(BuyCardButton->getPositionX(), EndStepButton->getPositionY() + TestButton->getBoundingBox().size.height * 4));
     //все объекты на сцену
     this->addChild(cube2, 1);   //кубики
     this->addChild(cube1, 1);
@@ -255,6 +282,8 @@ bool MainTable::init()
     this->addChild(rotate_right,1);
     this->addChild(rotate_left,1);
     this->addChild(StepButton,1);
+    this->addChild(EndStepButton,0);
+    this->addChild(BuyCardButton,1);
     
     //Фишка 1игрока
     chip1 = Sprite::create("fishka1.png");
@@ -288,6 +317,7 @@ bool MainTable::init()
 void MainTable::onStepQlick(Ref *pSender)
 {
     BuyCardButton->setVisible(false);
+    EndStepButton->setVisible(true);
     //рандомизатор
     rng.seed((++seed) + time(NULL));
     boost::random::uniform_int_distribution<> six(1,6);
@@ -915,7 +945,7 @@ void MainTable::onGameStopped(std::string sender, std::string room)
     if(gameStarted)
         DisplayWinPanel(room);
 }
-
+    
 void MainTable::onDeleteRoomDone(AppWarp::room event)
 {
     if(event.result == 0)
@@ -930,6 +960,3 @@ void MainTable::onDeleteRoomDone(AppWarp::room event)
     }
     
 }
-
-
-
