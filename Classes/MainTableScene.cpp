@@ -268,9 +268,12 @@ void MainTable::onTest(cocos2d::Ref *pSender)
 {
     AppWarp::Client *warpClientRef;
     warpClientRef = AppWarp::Client::getInstance();
-    if(currentRoom != "")
-       // warpClientRef->unsubscribeRoom(currentRoom);
+    if(currentRoom != "") {
+        gameStarted = false;
         warpClientRef->leaveRoom(currentRoom);
+    }
+       // warpClientRef->unsubscribeRoom(currentRoom);
+    
 }
 
 void MainTable::JoinRoom(cocos2d::Ref *pSender)
@@ -706,8 +709,11 @@ void MainTable::onGetAllRoomsDone(AppWarp::liveresult event)
     {
         for(int i = 0; i<event.list.size(); i++)
         {
-            this->Rooms.push_back(event.list[i]);
-            warpClientRef->getLiveRoomInfo(event.list[i]);
+            if(event.list[i] != currentRoom)
+            {
+                this->Rooms.push_back(event.list[i]);
+                warpClientRef->getLiveRoomInfo(event.list[i]);
+            }
         }
     }
     
@@ -717,11 +723,6 @@ void MainTable::onGetAllRoomsDone(AppWarp::liveresult event)
 
 
 ////////// TODO ////////////
-
-void MainTable::onGetLiveUserInfoDone( AppWarp::liveuser event )
-{
-    std::cout<<"DATA OF "<<event.name<<": "<<event.customData<<" ";
-}
 
 void MainTable::onGetLiveRoomInfoDone(AppWarp :: liveroom event)
 {
@@ -738,7 +739,6 @@ void MainTable::onLeaveRoomDone(AppWarp::room event)
     {
         AppWarp::Client *warpClientRef;
         warpClientRef = AppWarp::Client::getInstance();
-        currentRoom = "";
         gameStarted = false;
         Rooms.clear();
         RoomPlayers.clear();
@@ -760,6 +760,11 @@ void MainTable::onGameStarted(std::string sender, std::string room, std::string 
     {
         StepButton->setVisible(false);
         StepButton->setEnabled(false);
+    }
+    else if(nextTurn == userName)
+    {
+        StepButton->setVisible(true);
+        StepButton->setEnabled(true);
     }
 }
 
@@ -804,7 +809,12 @@ void MainTable::onUserJoinedRoom(AppWarp::room event , std::string username)
 
 void MainTable::onGameStopped(std::string sender, std::string room)
 {
-    DisplayWinPanel(room);
+    chip1->setPosition(cards[0]->getPosition());
+    chip2->setPosition(cards[0]->getPosition());
+    current_position1 = 0;
+    current_position2 = 0;
+    if(gameStarted)
+        DisplayWinPanel(room);
 }
 
 void MainTable::onDeleteRoomDone(AppWarp::room event)
@@ -813,7 +823,6 @@ void MainTable::onDeleteRoomDone(AppWarp::room event)
     {
         AppWarp::Client *warpClientRef;
         warpClientRef = AppWarp::Client::getInstance();
-        currentRoom = "";
         gameStarted = false;
         Rooms.clear();
         RoomPlayers.clear();

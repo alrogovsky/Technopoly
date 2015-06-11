@@ -126,7 +126,6 @@ public:
     void onJoinRoomDone(AppWarp::room revent);
     void onSubscribeRoomDone(AppWarp::room revent);
     void onChatReceived(AppWarp::chat chatevent);
-    void onGetLiveUserInfoDone(AppWarp::liveuser event);
     void onGetLiveRoomInfoDone(AppWarp :: liveroom event);
     void onGetAllRoomsDone(AppWarp::liveresult event);
     void onCreateRoomDone(AppWarp::room event);
