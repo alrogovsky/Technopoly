@@ -38,6 +38,7 @@ bool MainMenu::init()
     
     //фон
     auto background = Sprite::create("background.png");
+    background->setScale(visibleSize.width / background->getContentSize().width, visibleSize.height / background->getContentSize().height);
     background->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     
     //кнопака начать игру
@@ -126,6 +127,7 @@ bool MainMenu::init()
     
     //анимация
     auto fin_and_jake = Sprite::create("fin_jake1.png");
+    fin_and_jake->setScale((OptionsButton->getBoundingBox().size.height / fin_and_jake->getContentSize().height));
     fin_and_jake->setAnchorPoint(Vec2(0, 0));
     fin_and_jake->setPosition(Vec2((BeginLabel->getPositionX() - BeginLabel->getBoundingBox().size.width * 0.5 - fin_and_jake->getBoundingBox().size.width) * 0.5 , CloseGameButton->getPositionY()));
     // now lets animate the sprite we moved

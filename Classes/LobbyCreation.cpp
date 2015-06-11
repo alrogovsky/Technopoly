@@ -39,6 +39,7 @@ bool LobbyCreation::init()
     
     //фон
     auto background = Sprite::create("paper.jpg");
+    background->setScale(visibleSize.width / background->getContentSize().width, visibleSize.height / background->getContentSize().height);
     background->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
     
     //первый блок "Ввести имя"
@@ -58,18 +59,20 @@ bool LobbyCreation::init()
     //Widget::EditBox::create
 
     auto textField = cocos2d::ui::TextField::create("ВАШЕ ИМЯ","isotextpro/PFIsotextPro-Bold.ttf",72);
-    //textField->setMaxLength(9);
+    textField->setMaxLength(9);
     textField->setScale(1 / (height_lable * scale_k));
     textField->setColor(Color3B::BLACK);
     textField->setName("fieldUserName");
     textField->setColor(Color3B::BLACK);
+    /*
     auto nameAdded =  0;
-//nameAdded = textField->getMaxLength();
-    //textField->setPlaceHolder("input words here");
-//textField->addEventListener(CC_CALLBACK_2(UITextFieldTest_LineWrap::textFieldEvent, this));
+    nameAdded = textField->getMaxLength();
+     textField->setPlaceHolder("input words here");
+     textField->addEventListener(CC_CALLBACK_2(UITextFieldTest_LineWrap::textFieldEvent, this));
     textField->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
         std::cout << "editing a TextField" << std::endl;
     });
+     */
     
     //отступ между блоками
     auto delta = (visibleSize.height - BeginLabel->getBoundingBox().size.height - textFieldBackground->getBoundingBox().size.height) * 0.5;
@@ -92,9 +95,7 @@ bool LobbyCreation::init()
         switch (type)
         {
             case ui::Widget::TouchEventType::BEGAN:
-                
-                if (!nameAdded)
-                    onNext(sender);
+                onNext(sender);
                 break;
             default:
                 break;
@@ -155,6 +156,7 @@ bool LobbyCreation::init()
 
     //анимация
     auto fin_and_jake = Sprite::create("fin_jake1.png");
+    fin_and_jake->setScale((button_next->getBoundingBox().size.height / fin_and_jake->getContentSize().height));
     fin_and_jake->setAnchorPoint(Vec2(0, 0));
     fin_and_jake->setPosition(Vec2((BeginLabel->getPositionX() - BeginLabel->getBoundingBox().size.width * 0.5 - fin_and_jake->getBoundingBox().size.width) * 0.5 , button_next->getPositionY() - fin_and_jake->getBoundingBox().size.height *  0.5));
     // now lets animate the sprite we moved
