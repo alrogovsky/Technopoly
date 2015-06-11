@@ -130,11 +130,11 @@ bool MainTable::init()
     
     
     //Тест... просто Тест...
-    auto Test = Label::createWithTTF("Test", "isotextpro/PFIsotextPro-Regular.ttf", 34);
+    auto Test = Label::createWithTTF("Покинуть комнату", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     Test -> setColor(Color3B::BLACK);
     auto TestButton = MenuItemLabel::create(Test, CC_CALLBACK_1(MainTable::onTest, this));
     TestButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
-                                        origin.y + visibleSize.height/2 - StepButton->getContentSize().height - 80));
+                                        origin.y + visibleSize.height/2 - StepButton->getContentSize().height - RotateLeftButton->getContentSize().height - RotateRightButton->getContentSize().height - 10));
 
     //Все в менюшный вектор
     Vector<MenuItem*> MenuItems;
@@ -270,9 +270,7 @@ void MainTable::onTest(cocos2d::Ref *pSender)
     warpClientRef = AppWarp::Client::getInstance();
     if(currentRoom != "")
        // warpClientRef->unsubscribeRoom(currentRoom);
-        //warpClientRef->leaveRoom(currentRoom);
-        warpClientRef->startGame();
-        warpClientRef->stopGame();
+        warpClientRef->leaveRoom(currentRoom);
 }
 
 void MainTable::JoinRoom(cocos2d::Ref *pSender)
@@ -704,11 +702,17 @@ void MainTable::onGetAllRoomsDone(AppWarp::liveresult event)
     AppWarp::Client *warpClientRef;
     warpClientRef = AppWarp::Client::getInstance();
     
-    for(int i = 0; i<event.list.size(); i++)
+    if(event.list.size() != 0)
     {
-        this->Rooms.push_back(event.list[i]);
-        warpClientRef->getLiveRoomInfo(event.list[i]);
+        for(int i = 0; i<event.list.size(); i++)
+        {
+            this->Rooms.push_back(event.list[i]);
+            warpClientRef->getLiveRoomInfo(event.list[i]);
+        }
     }
+    
+    else
+        DisplayLobbySelection();
 }
 
 
