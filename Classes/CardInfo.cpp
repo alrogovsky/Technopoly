@@ -44,7 +44,9 @@ bool CardInfo::init(std::string intname)
    // std::string name = std::to_string(intname);
     
     auto background = Sprite::create("paper.jpg");
+    
     background->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+    background->setScale(visibleSize.width / background->getContentSize().width, visibleSize.height / background->getContentSize().height);
     background->setOpacity(400);
     
     auto sprite = Sprite::create("cards/HighRes/" + intname + ".jpg");
