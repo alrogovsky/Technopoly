@@ -64,7 +64,7 @@ public:
     void addBottom  (cocos2d::Node*, cocos2d::Node*, cocos2d::Size, bool);      // добавление карты снизу
     
     // шаг пользователя
-    cocos2d::MenuItemLabel* StepButton;
+    cocos2d::ui::Button* StepButton;
     void userStep(cocos2d::Node* spr,int strokes_number, int* curr_pos);
     
     // кубики + фишки

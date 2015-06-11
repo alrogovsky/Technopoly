@@ -169,8 +169,11 @@ bool CardInfo::init(std::string intname)
         textDesc->setPosition(Vec2(origin.x + Margin, text->getPositionY() - text->getContentSize().height - Margin));
         textDesc->setAnchorPoint(Vec2(0,1));
         textDesc->setColor(Color3B::WHITE);
-        
-        std::string Owner = "Приобретено:" + ((SubjectCard*)MainTable::dataCards[cardIndex])->getOwnerName();
+        std::string Owner = "";
+        if(((SubjectCard*)MainTable::dataCards[cardIndex])->getOwnerName() != "")
+        {
+            Owner = "Приобретено:" + ((SubjectCard*)MainTable::dataCards[cardIndex])->getOwnerName();
+        }
         auto OwnerText = Text::create(Owner,"isotextpro/PFIsotextPro-Light.ttf",visibleSize.height/Font_K);
         OwnerText->ignoreContentAdaptWithSize(false);
         OwnerText->setContentSize(Size(leftPanel.width - 2*Margin, leftPanel.height/3 - Margin));

@@ -44,28 +44,25 @@ bool MainTable::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();                  // первоначальная координата
     
     //кнопка закрытия
- /*   auto exit = MenuItemImage::create("menus/m8.png", "menus/m14.png",
+    auto exit = MenuItemImage::create("menus/m8.png", "menus/m14.png",
                                       [&](Ref* sender){
                                           auto NewGameScene = MainMenu::createScene();
                                           Director::getInstance()->replaceScene(NewGameScene);
-                                      });*/
+                                      });
     
     //размеры окна
     Size visibleSize = Director::getInstance()->getVisibleSize();               // общий размер ...
-    visibleSize.height = visibleSize.height;  //... без верхнего меню
+    visibleSize.height = visibleSize.height - exit->getContentSize().height/2;  //... без верхнего меню
     
     
     //продолжаю пилить кнопку закрытия
- /*   exit->setPosition(Vec2(origin.x,
+  /*  exit->setPosition(Vec2(origin.x,
                            origin.y + fullSize.height));
     exit->setAnchorPoint(Vec2(0,1));
     exit->setScale(0.5);
     auto exitButton = Menu::create(exit, NULL);
     exitButton->setPosition(origin);
-    auto NickName = Label::createWithTTF(this->userName, "isotextpro/PFIsotextPro-Regular.ttf", 100);
-    NickName->setAnchorPoint(Vec2(0,0));
-    NickName->setPosition(Vec2(origin.x + exit->getPositionX(), origin.y + exit->getPositionY()));
-    NickName->setColor(Color3B::BLACK);
+   // this->addChild(exitButton,3);
     
     this->addChild(NickName,3);
     this->addChild(exitButton,3);*/
@@ -101,7 +98,7 @@ bool MainTable::init()
         case (3): cube1 = Sprite::create("3.jpg"); break;
         case (4): cube1 = Sprite::create("4.jpg"); break;
         case (5): cube1 = Sprite::create("5.jpg"); break;
-        case (6): cube1 = Sprite::create("6.png"); break;
+        case (6): cube1 = Sprite::create("6.jpg"); break;
         default: break;
     }
     int random_num2 = six(rng);
@@ -111,7 +108,7 @@ bool MainTable::init()
         case (3): cube2 = Sprite::create("3.jpg"); break;
         case (4): cube2 = Sprite::create("4.jpg"); break;
         case (5): cube2 = Sprite::create("5.jpg"); break;
-        case (6): cube2 = Sprite::create("6.png"); break;
+        case (6): cube2 = Sprite::create("6.jpg"); break;
         default: break;
     }
     
@@ -128,7 +125,8 @@ bool MainTable::init()
                               origin.y + visibleSize.height/2));
     
     */
-    auto StepButton = cocos2d::ui::Button::create("do_step_black.png");
+    StepButton = cocos2d::ui::Button::create("do_step_black.png");
+    
     StepButton->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
         switch (type)
         {
@@ -181,7 +179,7 @@ bool MainTable::init()
                                         origin.y + visibleSize.height/2 - StepButton->getContentSize().height - RotateRightButton->getContentSize().height - 10));
     
     
-  /*  //Тест... просто Тест...
+  /* Тест... просто Тест...
     auto Test = Label::createWithTTF("Test", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     Test -> setColor(Color3B::BLACK);
     auto TestButton = MenuItemLabel::create(Test, CC_CALLBACK_1(MainTable::onTest, this));
@@ -190,11 +188,7 @@ bool MainTable::init()
     
     //покупка
     auto BuyCard = Label::createWithTTF("Купить", "isotextpro/PFIsotextPro-Regular.ttf", 34);
-    BuyCard -> setColor(Color3B::BLACK);
-    
-    auto NoMoney = Label::createWithTTF("Недостаточно времени", "isotextpro/PFIsotextPro-Regular.ttf", 34);
-    NoMoney -> setColor(Color3B::BLACK);
-    
+    BuyCard -> setColor(Color3B::WHITE);
     
     BuyCardButton = MenuItemLabel::create(BuyCard,
                                                [&](Ref* sender)
@@ -206,19 +200,14 @@ bool MainTable::init()
         }
     }
     );
-    BuyCardButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
-                                 origin.y + visibleSize.height/2 - StepButton->getContentSize().height - 80));
-    BuyCardButton->setVisible(false);
-    BuyCardButton->setName("BuyCardButton");
-    
 
     //Все в менюшный вектор
     Vector<MenuItem*> MenuItems;
    // MenuItems.pushBack(StepButton);
     MenuItems.pushBack(closeItem);
-    MenuItems.pushBack(RotateRightButton);
-    MenuItems.pushBack(RotateLeftButton);
-  //  MenuItems.pushBack(TestButton);
+   // MenuItems.pushBack(RotateRightButton);
+   // MenuItems.pushBack(RotateLeftButton);
+   // MenuItems.pushBack(TestButton);
     MenuItems.pushBack(BuyCardButton);
     
     //Создаем работоспособное меню на основе массива менюшек
@@ -238,7 +227,7 @@ bool MainTable::init()
     
     auto delta_cube = MenuWidth - 2 * cube1->getBoundingBox().size.width;
     cube1->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 + delta_cube * 0.5, cards[30]->getPositionY()));
-    cube2->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 - delta_cube* 0.5,cards[30]->getPositionY() ));
+    cube2->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 - delta_cube * 0.5,cards[30]->getPositionY() ));
     
     auto button_width = cube1->getPositionX() - cube2->getPositionX() + cube2->getBoundingBox().size.width;
     StepButton->setScale((button_width) / StepButton->getContentSize().width);
@@ -248,6 +237,10 @@ bool MainTable::init()
     rotate_right->setPosition(Vec2(cube1->getPositionX(), cards[0]->getPositionY() ));
     rotate_left->setPosition(Vec2(cube2->getPositionX(), cards[0]->getPositionY() ));
     
+    BuyCardButton->setPosition(Vec2(StepButton->getPositionX(),
+                                    StepButton->getPositionY() - StepButton->getBoundingBox().size.height));
+    BuyCardButton->setVisible(false);
+    BuyCardButton->setName("BuyCardButton");
     
     //все объекты на сцену
     this->addChild(cube2, 1);   //кубики
@@ -256,7 +249,7 @@ bool MainTable::init()
     table->addChild(tableMenu); //для дальнейшего поиска в CardInfo
     table->setName("table");
     this->addChild(table,1);    //стол с картами
-    this->addChild(menu, 1);
+    this->addChild(menu, 2);
     this->addChild(rotate_right,1);
     this->addChild(rotate_left,1);
     this->addChild(StepButton,1);
@@ -661,8 +654,6 @@ void MainTable::onConnectDone(int res, int reasonCode)
     {
         AppWarp::Client *warpClientRef;
         warpClientRef = AppWarp::Client::getInstance();
-        //warpClientRef->joinRoom(ROOM_ID);
-      //  warpClientRef->createRoom("LDA", userName, 3);
         warpClientRef->getAllRooms();
     } else {
         printf("ERROR %d", res);
