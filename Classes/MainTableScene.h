@@ -24,7 +24,6 @@
 #define Height_K 7.35
 #define APPWARP_APP_KEY "e9e179212bf8ab524908f4f2449a5399469a41b7a10c73d653bbc30af77141b2"
 #define APPWARP_SECRET_KEY "6c8de95986e7916ac1faf63972e953e87f50dacd4075a2eec2b24c91f0c92339"
-#define ROOM_ID "1799451657"
 
 void InitData();
 
@@ -112,8 +111,10 @@ public:
     std::string currentRoom = "";
     
     void DisplayLobbySelection();
+    void DisplayWinPanel(std::string room);
     void JoinRoom(cocos2d::Ref* pSender);
     void createNewGame(cocos2d::Ref* pSender);
+    void endGame(cocos2d::Ref* pSender);
     
     std::vector<std::string> Rooms;
     std::vector<int> RoomPlayers;
@@ -138,7 +139,8 @@ public:
     void onLeaveRoomDone(AppWarp::room event);
     void onMoveCompleted(AppWarp::move event);
     void onGameStarted(std::string sender, std::string room, std::string nextTurn);
-    void onGameStopped(std::string sender, std::string room);  
+    void onGameStopped(std::string sender, std::string room);
+    void onDeleteRoomDone(AppWarp::room event);  
     
     CREATE_FUNC(MainTable);
     

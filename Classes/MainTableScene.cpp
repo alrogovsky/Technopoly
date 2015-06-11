@@ -359,8 +359,7 @@ void MainTable::onTest(cocos2d::Ref *pSender)
     warpClientRef = AppWarp::Client::getInstance();
     if(currentRoom != "")
        // warpClientRef->unsubscribeRoom(currentRoom);
-        //warpClientRef->leaveRoom(currentRoom);
-        warpClientRef->getMoveHistory();
+        warpClientRef->leaveRoom(currentRoom);
 }
 
 void MainTable::JoinRoom(cocos2d::Ref *pSender)
@@ -380,6 +379,19 @@ void MainTable::createNewGame(Ref* pSender)
     std::map<std::string, std::string> properties;
     warpClientRef->createTurnRoom("newRoom", userName, 2, properties, 360);
 }
+
+void MainTable::endGame(cocos2d::Ref* pSender)
+{
+    tableMenu->setEnabled(true);
+    ((Menu*) (this->getChildByName("menu")))->setEnabled(true);
+    this->removeChildByName("WinPanel");
+
+    AppWarp::Client *warpClientRef;
+    warpClientRef = AppWarp::Client::getInstance();
+    std::string temp = currentRoom;
+    warpClientRef->deleteRoom(temp);
+}
+
 
 void MainTable::createTable(Node* Table)
 {
@@ -584,6 +596,7 @@ void MainTable::DisplayLobbySelection()
                                                tableMenu->setEnabled(true);
                                                ((Menu*) (this->getChildByName("menu")))->setEnabled(true);
                                                this->removeChildByName("Lobby");
+                                               
                                                //this->autorelease();
                                                //this->retain();
                                            });
@@ -592,7 +605,7 @@ void MainTable::DisplayLobbySelection()
     
     auto exitLobbyButton = Menu::create(exitLobby, NULL);
     exitLobbyButton->setPosition(Vec2::ZERO);
-    LobbyChoose->addChild(exitLobbyButton,1);
+   // LobbyChoose->addChild(exitLobbyButton,1);
     
     auto newGame = Label::createWithTTF("Создать комнату", "isotextpro/PFIsotextPro-Regular.ttf", 24);
     newGame->setColor(Color3B::WHITE);
@@ -617,6 +630,41 @@ void MainTable::DisplayLobbySelection()
     
     
     //---------ВЫБОР ЛОББИ--------//
+}
+
+void MainTable::DisplayWinPanel(std::string room)
+{
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    Size visibleSize = Director::getInstance()->getVisibleSize();
+    
+    AppWarp::Client *warpClientRef;
+    warpClientRef = AppWarp::Client::getInstance();
+    
+    cocos2d::Layer* WinPanel = Layer::create();
+    WinPanel->setName("WinPanel");
+    this->addChild(WinPanel,5);
+    WinPanel->setPosition(Vec2(origin.x + visibleSize.width/2,
+                                  origin.y + visibleSize.height/2));
+    WinPanel->setContentSize(Size(visibleSize.width/2, visibleSize.height/2));
+    WinPanel->setAnchorPoint(Vec2(0.5,0.5));
+    auto background = Sprite::create("background.png");
+    float bg_HeightK = background->getContentSize().height / WinPanel->getContentSize().height;
+    float bg_WidthK = background->getContentSize().width / WinPanel->getContentSize().width;
+    background->setOpacity(400);
+    background->setScale(1/bg_WidthK,1/bg_HeightK);
+    WinPanel->addChild(background);
+    tableMenu->setEnabled(false);
+    ((Menu*) (this->getChildByName("menu")))->setEnabled(false);
+    
+    // Кнопки //
+    auto exitPanel = MenuItemImage::create("menus/m8.png", "menus/m14.png", CC_CALLBACK_1(MainTable::endGame, this));
+    exitPanel->setAnchorPoint(Vec2(0.5,0.5));
+    exitPanel->setPosition(Vec2(-WinPanel->getContentSize().width/2, WinPanel->getContentSize().height/2));
+    
+    auto exitButton = Menu::create(exitPanel, NULL);
+    exitButton->setPosition(Vec2::ZERO);
+    WinPanel->addChild(exitButton,1);
+
 }
 
 
@@ -688,6 +736,8 @@ void MainTable::onJoinRoomDone(AppWarp::room revent)
         gameStarted = true;
         Opponent->setString("Ожидание игрока...");
         Opponent->setVisible(true);
+        StepButton->setVisible(false);
+        StepButton->setEnabled(false);
     }
 }
 
@@ -741,11 +791,17 @@ void MainTable::onGetAllRoomsDone(AppWarp::liveresult event)
     AppWarp::Client *warpClientRef;
     warpClientRef = AppWarp::Client::getInstance();
     
-    for(int i = 0; i<event.list.size(); i++)
+    if(event.list.size() != 0)
     {
-        this->Rooms.push_back(event.list[i]);
-        warpClientRef->getLiveRoomInfo(event.list[i]);
+        for(int i = 0; i<event.list.size(); i++)
+        {
+            this->Rooms.push_back(event.list[i]);
+            warpClientRef->getLiveRoomInfo(event.list[i]);
+        }
     }
+    
+    else
+        DisplayLobbySelection();
 }
 
 
@@ -783,7 +839,6 @@ void MainTable::onLeaveRoomDone(AppWarp::room event)
 
 void MainTable::onGameStarted(std::string sender, std::string room, std::string nextTurn)
 {
-    cout<<nextTurn;
     if(sender!=userName)
     {
         Opponent->setString("Игра с: "+sender);
@@ -838,5 +893,24 @@ void MainTable::onUserJoinedRoom(AppWarp::room event , std::string username)
 
 void MainTable::onGameStopped(std::string sender, std::string room)
 {
-    //Отобразить панель YOU WIN, при закрытии удалять комнату
+    DisplayWinPanel(room);
 }
+
+void MainTable::onDeleteRoomDone(AppWarp::room event)
+{
+    if(event.result == 0)
+    {
+        AppWarp::Client *warpClientRef;
+        warpClientRef = AppWarp::Client::getInstance();
+        currentRoom = "";
+        gameStarted = false;
+        Rooms.clear();
+        RoomPlayers.clear();
+        Opponent->setVisible(false);
+        warpClientRef->getAllRooms();
+    }
+    
+}
+
+
+
