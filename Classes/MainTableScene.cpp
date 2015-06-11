@@ -182,11 +182,10 @@ bool MainTable::init()
     
 
     //Тест... просто Тест...
-    auto Test = Label::createWithTTF("Test", "isotextpro/PFIsotextPro-Regular.ttf", 34);
-    Test -> setColor(Color3B::BLACK);
+    auto Test = Label::createWithTTF("Покинуть комнату", "isotextpro/PFIsotextPro-Regular.ttf", 34);
+    Test -> setColor(Color3B::WHITE);
     auto TestButton = MenuItemLabel::create(Test, CC_CALLBACK_1(MainTable::onTest, this));
-    TestButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
-                                        origin.y + visibleSize.height/2 - StepButton->getContentSize().height - 80));
+    TestButton->setPosition(Vec2(visibleSize.width-170, visibleSize.height/2));
     
     //покупка
     /*
@@ -281,7 +280,7 @@ bool MainTable::init()
     this->addChild(rotate_right,1);
     this->addChild(rotate_left,1);
     this->addChild(StepButton,1);
-    this->addChild(EndStepButton,1);
+    this->addChild(EndStepButton,0);
     this->addChild(BuyCardButton,1);
     
     //Фишка 1игрока
@@ -936,7 +935,7 @@ void MainTable::onGameStopped(std::string sender, std::string room)
     if(gameStarted)
         DisplayWinPanel(room);
 }
-
+    
 void MainTable::onDeleteRoomDone(AppWarp::room event)
 {
     if(event.result == 0)
@@ -951,6 +950,3 @@ void MainTable::onDeleteRoomDone(AppWarp::room event)
     }
     
 }
-
-
-
