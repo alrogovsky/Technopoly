@@ -125,7 +125,7 @@ bool MainTable::init()
                               origin.y + visibleSize.height/2));
     
     */
-    StepButton = cocos2d::ui::Button::create("do_step_black.png");
+    StepButton = cocos2d::ui::Button::create("do_step_white.png");
     
     StepButton->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
         switch (type)
@@ -217,8 +217,8 @@ bool MainTable::init()
     menu->setTag(1);              // аналогично, для поиска
     
     //фон
-    auto sprite = Sprite::create("grey_grodation.jpg");
-    sprite->setScale(visibleSize.width / sprite->getContentSize().width, (visibleSize.height + exit->getContentSize().height)/ sprite->getContentSize().height);
+    auto sprite = Sprite::create("paper.jpg");
+    sprite->setScale(2 * fullSize.width / sprite->getContentSize().width, 2 * fullSize.height / sprite->getContentSize().height);
     sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     
     //позиция кубиков
