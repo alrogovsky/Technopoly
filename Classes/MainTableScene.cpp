@@ -27,6 +27,10 @@ bool MainTable::init()
         return false;
     }
     InitData();
+    
+    Player = new User();
+    Player->setName("Player1");
+    
     //добавление в кэш текстур изображения кубиков
     Director::getInstance()->getTextureCache()->addImage("1.png");
     Director::getInstance()->getTextureCache()->addImage("2.png");
@@ -52,13 +56,16 @@ bool MainTable::init()
     
     
     //продолжаю пилить кнопку закрытия
-    exit->setPosition(Vec2(origin.x,
+  /*  exit->setPosition(Vec2(origin.x,
                            origin.y + fullSize.height));
     exit->setAnchorPoint(Vec2(0,1));
     exit->setScale(0.5);
     auto exitButton = Menu::create(exit, NULL);
     exitButton->setPosition(origin);
-    this->addChild(exitButton,3);
+   // this->addChild(exitButton,3);
+    
+    this->addChild(NickName,3);
+    this->addChild(exitButton,3);*/
     
     
     //для объединения карточек в один 'node'
@@ -84,6 +91,7 @@ bool MainTable::init()
     int random_num1 = six(rng);
 
     //изображения кубиков
+    
     cube1 = Sprite::create("1.png");
     switch (random_num1) {
         case (2): cube1 = Sprite::create("2.png"); break;
@@ -109,13 +117,57 @@ bool MainTable::init()
     float MenuWidth = visibleSize.width - (table->getPosition().x + table->getContentSize().width/2);
     
     //сделать ход пользователем
+    /*
     auto StepButtonLabel = Label::createWithTTF("Сделать ход", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     StepButtonLabel -> setColor(Color3B::BLACK);
     StepButton = MenuItemLabel::create(StepButtonLabel, CC_CALLBACK_1(MainTable::onStepQlick, this));
     StepButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
                               origin.y + visibleSize.height/2));
     
+    */
+    StepButton = cocos2d::ui::Button::create("do_step_black.png");
+    
+    StepButton->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
+        switch (type)
+        {
+            case ui::Widget::TouchEventType::BEGAN:
+                onStepQlick(sender);
+                break;
+            default:
+                break;
+        }
+    });
+    
+    StepButton->setVisible(false);
+    
     //поворот доски
+    auto rotate_right = cocos2d::ui::Button::create("rotate_r.png");
+    rotate_right->setScale(cube2->getBoundingBox().size.width / rotate_right->getContentSize().width);
+    rotate_right->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
+        switch (type)
+        {
+            case ui::Widget::TouchEventType::BEGAN:
+                onRotateRight(sender);
+                break;
+            default:
+                break;
+        }
+    });
+
+
+    auto rotate_left = cocos2d::ui::Button::create("rotate_l.png");
+    rotate_left->setScale(rotate_right->getBoundingBox().size.width / rotate_left->getContentSize().width);
+    rotate_left->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
+        switch (type)
+        {
+            case ui::Widget::TouchEventType::BEGAN:
+                onRotateLeft(sender);
+                break;
+            default:
+                break;
+        }
+    });
+    /*
     auto RotateRight = Label::createWithTTF("Направо", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     RotateRight -> setColor(Color3B::BLACK);
     auto RotateRightButton = MenuItemLabel::create(RotateRight, CC_CALLBACK_1(MainTable::onRotateRight, this));
@@ -127,22 +179,38 @@ bool MainTable::init()
     auto RotateLeftButton = MenuItemLabel::create(RotateLeft, CC_CALLBACK_1(MainTable::onRotateLeft, this));
     RotateLeftButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
                                         origin.y + visibleSize.height/2 - StepButton->getContentSize().height - RotateRightButton->getContentSize().height - 10));
+     */
     
     
     //Тест... просто Тест...
     auto Test = Label::createWithTTF("Покинуть комнату", "isotextpro/PFIsotextPro-Regular.ttf", 34);
-    Test -> setColor(Color3B::BLACK);
+    Test -> setColor(Color3B::WHITE);
     auto TestButton = MenuItemLabel::create(Test, CC_CALLBACK_1(MainTable::onTest, this));
-    TestButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
-                                        origin.y + visibleSize.height/2 - StepButton->getContentSize().height - RotateLeftButton->getContentSize().height - RotateRightButton->getContentSize().height - 10));
+    TestButton->setPosition(Vec2(visibleSize.width-170, visibleSize.height/2));
+    
+    //покупка
+    auto BuyCard = Label::createWithTTF("Купить", "isotextpro/PFIsotextPro-Regular.ttf", 34);
+    BuyCard -> setColor(Color3B::WHITE);
+    
+    BuyCardButton = MenuItemLabel::create(BuyCard,
+                                               [&](Ref* sender)
+    {
+        if(Player->getResources()>((SubjectCard*)dataCards[current_position1])->getCardPrice())
+        {
+            ((SubjectCard*)dataCards[current_position1])->sellToOwner(Player);
+            BuyCardButton->setVisible(false);
+        }
+    }
+);
 
     //Все в менюшный вектор
     Vector<MenuItem*> MenuItems;
-    MenuItems.pushBack(StepButton);
+   // MenuItems.pushBack(StepButton);
     MenuItems.pushBack(closeItem);
-    MenuItems.pushBack(RotateRightButton);
-    MenuItems.pushBack(RotateLeftButton);
+   // MenuItems.pushBack(RotateRightButton);
+   // MenuItems.pushBack(RotateLeftButton);
     MenuItems.pushBack(TestButton);
+    MenuItems.pushBack(BuyCardButton);
     
     //Создаем работоспособное меню на основе массива менюшек
     auto menu = Menu::createWithArray(MenuItems);
@@ -151,17 +219,30 @@ bool MainTable::init()
     menu->setTag(1);              // аналогично, для поиска
     
     //фон
-    auto sprite = Sprite::create("paper.jpg");
+    auto sprite = Sprite::create("grey_grodation.jpg");
+    sprite->setScale(visibleSize.width / sprite->getContentSize().width, (visibleSize.height + exit->getContentSize().height)/ sprite->getContentSize().height);
     sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     
     //позиция кубиков
-    cube1->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 + cube1->getContentSize().width,
-                            origin.y + visibleSize.height - cube1->getContentSize().height));
+    cube1->setScale(MenuWidth / (4 * cube1->getContentSize().width));
+    cube2->setScale(MenuWidth / (4 * cube2->getContentSize().width));
     
+    auto delta_cube = MenuWidth - 2 * cube1->getBoundingBox().size.width;
+    cube1->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 + delta_cube * 0.5, cards[30]->getPositionY()));
+    cube2->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 - delta_cube * 0.5,cards[30]->getPositionY() ));
     
-    cube2->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 - cube2->getContentSize().width,
-                            origin.y + visibleSize.height - cube2->getContentSize().height));
+    auto button_width = cube1->getPositionX() - cube2->getPositionX() + cube2->getBoundingBox().size.width;
+    StepButton->setScale((button_width) / StepButton->getContentSize().width);
+    StepButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
+                                 origin.y + visibleSize.height/2));
+    //позиция кнопок поворота
+    rotate_right->setPosition(Vec2(cube1->getPositionX(), cards[0]->getPositionY() ));
+    rotate_left->setPosition(Vec2(cube2->getPositionX(), cards[0]->getPositionY() ));
     
+    BuyCardButton->setPosition(Vec2(StepButton->getPositionX(),
+                                    StepButton->getPositionY() - StepButton->getBoundingBox().size.height));
+    BuyCardButton->setVisible(false);
+    BuyCardButton->setName("BuyCardButton");
     
     //все объекты на сцену
     this->addChild(cube2, 1);   //кубики
@@ -170,7 +251,10 @@ bool MainTable::init()
     table->addChild(tableMenu); //для дальнейшего поиска в CardInfo
     table->setName("table");
     this->addChild(table,1);    //стол с картами
-    this->addChild(menu, 1);
+    this->addChild(menu, 2);
+    this->addChild(rotate_right,1);
+    this->addChild(rotate_left,1);
+    this->addChild(StepButton,1);
     
     //Фишка 1игрока
     chip1 = Sprite::create("fishka1.png");
@@ -194,7 +278,7 @@ bool MainTable::init()
     
     Opponent = Label::createWithTTF("Игра с: ", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     Opponent->setColor(Color3B::BLACK);
-    Opponent->setPosition(Vec2(visibleSize.width-160, visibleSize.height));
+    Opponent->setPosition(Vec2(visibleSize.width-170, visibleSize.height+15));
     Opponent->setVisible(false);
     this->addChild(Opponent);
     
@@ -203,6 +287,7 @@ bool MainTable::init()
 
 void MainTable::onStepQlick(Ref *pSender)
 {
+    BuyCardButton->setVisible(false);
     //рандомизатор
     rng.seed((++seed) + time(NULL));
     boost::random::uniform_int_distribution<> six(1,6);
@@ -238,7 +323,13 @@ void MainTable::onStepQlick(Ref *pSender)
     userStep(chip1, random_num1 + random_num2, &current_position1 );//userStep(chip1, 0, &current_position1 ); при этом выше current_position1 = W; где W-позиция вылета
     sendData("M"+string_sum);
     
-
+    if(dataCards[current_position1]->type==Subject)
+    {
+        if(((SubjectCard*)dataCards[current_position1])->getOwnerName()=="")
+        {
+            BuyCardButton->setVisible(true);
+        }
+    }
    }
 
 void MainTable::menuCloseCallback(Ref* pSender)
@@ -268,9 +359,12 @@ void MainTable::onTest(cocos2d::Ref *pSender)
 {
     AppWarp::Client *warpClientRef;
     warpClientRef = AppWarp::Client::getInstance();
-    if(currentRoom != "")
-       // warpClientRef->unsubscribeRoom(currentRoom);
+    if(currentRoom != "") {
+        gameStarted = false;
         warpClientRef->leaveRoom(currentRoom);
+    }
+       // warpClientRef->unsubscribeRoom(currentRoom);
+    
 }
 
 void MainTable::JoinRoom(cocos2d::Ref *pSender)
@@ -706,8 +800,11 @@ void MainTable::onGetAllRoomsDone(AppWarp::liveresult event)
     {
         for(int i = 0; i<event.list.size(); i++)
         {
-            this->Rooms.push_back(event.list[i]);
-            warpClientRef->getLiveRoomInfo(event.list[i]);
+            if(event.list[i] != currentRoom)
+            {
+                this->Rooms.push_back(event.list[i]);
+                warpClientRef->getLiveRoomInfo(event.list[i]);
+            }
         }
     }
     
@@ -717,11 +814,6 @@ void MainTable::onGetAllRoomsDone(AppWarp::liveresult event)
 
 
 ////////// TODO ////////////
-
-void MainTable::onGetLiveUserInfoDone( AppWarp::liveuser event )
-{
-    std::cout<<"DATA OF "<<event.name<<": "<<event.customData<<" ";
-}
 
 void MainTable::onGetLiveRoomInfoDone(AppWarp :: liveroom event)
 {
@@ -738,7 +830,6 @@ void MainTable::onLeaveRoomDone(AppWarp::room event)
     {
         AppWarp::Client *warpClientRef;
         warpClientRef = AppWarp::Client::getInstance();
-        currentRoom = "";
         gameStarted = false;
         Rooms.clear();
         RoomPlayers.clear();
@@ -760,6 +851,11 @@ void MainTable::onGameStarted(std::string sender, std::string room, std::string 
     {
         StepButton->setVisible(false);
         StepButton->setEnabled(false);
+    }
+    else if(nextTurn == userName)
+    {
+        StepButton->setVisible(true);
+        StepButton->setEnabled(true);
     }
 }
 
@@ -804,7 +900,12 @@ void MainTable::onUserJoinedRoom(AppWarp::room event , std::string username)
 
 void MainTable::onGameStopped(std::string sender, std::string room)
 {
-    DisplayWinPanel(room);
+    chip1->setPosition(cards[0]->getPosition());
+    chip2->setPosition(cards[0]->getPosition());
+    current_position1 = 0;
+    current_position2 = 0;
+    if(gameStarted)
+        DisplayWinPanel(room);
 }
 
 void MainTable::onDeleteRoomDone(AppWarp::room event)
@@ -813,7 +914,6 @@ void MainTable::onDeleteRoomDone(AppWarp::room event)
     {
         AppWarp::Client *warpClientRef;
         warpClientRef = AppWarp::Client::getInstance();
-        currentRoom = "";
         gameStarted = false;
         Rooms.clear();
         RoomPlayers.clear();

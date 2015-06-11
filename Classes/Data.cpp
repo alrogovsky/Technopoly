@@ -50,6 +50,7 @@ void InitData()
        // MainTable::dataCards[indexSubject[i]]->setName("Название конкретной карты");
        // MainTable::dataCards[indexSubject[i]]->setDescription("Какое-то описание карты");
         MainTable::dataCards[indexSubject[i]]->setIndex(indexSubject[i]);
+        ((SubjectCard*)MainTable::dataCards[indexSubject[i]])->setPrice(100);
     }
     for(int i=0; i<NumberOfOSCards; i++)
     {
@@ -135,7 +136,7 @@ void InitData()
     MainTable::Groups[4].addCard(MainTable::dataCards[23]);
     MainTable::Groups[4].addCard(MainTable::dataCards[24]);
     MainTable::Groups[4].setName("Цель курса");
-    MainTable::Groups[4].setDescription("Курс направлен на приобретение студентами навыков работы в среде linux на уровнях базового администрирования и оценки работоспособности системы.");
+    MainTable::Groups[4].setDescription("Открытые курсы");
     
     MainTable::Groups[5].addCard(MainTable::dataCards[26]);
     MainTable::Groups[5].addCard(MainTable::dataCards[27]);
