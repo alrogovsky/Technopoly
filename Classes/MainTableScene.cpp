@@ -186,7 +186,7 @@ bool MainTable::init()
     auto Test = Label::createWithTTF("Покинуть комнату", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     Test -> setColor(Color3B::WHITE);
     auto TestButton = MenuItemLabel::create(Test, CC_CALLBACK_1(MainTable::onTest, this));
-    TestButton->setPosition(Vec2(visibleSize.width-170, visibleSize.height/2));
+    TestButton->setPosition(Vec2(visibleSize.width-170, visibleSize.height/2-150));
     
     //покупка
     auto BuyCard = Label::createWithTTF("Купить", "isotextpro/PFIsotextPro-Regular.ttf", 34);
@@ -669,6 +669,10 @@ void MainTable::DisplayWinPanel(std::string room)
     auto exitButton = Menu::create(exitPanel, NULL);
     exitButton->setPosition(Vec2::ZERO);
     WinPanel->addChild(exitButton,1);
+    
+    Victory = Label::createWithTTF("Вы победили!", "isotextpro/PFIsotextPro-Regular.ttf", 34);
+    Victory->setPosition(Vec2(0.5, 0.5));
+    WinPanel->addChild(Victory);
 
 }
 
@@ -798,6 +802,12 @@ void MainTable::onGetAllRoomsDone(AppWarp::liveresult event)
     
     if(event.list.size() != 0)
     {
+        if(event.list.size() == 1 && event.list[0] == currentRoom)
+        {
+            DisplayLobbySelection();
+            return;
+        }
+        
         for(int i = 0; i<event.list.size(); i++)
         {
             if(event.list[i] != currentRoom)
@@ -812,8 +822,6 @@ void MainTable::onGetAllRoomsDone(AppWarp::liveresult event)
         DisplayLobbySelection();
 }
 
-
-////////// TODO ////////////
 
 void MainTable::onGetLiveRoomInfoDone(AppWarp :: liveroom event)
 {

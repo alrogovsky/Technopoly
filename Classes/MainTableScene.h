@@ -74,6 +74,7 @@ public:
     
     cocos2d::Label* Attention;
     cocos2d::Label* Opponent;
+    cocos2d::Label* Victory;
     
     cocos2d::Sequence* step_sequence;
     
