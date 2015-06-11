@@ -125,13 +125,26 @@ bool MainTable::init()
                               origin.y + visibleSize.height/2));
     
     */
-    StepButton = cocos2d::ui::Button::create("do_step_black.png");
     
+    
+    StepButton = cocos2d::ui::Button::create("do_step_black.png");
     StepButton->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
         switch (type)
         {
             case ui::Widget::TouchEventType::BEGAN:
                 onStepQlick(sender);
+                break;
+            default:
+                break;
+        }
+    });
+    
+    EndStepButton = cocos2d::ui::Button::create("end_step.png");
+    EndStepButton->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
+        switch (type)
+        {
+            case ui::Widget::TouchEventType::BEGAN:
+                
                 break;
             default:
                 break;
@@ -173,9 +186,10 @@ bool MainTable::init()
     Test -> setColor(Color3B::BLACK);
     auto TestButton = MenuItemLabel::create(Test, CC_CALLBACK_1(MainTable::onTest, this));
     TestButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
-                                        origin.y + visibleSize.height/2 - StepButton->getContentSize().height - 80));*/
+                                        origin.y + visibleSize.height/2 - StepButton->getContentSize().height - 80));
     
     //покупка
+    /*
     auto BuyCard = Label::createWithTTF("Купить", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     BuyCard -> setColor(Color3B::WHITE);
     
@@ -189,12 +203,32 @@ bool MainTable::init()
         }
     }
     );
+    */
+    BuyCardButton = cocos2d::ui::Button::create("lets_learn.png");
+    BuyCardButton->setName("BuyCardButton");
+    BuyCardButton->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
+        switch (type)
+        {
+            case ui::Widget::TouchEventType::BEGAN:
+                if(Player->getResources()>((SubjectCard*)dataCards[current_position1])->getCardPrice())
+                {
+                    ((SubjectCard*)dataCards[current_position1])->sellToOwner(Player);
+                    BuyCardButton->setVisible(false);
+                }
+                break;
+            default:
+                break;
+        }
+    });
 
     //Все в менюшный вектор
     Vector<MenuItem*> MenuItems;
    // MenuItems.pushBack(StepButton);
     MenuItems.pushBack(closeItem);
-    MenuItems.pushBack(TestButton);
+   // MenuItems.pushBack(RotateRightButton);
+   // MenuItems.pushBack(RotateLeftButton);
+   // MenuItems.pushBack(TestButton);
+   // MenuItems.pushBack(BuyCardButton);
     
     //Создаем работоспособное меню на основе массива менюшек
     auto menu = Menu::createWithArray(MenuItems);
@@ -203,7 +237,7 @@ bool MainTable::init()
     menu->setTag(1);              // аналогично, для поиска
     
     //фон
-    auto sprite = Sprite::create("grey_grodation.jpg");
+    auto sprite = Sprite::create("paper.jpg");
     sprite->setScale(visibleSize.width / sprite->getContentSize().width, (visibleSize.height + exit->getContentSize().height)/ sprite->getContentSize().height);
     sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     
@@ -219,14 +253,22 @@ bool MainTable::init()
     StepButton->setScale((button_width) / StepButton->getContentSize().width);
     StepButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
                                  origin.y + visibleSize.height/2));
+    
+    EndStepButton->setScale((button_width) / EndStepButton->getContentSize().width);
+    EndStepButton->setPosition(Vec2(StepButton->getPositionX(),
+                                 StepButton->getPositionY()));
+    EndStepButton->setVisible(false);
+
+    
     //позиция кнопок поворота
     rotate_right->setPosition(Vec2(cube1->getPositionX(), cards[0]->getPositionY() ));
     rotate_left->setPosition(Vec2(cube2->getPositionX(), cards[0]->getPositionY() ));
     
+    BuyCardButton->setScale((button_width) / BuyCardButton->getContentSize().width);
     BuyCardButton->setPosition(Vec2(StepButton->getPositionX(),
-                                    StepButton->getPositionY() - StepButton->getBoundingBox().size.height));
+                                    StepButton->getPositionY() - StepButton->getBoundingBox().size.height * 1.5));
     BuyCardButton->setVisible(false);
-    BuyCardButton->setName("BuyCardButton");
+    
     
     //все объекты на сцену
     this->addChild(cube2, 1);   //кубики
@@ -239,6 +281,8 @@ bool MainTable::init()
     this->addChild(rotate_right,1);
     this->addChild(rotate_left,1);
     this->addChild(StepButton,1);
+    this->addChild(EndStepButton,1);
+    this->addChild(BuyCardButton,1);
     
     //Фишка 1игрока
     chip1 = Sprite::create("fishka1.png");
@@ -272,6 +316,7 @@ bool MainTable::init()
 void MainTable::onStepQlick(Ref *pSender)
 {
     BuyCardButton->setVisible(false);
+    EndStepButton->setVisible(true);
     //рандомизатор
     rng.seed((++seed) + time(NULL));
     boost::random::uniform_int_distribution<> six(1,6);
@@ -695,8 +740,8 @@ void MainTable::sendData(std::string message = "")
     AppWarp::Client *warpClientRef;
     warpClientRef = AppWarp::Client::getInstance();
     warpClientRef->sendMove(message);
-  //  StepButton->setEnabled(false);
-  //  StepButton->setVisible(false);
+    StepButton->setEnabled(false);
+    StepButton->setVisible(false);
 }
 
 //Парсинг сообщения

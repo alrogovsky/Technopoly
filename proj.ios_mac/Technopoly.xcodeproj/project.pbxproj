@@ -129,6 +129,12 @@
 		9556E33D1B1F9CCE00BACA85 /* arrow_left1.png in Resources */ = {isa = PBXBuildFile; fileRef = 9556E33A1B1F9CCE00BACA85 /* arrow_left1.png */; };
 		9556E3411B2061C600BACA85 /* arrow_small_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 9556E3401B2061C600BACA85 /* arrow_small_white.png */; };
 		9556E3421B2061C600BACA85 /* arrow_small_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 9556E3401B2061C600BACA85 /* arrow_small_white.png */; };
+		955AC9611B2971FB008AE004 /* tree.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 955AC9601B2971FA008AE004 /* tree.jpg */; };
+		955AC9621B2971FB008AE004 /* tree.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 955AC9601B2971FA008AE004 /* tree.jpg */; };
+		955AC9651B29767B008AE004 /* end_step.png in Resources */ = {isa = PBXBuildFile; fileRef = 955AC9631B29767B008AE004 /* end_step.png */; };
+		955AC9661B29767B008AE004 /* end_step.png in Resources */ = {isa = PBXBuildFile; fileRef = 955AC9631B29767B008AE004 /* end_step.png */; };
+		955AC9671B29767B008AE004 /* lets_learn.png in Resources */ = {isa = PBXBuildFile; fileRef = 955AC9641B29767B008AE004 /* lets_learn.png */; };
+		955AC9681B29767B008AE004 /* lets_learn.png in Resources */ = {isa = PBXBuildFile; fileRef = 955AC9641B29767B008AE004 /* lets_learn.png */; };
 		9576CCC91B28570100555783 /* grey_grodation.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9576CCC81B28570100555783 /* grey_grodation.jpg */; };
 		9576CCCA1B28570100555783 /* grey_grodation.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9576CCC81B28570100555783 /* grey_grodation.jpg */; };
 		9576CCCD1B28A0C600555783 /* rotate_r.png in Resources */ = {isa = PBXBuildFile; fileRef = 9576CCCC1B28A0C600555783 /* rotate_r.png */; };
@@ -299,6 +305,9 @@
 		9556E3311B1F6AFE00BACA85 /* next.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = next.png; sourceTree = "<group>"; };
 		9556E33A1B1F9CCE00BACA85 /* arrow_left1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_left1.png; sourceTree = "<group>"; };
 		9556E3401B2061C600BACA85 /* arrow_small_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_small_white.png; sourceTree = "<group>"; };
+		955AC9601B2971FA008AE004 /* tree.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = tree.jpg; sourceTree = "<group>"; };
+		955AC9631B29767B008AE004 /* end_step.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = end_step.png; sourceTree = "<group>"; };
+		955AC9641B29767B008AE004 /* lets_learn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lets_learn.png; sourceTree = "<group>"; };
 		9576CCC81B28570100555783 /* grey_grodation.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = grey_grodation.jpg; sourceTree = "<group>"; };
 		9576CCCC1B28A0C600555783 /* rotate_r.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rotate_r.png; sourceTree = "<group>"; };
 		9576CCCF1B28A29600555783 /* rotate_l.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rotate_l.png; sourceTree = "<group>"; };
@@ -461,6 +470,9 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				955AC9631B29767B008AE004 /* end_step.png */,
+				955AC9641B29767B008AE004 /* lets_learn.png */,
+				955AC9601B2971FA008AE004 /* tree.jpg */,
 				9576CCE11B28D99200555783 /* do_step_black.png */,
 				9576CCD21B28D03100555783 /* do_step.png */,
 				9576CCCF1B28A29600555783 /* rotate_l.png */,
@@ -738,6 +750,7 @@
 				9576CCE21B28D99200555783 /* do_step_black.png in Resources */,
 				5087E78317EB970100C73F5D /* Icon-152.png in Resources */,
 				46880B8119C43A67006E1F66 /* HelloWorld.png in Resources */,
+				955AC9651B29767B008AE004 /* end_step.png in Resources */,
 				46880B7D19C43A67006E1F66 /* CloseSelected.png in Resources */,
 				950BEF1B1B18F01700F0587F /* button_options.png in Resources */,
 				5087E77D17EB970100C73F5D /* Default-568h@2x.png in Resources */,
@@ -763,6 +776,7 @@
 				82986DAF1B061CBB000E0747 /* 4.jpg in Resources */,
 				9556E3321B1F6AFE00BACA85 /* next.png in Resources */,
 				950BEF171B18F01700F0587F /* button_exit.png in Resources */,
+				955AC9671B29767B008AE004 /* lets_learn.png in Resources */,
 				950BEF341B192C3C00F0587F /* fin_jake5.png in Resources */,
 				3EACC98F19EE6D4300EB3C5E /* res in Resources */,
 				950BEF3D1B19E05200F0587F /* name.png in Resources */,
@@ -774,6 +788,7 @@
 				521A8E6419F0C34300D177D7 /* Default-667h@2x.png in Resources */,
 				46880B7B19C43A67006E1F66 /* CloseNormal.png in Resources */,
 				950BEF191B18F01700F0587F /* button_new_game.png in Resources */,
+				955AC9611B2971FB008AE004 /* tree.jpg in Resources */,
 				9576CCD31B28D03100555783 /* do_step.png in Resources */,
 				950BEF221B192A5C00F0587F /* bimo1.png in Resources */,
 				950BEF361B192C3C00F0587F /* fin_jake6.png in Resources */,
@@ -806,11 +821,13 @@
 				9576CCD41B28D03100555783 /* do_step.png in Resources */,
 				950BEF441B1C8F1300F0587F /* arrow_small.png in Resources */,
 				82986DAE1B061CBB000E0747 /* 3.jpg in Resources */,
+				955AC9661B29767B008AE004 /* end_step.png in Resources */,
 				82986DAA1B061CBB000E0747 /* 1.png in Resources */,
 				950BEF351B192C3C00F0587F /* fin_jake5.png in Resources */,
 				FA3F396C1B16078F0017A163 /* fishka1.png in Resources */,
 				950BEF251B192A5C00F0587F /* bimo2.png in Resources */,
 				950BEF311B192C3C00F0587F /* fin_jake3.png in Resources */,
+				955AC9621B2971FB008AE004 /* tree.jpg in Resources */,
 				950BEF371B192C3C00F0587F /* fin_jake6.png in Resources */,
 				9556E32A1B1F606600BACA85 /* back.png in Resources */,
 				950BEF161B18F01700F0587F /* background.png in Resources */,
@@ -826,6 +843,7 @@
 				950BEF1C1B18F01700F0587F /* button_options.png in Resources */,
 				950BEF231B192A5C00F0587F /* bimo1.png in Resources */,
 				46880B7C19C43A67006E1F66 /* CloseNormal.png in Resources */,
+				955AC9681B29767B008AE004 /* lets_learn.png in Resources */,
 				9556E33D1B1F9CCE00BACA85 /* arrow_left1.png in Resources */,
 				FA3F39701B164AB90017A163 /* fishka2.png in Resources */,
 				950BEF2D1B192C3C00F0587F /* fin_jake1.png in Resources */,
@@ -935,7 +953,7 @@
 				);
 				INFOPLIST_FILE = ios/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				LIBRARY_SEARCH_PATHS = /Users/olegermakov/Desktop/cocos2dx/platform/third_party/ios/libraries;
+				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = (
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
@@ -973,7 +991,7 @@
 				);
 				INFOPLIST_FILE = ios/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				LIBRARY_SEARCH_PATHS = /Users/olegermakov/Desktop/cocos2dx/platform/third_party/ios/libraries;
+				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = (
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
@@ -1013,7 +1031,7 @@
 					"$(SRCROOT)/../cocos2d/external/glfw3/include/mac",
 				);
 				INFOPLIST_FILE = mac/Info.plist;
-				LIBRARY_SEARCH_PATHS = /Users/olegermakov/Desktop/cocos2dx/platform/third_party/ios/libraries;
+				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = (
 					"$(_COCOS_LIB_MAC_BEGIN)",
 					"$(_COCOS_LIB_MAC_END)",
@@ -1048,7 +1066,7 @@
 					"$(SRCROOT)/../cocos2d/external/glfw3/include/mac",
 				);
 				INFOPLIST_FILE = mac/Info.plist;
-				LIBRARY_SEARCH_PATHS = /Users/olegermakov/Desktop/cocos2dx/platform/third_party/ios/libraries;
+				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = (
 					"$(_COCOS_LIB_MAC_BEGIN)",
 					"$(_COCOS_LIB_MAC_END)",
@@ -1085,7 +1103,7 @@
 					"$(SRCROOT)/../cocos2d/external/chipmunk/include/chipmunk",
 					"$(SRCROOT)/../cocos2d/external/curl/include/ios",
 				);
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../cocos2d/cocos/boost";
 				LINK_WITH_STANDARD_LIBRARIES = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1121,7 +1139,7 @@
 					"$(SRCROOT)/../cocos2d/external/chipmunk/include/chipmunk",
 					"$(SRCROOT)/../cocos2d/external/curl/include/ios",
 				);
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../cocos2d/cocos/boost";
 				LINK_WITH_STANDARD_LIBRARIES = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
