@@ -91,7 +91,7 @@ bool MainTable::init()
         case (3): cube1 = Sprite::create("3.jpg"); break;
         case (4): cube1 = Sprite::create("4.jpg"); break;
         case (5): cube1 = Sprite::create("5.jpg"); break;
-        case (6): cube1 = Sprite::create("6.png"); break;
+        case (6): cube1 = Sprite::create("6.jpg"); break;
         default: break;
     }
     int random_num2 = six(rng);
@@ -101,7 +101,7 @@ bool MainTable::init()
         case (3): cube2 = Sprite::create("3.jpg"); break;
         case (4): cube2 = Sprite::create("4.jpg"); break;
         case (5): cube2 = Sprite::create("5.jpg"); break;
-        case (6): cube2 = Sprite::create("6.png"); break;
+        case (6): cube2 = Sprite::create("6.jpg"); break;
         default: break;
     }
     
@@ -157,20 +157,9 @@ bool MainTable::init()
                 break;
         }
     });
-    /*
-    auto RotateRight = Label::createWithTTF("Направо", "isotextpro/PFIsotextPro-Regular.ttf", 34);
-    RotateRight -> setColor(Color3B::BLACK);
-    auto RotateRightButton = MenuItemLabel::create(RotateRight, CC_CALLBACK_1(MainTable::onRotateRight, this));
-    RotateRightButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
-                                 origin.y + visibleSize.height/2 - StepButton->getContentSize().height - 5));
+
     
-    auto RotateLeft = Label::createWithTTF("Налево", "isotextpro/PFIsotextPro-Regular.ttf", 34);
-    RotateLeft -> setColor(Color3B::BLACK);
-    auto RotateLeftButton = MenuItemLabel::create(RotateLeft, CC_CALLBACK_1(MainTable::onRotateLeft, this));
-    RotateLeftButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
-                                        origin.y + visibleSize.height/2 - StepButton->getContentSize().height - RotateRightButton->getContentSize().height - 10));
-    
-    */
+
     //Тест... просто Тест...
     auto Test = Label::createWithTTF("Test", "isotextpro/PFIsotextPro-Regular.ttf", 34);
     Test -> setColor(Color3B::BLACK);
@@ -182,8 +171,6 @@ bool MainTable::init()
     Vector<MenuItem*> MenuItems;
    // MenuItems.pushBack(StepButton);
     MenuItems.pushBack(closeItem);
-   // MenuItems.pushBack(RotateRightButton);
-   // MenuItems.pushBack(RotateLeftButton);
     MenuItems.pushBack(TestButton);
     
     //Создаем работоспособное меню на основе массива менюшек
@@ -670,8 +657,8 @@ void MainTable::sendData(std::string message = "")
     AppWarp::Client *warpClientRef;
     warpClientRef = AppWarp::Client::getInstance();
     warpClientRef->sendMove(message);
-    StepButton->setEnabled(false);
-    StepButton->setVisible(false);
+  //  StepButton->setEnabled(false);
+  //  StepButton->setVisible(false);
 }
 
 //Парсинг сообщения
