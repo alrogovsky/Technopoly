@@ -64,7 +64,7 @@ public:
     void addBottom  (cocos2d::Node*, cocos2d::Node*, cocos2d::Size, bool);      // добавление карты снизу
     
     // шаг пользователя
-    cocos2d::MenuItemLabel* StepButton;
+    cocos2d::ui::Button* StepButton;
     void userStep(cocos2d::Node* spr,int strokes_number, int* curr_pos);
     
     // кубики + фишки
@@ -78,6 +78,7 @@ public:
     
     cocos2d::Sequence* step_sequence;
     
+    cocos2d::MenuItemLabel* BuyCardButton;
     //рандомизатор              --библиотека Boost
     boost::random::mt11213b rng;
     unsigned int seed = 0;
@@ -101,6 +102,9 @@ public:
     //Флаг состояния игры
     bool gameStarted = false;
     
+    
+    ///НАДО ГДЕ-ТО ОЧИСТИТЬ
+    User* Player;
     ////////////
     //APPWARP///
     ////////////
@@ -117,7 +121,7 @@ public:
     void connectToAppWarp(cocos2d::Ref* pSender);
     
     void startGame();
-    void pauseGame();
+    void stopGame();
     
     void sendData(std::string message);
     
@@ -125,10 +129,8 @@ public:
     void onJoinRoomDone(AppWarp::room revent);
     void onSubscribeRoomDone(AppWarp::room revent);
     void onChatReceived(AppWarp::chat chatevent);
-    void onGetOnlineUsersDone(AppWarp::liveresult event);
     void onGetLiveUserInfoDone(AppWarp::liveuser event);
     void onGetLiveRoomInfoDone(AppWarp :: liveroom event);
-    void onSetCustomRoomDataDone(AppWarp :: liveroom event);
     void onGetAllRoomsDone(AppWarp::liveresult event);
     void onCreateRoomDone(AppWarp::room event);
     void onUserLeftRoom(AppWarp::room event , std::string username);
@@ -136,6 +138,7 @@ public:
     void onLeaveRoomDone(AppWarp::room event);
     void onMoveCompleted(AppWarp::move event);
     void onGameStarted(std::string sender, std::string room, std::string nextTurn);
+    void onGameStopped(std::string sender, std::string room);  
     
     CREATE_FUNC(MainTable);
     

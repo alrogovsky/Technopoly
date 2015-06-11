@@ -22,11 +22,15 @@ class User{
 private:
     int _resources;
     std::string _name;
+    int _index;
     static const int firstTimeRecources = 1500;
 public:
     User();
+     vector<Card*> cards;
     void setName(std::string);
     void changeResources(int);
+    void addCard(Card*);
+    void move(int);
     int getResources();
     std::string getName();
   //  int resources() {return _resources;);
@@ -62,11 +66,15 @@ private:
     int house_price;
     int house_count;
     int hotel_price;
-    User* Player;
+    User* Owner;
     int tax;
 public:
     SubjectCard();
     ~SubjectCard();
+    void sellToOwner(User* player);
+    void setPrice(int price);
+    string getOwnerName();
+    int getCardPrice();
     void Action(User*);
 };
 

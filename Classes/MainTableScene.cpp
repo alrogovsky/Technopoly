@@ -27,6 +27,10 @@ bool MainTable::init()
         return false;
     }
     InitData();
+    
+    Player = new User();
+    Player->setName("Player1");
+    
     //добавление в кэш текстур изображения кубиков
     Director::getInstance()->getTextureCache()->addImage("1.png");
     Director::getInstance()->getTextureCache()->addImage("2.png");
@@ -52,13 +56,16 @@ bool MainTable::init()
     
     
     //продолжаю пилить кнопку закрытия
-    exit->setPosition(Vec2(origin.x,
+  /*  exit->setPosition(Vec2(origin.x,
                            origin.y + fullSize.height));
     exit->setAnchorPoint(Vec2(0,1));
     exit->setScale(0.5);
     auto exitButton = Menu::create(exit, NULL);
     exitButton->setPosition(origin);
    // this->addChild(exitButton,3);
+    
+    this->addChild(NickName,3);
+    this->addChild(exitButton,3);*/
     
     
     //для объединения карточек в один 'node'
@@ -118,7 +125,8 @@ bool MainTable::init()
                               origin.y + visibleSize.height/2));
     
     */
-    auto StepButton = cocos2d::ui::Button::create("do_step_black.png");
+    StepButton = cocos2d::ui::Button::create("do_step_black.png");
+    
     StepButton->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
         switch (type)
         {
@@ -165,7 +173,22 @@ bool MainTable::init()
     Test -> setColor(Color3B::BLACK);
     auto TestButton = MenuItemLabel::create(Test, CC_CALLBACK_1(MainTable::onTest, this));
     TestButton->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2,
-                                        origin.y + visibleSize.height/2 - StepButton->getContentSize().height - 80));
+                                        origin.y + visibleSize.height/2 - StepButton->getContentSize().height - 80));*/
+    
+    //покупка
+    auto BuyCard = Label::createWithTTF("Купить", "isotextpro/PFIsotextPro-Regular.ttf", 34);
+    BuyCard -> setColor(Color3B::WHITE);
+    
+    BuyCardButton = MenuItemLabel::create(BuyCard,
+                                               [&](Ref* sender)
+    {
+        if(Player->getResources()>((SubjectCard*)dataCards[current_position1])->getCardPrice())
+        {
+            ((SubjectCard*)dataCards[current_position1])->sellToOwner(Player);
+            BuyCardButton->setVisible(false);
+        }
+    }
+    );
 
     //Все в менюшный вектор
     Vector<MenuItem*> MenuItems;
@@ -190,7 +213,7 @@ bool MainTable::init()
     
     auto delta_cube = MenuWidth - 2 * cube1->getBoundingBox().size.width;
     cube1->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 + delta_cube * 0.5, cards[30]->getPositionY()));
-    cube2->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 - delta_cube* 0.5,cards[30]->getPositionY() ));
+    cube2->setPosition(Vec2(table->getPosition().x + table->getContentSize().width/2 + MenuWidth/2 - delta_cube * 0.5,cards[30]->getPositionY() ));
     
     auto button_width = cube1->getPositionX() - cube2->getPositionX() + cube2->getBoundingBox().size.width;
     StepButton->setScale((button_width) / StepButton->getContentSize().width);
@@ -200,6 +223,10 @@ bool MainTable::init()
     rotate_right->setPosition(Vec2(cube1->getPositionX(), cards[0]->getPositionY() ));
     rotate_left->setPosition(Vec2(cube2->getPositionX(), cards[0]->getPositionY() ));
     
+    BuyCardButton->setPosition(Vec2(StepButton->getPositionX(),
+                                    StepButton->getPositionY() - StepButton->getBoundingBox().size.height));
+    BuyCardButton->setVisible(false);
+    BuyCardButton->setName("BuyCardButton");
     
     //все объекты на сцену
     this->addChild(cube2, 1);   //кубики
@@ -208,7 +235,7 @@ bool MainTable::init()
     table->addChild(tableMenu); //для дальнейшего поиска в CardInfo
     table->setName("table");
     this->addChild(table,1);    //стол с картами
-    this->addChild(menu, 1);
+    this->addChild(menu, 2);
     this->addChild(rotate_right,1);
     this->addChild(rotate_left,1);
     this->addChild(StepButton,1);
@@ -244,6 +271,7 @@ bool MainTable::init()
 
 void MainTable::onStepQlick(Ref *pSender)
 {
+    BuyCardButton->setVisible(false);
     //рандомизатор
     rng.seed((++seed) + time(NULL));
     boost::random::uniform_int_distribution<> six(1,6);
@@ -279,7 +307,13 @@ void MainTable::onStepQlick(Ref *pSender)
     userStep(chip1, random_num1 + random_num2, &current_position1 );//userStep(chip1, 0, &current_position1 ); при этом выше current_position1 = W; где W-позиция вылета
     sendData("M"+string_sum);
     
-
+    if(dataCards[current_position1]->type==Subject)
+    {
+        if(((SubjectCard*)dataCards[current_position1])->getOwnerName()=="")
+        {
+            BuyCardButton->setVisible(true);
+        }
+    }
    }
 
 void MainTable::menuCloseCallback(Ref* pSender)
@@ -311,7 +345,8 @@ void MainTable::onTest(cocos2d::Ref *pSender)
     warpClientRef = AppWarp::Client::getInstance();
     if(currentRoom != "")
        // warpClientRef->unsubscribeRoom(currentRoom);
-        warpClientRef->leaveRoom(currentRoom);
+        //warpClientRef->leaveRoom(currentRoom);
+        warpClientRef->getMoveHistory();
 }
 
 void MainTable::JoinRoom(cocos2d::Ref *pSender)
@@ -591,7 +626,7 @@ void MainTable::startGame()
     
 }
 
-void MainTable::pauseGame()
+void MainTable::stopGame()
 {
     
 }
@@ -637,6 +672,8 @@ void MainTable::onJoinRoomDone(AppWarp::room revent)
         tableMenu->setEnabled(true);
         ((Menu*) (this->getChildByName("menu")))->setEnabled(true);
         gameStarted = true;
+        Opponent->setString("Ожидание игрока...");
+        Opponent->setVisible(true);
     }
 }
 
@@ -646,6 +683,7 @@ void MainTable::onSubscribeRoomDone(AppWarp::room revent)
     if (revent.result==0)
     {
         printf("\nonSubscribeRoomDone .. SUCCESS\n");
+        
     }
     else
         printf("\nonSubscribeRoomDone .. FAILED\n");
@@ -698,14 +736,6 @@ void MainTable::onGetAllRoomsDone(AppWarp::liveresult event)
 
 
 ////////// TODO ////////////
-void MainTable::onGetOnlineUsersDone(AppWarp::liveresult event)
-{
-    std::cout<< "ONLINE: ";
-    for(int i = 0; i<event.list.size(); i++)
-    {
-        std::cout<<event.list[i]<<" ";
-    }
-}
 
 void MainTable::onGetLiveUserInfoDone( AppWarp::liveuser event )
 {
@@ -731,33 +761,31 @@ void MainTable::onLeaveRoomDone(AppWarp::room event)
         gameStarted = false;
         Rooms.clear();
         RoomPlayers.clear();
+        Opponent->setVisible(false);
         warpClientRef->getAllRooms();
     }
    
 }
 
-void MainTable::onSetCustomRoomDataDone(AppWarp::liveroom event)
-{
-    
-}
-
 void MainTable::onGameStarted(std::string sender, std::string room, std::string nextTurn)
 {
+    cout<<nextTurn;
     if(sender!=userName)
     {
         Opponent->setString("Игра с: "+sender);
         Opponent->setVisible(true);
     }
     
-    if(nextTurn == userName)
+    if(nextTurn != userName)
     {
-        StepButton->setVisible(true);
-        StepButton->setEnabled(true);
+        StepButton->setVisible(false);
+        StepButton->setEnabled(false);
     }
 }
 
 void MainTable::onMoveCompleted(AppWarp::move event)
 {
+    cout<<event.nextTurn<<"\n";
     if(event.sender != userName)
     {
         std::size_t loc = event.moveData.find('M');
@@ -778,6 +806,9 @@ void MainTable::onMoveCompleted(AppWarp::move event)
 void MainTable::onUserLeftRoom(AppWarp::room event , std::string username)
 {
     cout<<username+" LEFT THE ROOM "+event.roomId.c_str();
+    AppWarp::Client *warpClientRef;
+    warpClientRef = AppWarp::Client::getInstance();
+    warpClientRef->stopGame();
 }
 
 void MainTable::onUserJoinedRoom(AppWarp::room event , std::string username)
@@ -789,4 +820,9 @@ void MainTable::onUserJoinedRoom(AppWarp::room event , std::string username)
     AppWarp::Client *warpClientRef;
     warpClientRef = AppWarp::Client::getInstance();
     warpClientRef->startGame();
+}
+
+void MainTable::onGameStopped(std::string sender, std::string room)
+{
+    //Отобразить панель YOU WIN, при закрытии удалять комнату
 }
