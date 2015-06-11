@@ -99,6 +99,8 @@ public:
     //Никнейм пользователя
     std::string userName = "default";
     
+    //Флаг состояния игры
+    bool gameStarted = false;
     
     
     ///НАДО ГДЕ-ТО ОЧИСТИТЬ
