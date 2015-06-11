@@ -911,6 +911,3 @@ void MainTable::onDeleteRoomDone(AppWarp::room event)
     }
     
 }
-
-
-
