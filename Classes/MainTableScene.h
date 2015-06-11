@@ -10,21 +10,20 @@
 #define __Technopoly__MainTableScene__
 
 #include "cocos2d.h"
+#include "CocosGUI.h"
 #include "boost/random.hpp"
 #include "boost/algorithm/string/split.hpp"
 #include "boost/algorithm/string/classification.hpp"
 #include "Gameplay.h"
 #include "appwarp.h"
 #include "MainMenu.h"
+#include <vector>
 #include "CardInfo.h"
-
 #include "Gameplay.h"
 
 #define Height_K 7.35
-
-#define APPWARP_APP_KEY     "e9e179212bf8ab524908f4f2449a5399469a41b7a10c73d653bbc30af77141b2"
-#define APPWARP_SECRET_KEY  "6c8de95986e7916ac1faf63972e953e87f50dacd4075a2eec2b24c91f0c92339"
-#define ROOM_ID "1799451657"
+#define APPWARP_APP_KEY "e9e179212bf8ab524908f4f2449a5399469a41b7a10c73d653bbc30af77141b2"
+#define APPWARP_SECRET_KEY "6c8de95986e7916ac1faf63972e953e87f50dacd4075a2eec2b24c91f0c92339"
 
 void InitData();
 
@@ -32,7 +31,8 @@ class MainTable :   public cocos2d::Layer,
                     public AppWarp::ConnectionRequestListener,
                     public AppWarp::RoomRequestListener,
                     public AppWarp::NotificationListener,
-                    public AppWarp::ZoneRequestListener
+                    public AppWarp::ZoneRequestListener,
+                    public AppWarp::TurnBasedRoomRequestListener
 {
 public:
     // создание кнопок для карт
@@ -73,6 +73,7 @@ public:
     cocos2d::Sprite* chip2;
     
     cocos2d::Label* Attention;
+    cocos2d::Label* Opponent;
     
     cocos2d::Sequence* step_sequence;
     
@@ -92,16 +93,32 @@ public:
     void onRotateLeft(cocos2d::Ref* pSender);           //вращать налево
     void onTest(cocos2d::Ref* pSender);                 //кнопка тест
     
+    
     //Никнейм пользователя
     std::string userName = "default";
+    
+    //Флаг состояния игры
+    bool gameStarted = false;
     
     ////////////
     //APPWARP///
     ////////////
+    
+    std::string currentRoom = "";
+    
+    void DisplayLobbySelection();
+    void DisplayWinPanel(std::string room);
+    void JoinRoom(cocos2d::Ref* pSender);
+    void createNewGame(cocos2d::Ref* pSender);
+    void endGame(cocos2d::Ref* pSender);
+    
+    std::vector<std::string> Rooms;
+    std::vector<int> RoomPlayers;
+    
     void connectToAppWarp(cocos2d::Ref* pSender);
     
     void startGame();
-    void pauseGame();
+    void stopGame();
     
     void sendData(std::string message);
     
@@ -109,14 +126,17 @@ public:
     void onJoinRoomDone(AppWarp::room revent);
     void onSubscribeRoomDone(AppWarp::room revent);
     void onChatReceived(AppWarp::chat chatevent);
-    void onUserPaused(std::string user,std::string locId,bool isLobby);
-    void onUserResumed(std::string user,std::string locId,bool isLobby);
-    void onGetOnlineUsersDone(AppWarp::liveresult event);
     void onGetLiveUserInfoDone(AppWarp::liveuser event);
     void onGetLiveRoomInfoDone(AppWarp :: liveroom event);
-    void onSetCustomRoomDataDone(AppWarp :: liveroom event);
     void onGetAllRoomsDone(AppWarp::liveresult event);
     void onCreateRoomDone(AppWarp::room event);
+    void onUserLeftRoom(AppWarp::room event , std::string username);
+    void onUserJoinedRoom(AppWarp::room event , std::string username);
+    void onLeaveRoomDone(AppWarp::room event);
+    void onMoveCompleted(AppWarp::move event);
+    void onGameStarted(std::string sender, std::string room, std::string nextTurn);
+    void onGameStopped(std::string sender, std::string room);
+    void onDeleteRoomDone(AppWarp::room event);  
     
     CREATE_FUNC(MainTable);
     
