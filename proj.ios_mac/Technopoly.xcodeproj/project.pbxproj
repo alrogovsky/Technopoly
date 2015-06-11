@@ -88,7 +88,6 @@
 		82D68F821B01D913008F435C /* LobbyCreation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82D68F7F1B01D913008F435C /* LobbyCreation.cpp */; };
 		82D68F841B01DA56008F435C /* menus in Resources */ = {isa = PBXBuildFile; fileRef = 82D68F831B01DA56008F435C /* menus */; };
 		82D68F851B01DA56008F435C /* menus in Resources */ = {isa = PBXBuildFile; fileRef = 82D68F831B01DA56008F435C /* menus */; };
-		82E6EA001B1AE34F002964E2 /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 503AE11117EB99EE00D1A890 /* libcurl.dylib */; };
 		950BEF151B18F01700F0587F /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 950BEF101B18F01700F0587F /* background.png */; };
 		950BEF161B18F01700F0587F /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 950BEF101B18F01700F0587F /* background.png */; };
 		950BEF171B18F01700F0587F /* button_exit.png in Resources */ = {isa = PBXBuildFile; fileRef = 950BEF111B18F01700F0587F /* button_exit.png */; };
@@ -355,7 +354,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */,
-				82E6EA001B1AE34F002964E2 /* libcurl.dylib in Frameworks */,
 				1AC6FB30180E99EB004C840B /* libcocos2d iOS.a in Frameworks */,
 				D6B0611B1803AB670077942B /* CoreMotion.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
@@ -952,7 +950,7 @@
 					"$(SRCROOT)/../cocos2d/cocos/platform/ios/Simulation",
 				);
 				INFOPLIST_FILE = ios/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = (
 					"$(_COCOS_LIB_IOS_BEGIN)",
@@ -990,7 +988,7 @@
 					"$(SRCROOT)/../cocos2d/cocos/platform/ios/Simulation",
 				);
 				INFOPLIST_FILE = ios/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = (
 					"$(_COCOS_LIB_IOS_BEGIN)",
@@ -1081,7 +1079,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../cocos2d/cocos/boost";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1118,7 +1116,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../cocos2d/cocos/boost";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
